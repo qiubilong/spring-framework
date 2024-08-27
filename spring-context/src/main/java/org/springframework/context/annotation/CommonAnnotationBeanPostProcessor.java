@@ -297,6 +297,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
 		InjectionMetadata metadata = findResourceMetadata(beanName, bean.getClass(), pvs);
 		try {
+			//反射设置field或调用method XXX
 			metadata.inject(bean, beanName, pvs);
 		}
 		catch (Throwable ex) {
@@ -344,6 +345,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 					}
 					currElements.add(new EjbRefElement(field, field, null));
 				}
+				//解析field @Resource
 				else if (field.isAnnotationPresent(Resource.class)) {
 					if (Modifier.isStatic(field.getModifiers())) {
 						throw new IllegalStateException("@Resource annotation is not supported on static fields");
@@ -370,6 +372,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 						PropertyDescriptor pd = BeanUtils.findPropertyForMethod(bridgedMethod, clazz);
 						currElements.add(new EjbRefElement(method, bridgedMethod, pd));
 					}
+					//解析method @Resource
 					else if (bridgedMethod.isAnnotationPresent(Resource.class)) {
 						if (Modifier.isStatic(method.getModifiers())) {
 							throw new IllegalStateException("@Resource annotation is not supported on static methods");
