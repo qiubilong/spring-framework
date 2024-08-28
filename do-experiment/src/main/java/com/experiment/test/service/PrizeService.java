@@ -2,6 +2,8 @@ package com.experiment.test.service;
 
 import com.experiment.test.common.PrizeConf;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Component;
  * @since 2024/8/28
  */
 @Component
+@Lazy
 public class PrizeService {
 
 	@Autowired
