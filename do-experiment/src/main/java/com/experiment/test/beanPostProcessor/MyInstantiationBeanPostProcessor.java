@@ -1,4 +1,4 @@
-package com.experiment.beanPostProcessor;
+package com.experiment.test.beanPostProcessor;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValues;

@@ -1,4 +1,4 @@
-package com.experiment.factory;
+package com.experiment.test.factory;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.stereotype.Component;

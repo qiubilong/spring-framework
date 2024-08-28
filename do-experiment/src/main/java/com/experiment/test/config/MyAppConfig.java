@@ -1,7 +1,7 @@
-package com.experiment.config;
+package com.experiment.test.config;
 
-import com.experiment.common.PrizeConf;
-import com.experiment.common.User;
+import com.experiment.test.common.PrizeConf;
+import com.experiment.test.common.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

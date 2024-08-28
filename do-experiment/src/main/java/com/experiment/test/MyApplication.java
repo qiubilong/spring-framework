@@ -1,10 +1,9 @@
-package com.experiment;
+package com.experiment.test;
 
-import com.experiment.common.PrizeConf;
-import com.experiment.config.MyAppConfig;
-import com.experiment.factory.OrderFeignService;
-import com.experiment.service.PrizeService;
-import com.experiment.service.UserInfoService;
+import com.experiment.test.config.MyAppConfig;
+import com.experiment.test.factory.OrderFeignService;
+import com.experiment.test.service.PrizeService;
+import com.experiment.test.service.UserInfoService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**

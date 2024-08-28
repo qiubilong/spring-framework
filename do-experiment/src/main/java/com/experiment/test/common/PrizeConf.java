@@ -1,4 +1,4 @@
-package com.experiment.common;
+package com.experiment.test.common;
 
 import lombok.Data;
 

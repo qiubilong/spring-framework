@@ -1,6 +1,6 @@
-package com.experiment.service;
+package com.experiment.test.service;
 
-import com.experiment.common.PrizeConf;
+import com.experiment.test.common.PrizeConf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
