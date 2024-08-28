@@ -20,7 +20,6 @@ public class MyApplication {
 		UserService userService = (UserService) applicationContext.getBean("userService");
 		userService.queryUsers();
 
-
 		System.out.println(applicationContext.getBean("feignBeanFactory"));
 		System.out.println(applicationContext.getBean("feignBeanFactory"));
 
