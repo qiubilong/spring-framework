@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * @since 2024/8/26
  */
 @Component
-public class UserService {
+public class UserInfoService {
 
 	public void queryUsers(){
 		System.out.println("queryUsers");
