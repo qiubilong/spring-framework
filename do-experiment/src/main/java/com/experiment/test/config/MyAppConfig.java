@@ -12,7 +12,7 @@ import java.util.Random;
  * @author chenxuegui
  * @since 2024/8/26
  */
-@ComponentScan("com.experiment")
+@ComponentScan("com.experiment.test")
 @Configuration
 /* 加不加@Configuration可以实例化@Bean，加@Configuration后通过代理保证只生成一个Bean  */
 public class MyAppConfig {

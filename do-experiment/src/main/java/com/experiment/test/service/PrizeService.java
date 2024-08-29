@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
  * @since 2024/8/28
  */
 @Component
-@Lazy
 public class PrizeService {
 
 	@Autowired

@@ -1,5 +1,6 @@
 package com.experiment.test;
 
+import com.experiment.spring.test.service.MyUserInfoService;
 import com.experiment.test.config.MyAppConfig;
 import com.experiment.test.factory.OrderFeignService;
 import com.experiment.test.service.PrizeService;
@@ -19,15 +20,21 @@ public class MyApplication {
 		}
 		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(MyAppConfig.class);
 
-		UserInfoService userInfoService = (UserInfoService) applicationContext.getBean("userInfoService");
+		//通过别名查询
+		UserInfoService userInfoService = (UserInfoService) applicationContext.getBean("com.experiment.test.service.UserInfoService");
 		userInfoService.queryUsers();
 
-		System.out.println(applicationContext.getBean("feignBeanFactory"));
-		OrderFeignService orderFeignService = (OrderFeignService) applicationContext.getBean("feignBeanFactory");
+		//通过FactoryBean手动实例化Bean
+		System.out.println(applicationContext.getBean("feignFactoryBean"));
+		OrderFeignService orderFeignService = (OrderFeignService) applicationContext.getBean("feignFactoryBean");
 		orderFeignService.createOrder();
 
 
 		applicationContext.getBean("prizeService", PrizeService.class).doPrize();
+
+
+		applicationContext.getBean("com.experiment.test.service.UserInfoService");
+		applicationContext.getBean("com.experiment.spring.test.service.MyUserInfoService", MyUserInfoService.class).queryUserInfo();
 
 	}
 }
