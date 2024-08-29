@@ -17,7 +17,7 @@ import java.util.*;
 public class MyAnnotationConfigApplicationContext {
 	private  Class<?> configClass;
 
-	private Map<String,Object> singletonsMap = new HashMap<>(64);
+	private Map<String,Object> singletonObjects = new HashMap<>(64);
 	private Map<String,BeanDefinition> beanDefinitionMap = new HashMap<>(64);
 
 	private List<MyBeanPostProcessor> beanPostProcessors = new ArrayList<>(10);
@@ -101,14 +101,14 @@ public class MyAnnotationConfigApplicationContext {
 			throw new NoSuchElementException(beanName);
 		}
 
-		Object instance = singletonsMap.get(beanName);
+		Object instance = singletonObjects.get(beanName);
 		if(instance!=null){
 			return instance;
 		}
 
 		if(definition.getScope() == MyScopeEnum.SINGLETON){
 			Object bean = createBean(definition);
-			singletonsMap.put(definition.getBeanName(),bean);
+			singletonObjects.put(definition.getBeanName(),bean);
 			return bean;
 		}else if(definition.getScope() == MyScopeEnum.PROTOTYPE){
 			Object bean = createBean(definition);
