@@ -1,0 +1,27 @@
+package com.experiment.test.service;
+
+import com.experiment.test.service.pay.IPayService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author chenxuegui
+ * @since 2024/8/30
+ */
+@Component
+public class OrderService {
+
+
+    @Autowired /* byClass ( @Primary > @Priority )  > byName  */
+	@Qualifier("jdPayService")
+	private IPayService aliPayService;
+
+	@Override
+	public String toString() {
+		return "OrderService{" +
+				"payService=" + aliPayService +
+				'}';
+	}
+}

@@ -5,6 +5,7 @@ import com.experiment.test.common.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.util.Random;
 
@@ -14,6 +15,7 @@ import java.util.Random;
  */
 @ComponentScan("com.experiment.test")
 @Configuration
+@PropertySource("classpath:spring.properties")
 /* 加不加@Configuration可以实例化@Bean，加@Configuration后通过代理保证只生成一个Bean  */
 public class MyAppConfig {
 

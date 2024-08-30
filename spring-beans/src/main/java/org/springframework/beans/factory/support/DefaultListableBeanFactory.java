@@ -839,6 +839,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		String bdName = BeanFactoryUtils.transformedBeanName(beanName);
 		if (containsBeanDefinition(bdName)) {
+			/* 候选bean筛选 */
 			return isAutowireCandidate(beanName, getMergedLocalBeanDefinition(bdName), descriptor, resolver);
 		}
 		else if (containsSingleton(beanName)) {
@@ -880,6 +881,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				this.mergedBeanDefinitionHolders.computeIfAbsent(beanName,
 						key -> new BeanDefinitionHolder(mbd, beanName, getAliases(bdName))) :
 				new BeanDefinitionHolder(mbd, beanName, getAliases(bdName)));
+		/* 检查 @Bean.autowireCandidate -> 泛型匹配(isAssignableFrom) -> @Qualifier */
 		return resolver.isAutowireCandidate(holder, descriptor);
 	}
 
@@ -1331,9 +1333,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			return new Jsr330Factory().createDependencyProvider(descriptor, requestingBeanName);
 		}
 		else {
+			/* @Autowired @Lazy 时生成代理类*/
 			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(
 					descriptor, requestingBeanName);
 			if (result == null) {
+				/* @Value、@Autowired注入属性 */
 				result = doResolveDependency(descriptor, requestingBeanName, autowiredBeanNames, typeConverter);
 			}
 			return result;
@@ -1376,12 +1380,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				}
 			}
 
-			/* 注入集合，如 @Autowired List<xxxService> xxxServices 或  @Autowired Map<String,xxxService> xxxServicesMap*/
+			/* 注入-集合，如 @Autowired List<xxxService> xxxServices 或  @Autowired Map<String,xxxService> xxxServicesMap*/
 			Object multipleBeans = resolveMultipleBeans(descriptor, beanName, autowiredBeanNames, typeConverter);
 			if (multipleBeans != null) {
 				return multipleBeans;
 			}
 
+			/* 注入-单个 */
 			Map<String, Object> matchingBeans = findAutowireCandidates(beanName, type, descriptor);
 			if (matchingBeans.isEmpty()) {
 				if (isRequired(descriptor)) {
@@ -1394,6 +1399,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			Object instanceCandidate;
 
 			if (matchingBeans.size() > 1) {
+				/* @Primary > @Priority > name 根据优先级配置*/
 				autowiredBeanName = determineAutowireCandidate(matchingBeans, descriptor);
 				if (autowiredBeanName == null) {
 					if (isRequired(descriptor) || !indicatesMultipleBeans(type)) {
@@ -1598,6 +1604,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 		}
 		for (String candidate : candidateNames) {
+			/* 暂时排查自己注入自己 && 检查 @Bean.autowireCandidate -> 泛型匹配(isAssignableFrom) -> @Qualifier  */
 			if (!isSelfReference(beanName, candidate) && isAutowireCandidate(candidate, descriptor)) {
 				addCandidateEntry(result, candidate, descriptor, requiredType);
 			}
@@ -1666,7 +1673,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		if (primaryCandidate != null) {
 			return primaryCandidate;
 		}
-		/*  */
+		/* @Priority 优先级 */
 		String priorityCandidate = determineHighestPriorityCandidate(candidates, requiredType);
 		if (priorityCandidate != null) {
 			return priorityCandidate;

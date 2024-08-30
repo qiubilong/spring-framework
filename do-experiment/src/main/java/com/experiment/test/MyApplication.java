@@ -6,6 +6,7 @@ import com.experiment.test.factory.OrderFeignService;
 import com.experiment.test.service.PrizeService;
 import com.experiment.test.service.UserInfoService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.env.MutablePropertySources;
 
 /**
  * @author chenxuegui
@@ -35,6 +36,12 @@ public class MyApplication {
 
 		applicationContext.getBean("com.experiment.test.service.UserInfoService");
 		applicationContext.getBean("com.experiment.spring.test.service.MyUserInfoService", MyUserInfoService.class).queryUserInfo();
+
+
+		System.out.println(applicationContext.getBean("orderService"));
+
+		MutablePropertySources propertySources = applicationContext.getEnvironment().getPropertySources();
+		System.out.println(propertySources);
 
 	}
 }

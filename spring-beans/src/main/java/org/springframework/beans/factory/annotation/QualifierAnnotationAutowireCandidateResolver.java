@@ -143,8 +143,10 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 	 */
 	@Override
 	public boolean isAutowireCandidate(BeanDefinitionHolder bdHolder, DependencyDescriptor descriptor) {
+		/* @Bean.autowireCandidate > 泛型匹配(isAssignableFrom) */
 		boolean match = super.isAutowireCandidate(bdHolder, descriptor);
 		if (match) {
+			/* @Qualifier检查 */
 			match = checkQualifiers(bdHolder, descriptor.getAnnotations());
 			if (match) {
 				MethodParameter methodParam = descriptor.getMethodParameter();
@@ -171,6 +173,7 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 			Class<? extends Annotation> type = annotation.annotationType();
 			boolean checkMeta = true;
 			boolean fallbackToMeta = false;
+			/* Annotation 的 @Qualifier检查 */
 			if (isQualifier(type)) {
 				if (!checkQualifier(bdHolder, annotation, typeConverter)) {
 					fallbackToMeta = true;
@@ -179,6 +182,7 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 					checkMeta = false;
 				}
 			}
+			/* Annotation.Annotation @Qualifier 检查 */
 			if (checkMeta) {
 				boolean foundMeta = false;
 				for (Annotation metaAnn : type.getAnnotations()) {
