@@ -1,6 +1,7 @@
 package com.experiment.test.service;
 
 import com.experiment.test.service.pay.IPayService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

@@ -282,6 +282,7 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 				// Fall back on bean definition attribute
 				actualValue = bd.getAttribute(attributeName);
 			}
+			/* @Qualifier.value与beanName相等时通过 */
 			if (actualValue == null && attributeName.equals(AutowireCandidateQualifier.VALUE_KEY) &&
 					expectedValue instanceof String name && bdHolder.matchesName(name)) {
 				// Fall back on bean name (or alias) match
