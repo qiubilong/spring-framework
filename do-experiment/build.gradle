@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api(project(":spring-core"))
+    api(project(":spring-aop"))
+    api(project(":spring-beans"))
+    api(project(":spring-context"))
+    implementation 'org.projectlombok:lombok:1.18.20'
+
+    implementation("jakarta.annotation:jakarta.annotation-api")
+
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task logInfo {
+    logging.captureStandardOutput LogLevel.DEBUG
+    doFirst {
+        println 'A task message which is logged at INFO level'
+    }
+}
