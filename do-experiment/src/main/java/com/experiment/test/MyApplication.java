@@ -4,6 +4,7 @@ import com.experiment.spring.test.service.MyUserInfoService;
 import com.experiment.test.config.MyAppConfig;
 import com.experiment.test.factory.OrderFeignService;
 import com.experiment.test.service.PrizeService;
+import com.experiment.test.service.UserInfoLazyService;
 import com.experiment.test.service.UserInfoService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.MutablePropertySources;
@@ -42,6 +43,9 @@ public class MyApplication {
 
 		MutablePropertySources propertySources = applicationContext.getEnvironment().getPropertySources();
 		System.out.println(propertySources);
+
+
+		applicationContext.getBean("userInfoLazyService", UserInfoLazyService.class).getService();
 
 	}
 }

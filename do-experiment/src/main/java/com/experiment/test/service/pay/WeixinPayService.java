@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Primary
-/* 依赖注入找到多个实例对象时，@Primary优先级最高 */
+/* 依赖注入找到多个候选对象时，@Primary优先级最高 */
 public class WeixinPayService implements IPayService {
 
 }

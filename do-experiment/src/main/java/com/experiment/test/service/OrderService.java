@@ -16,7 +16,7 @@ public class OrderService {
 
 
     @Autowired /* byClass ( @Primary > @Priority )  > byName  */
-	@Qualifier("jdPayService")
+	@Qualifier("jdPayService")/* 直接byName  */
 	private IPayService aliPayService;
 
 	@Override
