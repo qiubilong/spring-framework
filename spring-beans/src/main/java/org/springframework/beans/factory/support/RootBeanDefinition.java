@@ -120,7 +120,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	@Nullable
 	volatile Boolean beforeInstantiationResolved;
 
-	/* 属性注入标记，保证一个属性注入一次 */
+	/* 属性注入标记，保证一个属性仅注入一次 */
 	@Nullable
 	private Set<Member> externallyManagedConfigMembers;
 

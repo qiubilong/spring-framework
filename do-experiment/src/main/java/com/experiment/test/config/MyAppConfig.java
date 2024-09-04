@@ -14,12 +14,11 @@ import java.util.Random;
  * @since 2024/8/26
  */
 @ComponentScan("com.experiment.test")
-@Configuration
+@Configuration/* 加不加@Configuration可以实例化@Bean，加@Configuration后通过代理保证只生成一个Bean  */
 @PropertySource("classpath:spring.properties")
-/* 加不加@Configuration可以实例化@Bean，加@Configuration后通过代理保证只生成一个Bean  */
 public class MyAppConfig {
 
-	@Bean
+	@Bean /* <Bean>类似，factoryBeanName=myAppConfig， factoryMethodName=prizeConf */
 	PrizeConf prizeConf(){
 		PrizeConf conf = new PrizeConf(222L, "一等奖");
 		conf.setPrizeUser(prizeUser());

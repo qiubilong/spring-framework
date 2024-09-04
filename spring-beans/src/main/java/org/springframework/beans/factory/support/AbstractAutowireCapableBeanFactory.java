@@ -1381,6 +1381,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 						mbd.getResourceDescription(), beanName, "Cannot apply property values to a record");
 			}
 			else {
+
+
 				// Skip property population phase for records since they are immutable.
 				return;
 			}
