@@ -295,9 +295,10 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
+		/* 寻找@Resource注入点  */
 		InjectionMetadata metadata = findResourceMetadata(beanName, bean.getClass(), pvs);
 		try {
-			//反射设置field或调用method XXX
+			/* 反射设置field或调用methodXXX  */
 			metadata.inject(bean, beanName, pvs);
 		}
 		catch (Throwable ex) {
@@ -345,7 +346,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 					}
 					currElements.add(new EjbRefElement(field, field, null));
 				}
-				//解析field @Resource
+				/* 解析field @Resource */
 				else if (field.isAnnotationPresent(Resource.class)) {
 					if (Modifier.isStatic(field.getModifiers())) {
 						throw new IllegalStateException("@Resource annotation is not supported on static fields");

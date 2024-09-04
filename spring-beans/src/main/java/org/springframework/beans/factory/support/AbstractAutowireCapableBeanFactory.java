@@ -571,7 +571,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		synchronized (mbd.postProcessingLock) {
 			if (!mbd.postProcessed) {
 				try {
-					/* new Bean后，属性未赋值前，BeanDefinitionPostProcessor拓展点，可添加其属性  */
+					/* new Bean后，属性未赋值前，BeanDefinitionPostProcessor拓展点，扫描注解点(@Value、@Autowired)，可自定义其属性  */
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
 				catch (Throwable ex) {
@@ -599,7 +599,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		try {
 			/* bean属性赋值 */
 			populateBean(beanName, mbd, instanceWrapper);
-			/* 这里Bean已经是完整的对象，然后执行其初始化回调 */
+			/* 这里Bean已经是完整的对象，回调其初始化方法 */
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
 		catch (Throwable ex) {
@@ -1413,7 +1413,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			pvs = newPvs;
 		}
 
-		/* @Autowired、@Value、@Resource注入 */
+		/* 解析依赖注入注解 @Resource、@Value、@Autowired（@Qualifier） */
 		if (hasInstantiationAwareBeanPostProcessors()) {
 			if (pvs == null) {
 				pvs = mbd.getPropertyValues();
@@ -1432,7 +1432,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			PropertyDescriptor[] filteredPds = filterPropertyDescriptorsForDependencyCheck(bw, mbd.allowCaching);
 			checkDependencies(beanName, mbd, filteredPds, pvs);
 		}
-		/* 最后的属性赋值，可能会覆盖前面的@Autowired等注入 */
+		/* 最后的自定义属性赋值，可能会覆盖前面的@Autowired等注入 */
 		if (pvs != null) {
 			applyPropertyValues(beanName, mbd, bw, pvs);
 		}

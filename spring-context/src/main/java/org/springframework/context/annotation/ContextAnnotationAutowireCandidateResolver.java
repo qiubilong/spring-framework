@@ -86,7 +86,7 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 
 	private Object buildLazyResolutionProxy(
 			final DependencyDescriptor descriptor, final @Nullable String beanName, boolean classOnly) {
-
+		/* 生成 @Lazy属性的代理对象 */
 		BeanFactory beanFactory = getBeanFactory();
 		Assert.state(beanFactory instanceof DefaultListableBeanFactory,
 				"BeanFactory needs to be a DefaultListableBeanFactory");

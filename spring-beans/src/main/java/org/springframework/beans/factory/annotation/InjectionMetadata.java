@@ -239,6 +239,7 @@ public class InjectionMetadata {
 			if (this.isField) {
 				Field field = (Field) this.member;
 				ReflectionUtils.makeAccessible(field);
+				/* ResourceElement注入点 */
 				field.set(target, getResourceToInject(target, requestingBeanName));
 			}
 			else {

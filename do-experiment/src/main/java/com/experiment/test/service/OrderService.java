@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class OrderService {
 
 
+	@Resource(name = "aliPayService")
     @Autowired /* byClass ( @Primary > @Priority )  > byName  */
 	@Qualifier("jdPayService")/* 直接byName  */
 	private IPayService aliPayService;

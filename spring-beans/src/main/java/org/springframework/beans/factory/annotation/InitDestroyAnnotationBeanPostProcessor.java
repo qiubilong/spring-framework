@@ -265,7 +265,7 @@ public class InitDestroyAnnotationBeanPostProcessor implements DestructionAwareB
 			final List<LifecycleElement> currDestroyMethods = new ArrayList<>();
 
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
-				//解析@PostConstruct
+				/* 解析@PostConstruct */
 				if (this.initAnnotationType != null && method.isAnnotationPresent(this.initAnnotationType)) {
 					LifecycleElement element = new LifecycleElement(method);
 					currInitMethods.add(element);
@@ -273,6 +273,7 @@ public class InitDestroyAnnotationBeanPostProcessor implements DestructionAwareB
 						logger.trace("Found init method on class [" + clazz.getName() + "]: " + method);
 					}
 				}
+				/* 解析@PreDestroy */
 				if (this.destroyAnnotationType != null && method.isAnnotationPresent(this.destroyAnnotationType)) {
 					currDestroyMethods.add(new LifecycleElement(method));
 					if (logger.isTraceEnabled()) {
