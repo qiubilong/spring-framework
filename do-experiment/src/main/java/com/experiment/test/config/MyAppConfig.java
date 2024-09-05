@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.Random;
 
@@ -15,7 +16,8 @@ import java.util.Random;
  */
 @ComponentScan("com.experiment.test")
 @Configuration/* 加不加@Configuration可以实例化@Bean，加@Configuration后通过代理保证只生成一个Bean  */
-@PropertySource("classpath:spring.properties")
+@PropertySource("classpath:spring.properties") /* 通过environment加载资源 */
+@EnableAsync
 public class MyAppConfig {
 
 	@Bean /* <Bean>类似，factoryBeanName=myAppConfig， factoryMethodName=prizeConf */
