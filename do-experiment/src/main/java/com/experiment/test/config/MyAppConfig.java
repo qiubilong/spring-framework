@@ -15,7 +15,7 @@ import java.util.Random;
  * @since 2024/8/26
  */
 @ComponentScan("com.experiment.test")
-@Configuration/* 加不加@Configuration可以实例化@Bean，加@Configuration后通过代理保证只生成一个Bean  */
+@Configuration(enforceUniqueMethods=false)/* 加不加@Configuration可以实例化@Bean，加@Configuration后通过代理保证只生成一个Bean  */
 @PropertySource("classpath:spring.properties") /* 通过environment加载资源 */
 @EnableAsync
 public class MyAppConfig {
@@ -27,6 +27,12 @@ public class MyAppConfig {
 		return conf;
 	}
 
+	@Bean /* <Bean>类似，factoryBeanName=myAppConfig， factoryMethodName=prizeConf */
+	PrizeConf prizeConf(User prizeUser){
+		PrizeConf conf = new PrizeConf(222L, "一等奖");
+		conf.setPrizeUser(prizeUser);
+		return conf;
+	}
 	@Bean
 	User prizeUser(){
 		return new User(new Random().nextLong(),"用户");
