@@ -6,6 +6,7 @@ import com.experiment.test.factory.OrderFeignService;
 import com.experiment.test.service.PrizeService;
 import com.experiment.test.service.circularRef.UserInfoLazyService;
 import com.experiment.test.service.UserInfoService;
+import com.experiment.test.service.lookup.LookupService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.MutablePropertySources;
 
@@ -46,6 +47,7 @@ public class MyApplication {
 
 
 		applicationContext.getBean("userInfoLazyService", UserInfoLazyService.class).getService();
+		applicationContext.getBean("lookupService", LookupService.class).test();
 
 	}
 }
