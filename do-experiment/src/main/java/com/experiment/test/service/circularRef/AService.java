@@ -14,13 +14,9 @@ public class AService {
 
 	private BService bService;
 
-	@Lazy
+	@Lazy/* 生成代理对象解决循环依赖，按需从BeanFactory中获取原始对象 */
 	public AService(BService bService) {
 		this.bService = bService;
 	}
 
-	@Async
-	public void doAsyn(){
-
-	}
 }
