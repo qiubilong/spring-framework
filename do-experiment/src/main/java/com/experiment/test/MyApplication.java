@@ -21,7 +21,13 @@ public class MyApplication {
 		for (int i = 0; i < 10; i++) {
 			System.out.println();
 		}
-		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(MyAppConfig.class);
+
+		//等价 AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(MyAppConfig.class)
+		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+		applicationContext.register(MyAppConfig.class);
+
+		applicationContext.refresh();
+
 
 		//通过别名查询
 		UserInfoService userInfoService = (UserInfoService) applicationContext.getBean("com.experiment.test.service.UserInfoService");

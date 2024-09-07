@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
  * @author chenxuegui
  * @since 2024/9/4
  */
+/* 循环依赖 */
 @Component
 public class AService {
 

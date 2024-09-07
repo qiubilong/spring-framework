@@ -17,7 +17,7 @@ public class LookupService {
 		System.out.println(service);
 	}
 
-	@Lookup("jdPayService")
+	@Lookup("jdPayService")/* 实例化对象时，优化寻找@Lookup，生成增强子类对象（非AOP） */
 	public IPayService findPayService(){
 		return null;
 	}

@@ -9,10 +9,11 @@ import org.springframework.stereotype.Component;
  * @author chenxuegui
  * @since 2024/9/2
  */
+/* 懒加载 */
 @Component
 public class UserInfoLazyService {
 
-	@Autowired
+	@Autowired /*  */
 	private ApplicationContext applicationContext;
 
 	@Autowired
