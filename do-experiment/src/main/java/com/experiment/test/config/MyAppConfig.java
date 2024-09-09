@@ -42,6 +42,7 @@ public class MyAppConfig {
 
 	@Bean
 	MessageSource messageSource(){
+		/* 国际多语言 */
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("i18n/messages");
 		messageSource.setDefaultEncoding("utf-8");
