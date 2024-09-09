@@ -7,8 +7,11 @@ import com.experiment.test.service.PrizeService;
 import com.experiment.test.service.circularRef.UserInfoLazyService;
 import com.experiment.test.service.UserInfoService;
 import com.experiment.test.service.lookup.LookupService;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.MutablePropertySources;
+
+import java.util.Locale;
 
 /**
  * @author chenxuegui
@@ -54,6 +57,9 @@ public class MyApplication {
 
 		applicationContext.getBean("userInfoLazyService", UserInfoLazyService.class).getService();
 		applicationContext.getBean("lookupService", LookupService.class).test();
+
+
+		System.out.println(applicationContext.getBean(MessageSource.class).getMessage("test2", null, new Locale("en")));
 
 	}
 }

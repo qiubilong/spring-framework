@@ -2,10 +2,12 @@ package com.experiment.test.config;
 
 import com.experiment.test.common.PrizeConf;
 import com.experiment.test.common.User;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.Random;
@@ -36,5 +38,13 @@ public class MyAppConfig {
 	@Bean
 	User prizeUser(){
 		return new User(new Random().nextLong(),"用户");
+	}
+
+	@Bean
+	MessageSource messageSource(){
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("i18n/messages");
+		messageSource.setDefaultEncoding("utf-8");
+		return messageSource;
 	}
 }
