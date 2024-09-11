@@ -68,8 +68,8 @@ public class AnnotatedBeanDefinitionReader {
 	 * @see #setEnvironment(Environment)
 	 */
 	public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry) {
-		/* 注册 ConfigurationClassPostProcessor --> 用于扫描并生成BeanDefinition
-		   注册 AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等BeanPostProcessor
+		/* 注册BeanDefinition  - ConfigurationClassPostProcessor --> 用于扫描并生成BeanDefinition
+		   注册BeanDefinition  - AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等BeanPostProcessor
 		   */
 		this(registry, getOrCreateEnvironment(registry));
 		/* getOrCreateEnvironment(registry) --> 创建StandardEnvironment -->加载系统环境变量、JVM环境变量
@@ -91,6 +91,7 @@ public class AnnotatedBeanDefinitionReader {
 		this.registry = registry;
 		/* @Conditional 条件解析器 */
 		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);
+
 		/* ====================重点========================== */
 		/* 注册 ConfigurationClassPostProcessor --> 用于扫描并生成BeanDefinition
 		   注册 AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等BeanPostProcessor
@@ -263,6 +264,7 @@ public class AnnotatedBeanDefinitionReader {
 			@Nullable BeanDefinitionCustomizer[] customizers) {
 
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
+		/* 检查注解 @Conditional */
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}
@@ -271,8 +273,10 @@ public class AnnotatedBeanDefinitionReader {
 		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd);
 		abd.setScope(scopeMetadata.getScopeName());
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
-
+		/* 解析Bean定义注解，@Primary、@Lazy、@DependsOn等 */
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
+
+		// 自定义qualifiers，一般为空
 		if (qualifiers != null) {
 			for (Class<? extends Annotation> qualifier : qualifiers) {
 				if (Primary.class == qualifier) {
@@ -291,7 +295,7 @@ public class AnnotatedBeanDefinitionReader {
 				customizer.customize(abd);
 			}
 		}
-
+		/* 生成并注册 BeanDefinition*/
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry);

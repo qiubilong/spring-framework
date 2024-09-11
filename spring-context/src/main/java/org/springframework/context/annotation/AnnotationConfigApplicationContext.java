@@ -65,15 +65,20 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
 	 */
 	public AnnotationConfigApplicationContext() {
-		/* super(); //默认调用父类无参构造方法, 创建beanFactory(WebApplicationContext的beanFactory是refresh()方法中再创建)
+		/* super(); //默认调用父类无参构造方法, 创建beanFactory (WebApplicationContext的beanFactory是refresh()方法中再创建)
 		   public GenericApplicationContext() {
 		   this.beanFactory = new DefaultListableBeanFactory();
 		} */
 		StartupStep createAnnotatedBeanDefReader = this.getApplicationStartup().start("spring.context.annotated-bean-reader.create");
-		/* 配置类解析器 */
+		/* 配置类解析器
+		*  注入BeanDefinition - BeanFactoryPostProcessor - ConfigurationClassPostProcessor --> 用于扫描生成BeanDefinition
+		*  注入BeanDefinition - BeanPostProcessor        - AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等
+		*  注入BeanDefinition - @EventListener解析相关class
+		*  创建对象            - StandardEnvironment对象   -> 加载系统环境变量、jvm环境变量
+		*  */
 		this.reader = new AnnotatedBeanDefinitionReader(this);
 		createAnnotatedBeanDefReader.end();
-		/* @Component扫描器 */
+		/* 创建 @Component扫描器 */
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 

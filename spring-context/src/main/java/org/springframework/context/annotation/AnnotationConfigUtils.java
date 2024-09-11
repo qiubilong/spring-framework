@@ -135,7 +135,10 @@ public abstract class AnnotationConfigUtils {
 	 * @param registry the registry to operate on
 	 */
 	public static void registerAnnotationConfigProcessors(BeanDefinitionRegistry registry) {
-		/* 添加容器默认的BeanFactoryProcessor和BeanPostProcessor */
+		/* 注册BeanDefinition BeanFactoryProcessor -> ConfigurationClassPostProcessor -> 用户扫描生成BeanDefinition
+		   注册BeanDefinition BeanPostProcessor    -> AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor、InitDestroyAnnotationBeanPostProcessor
+		   注册BeanDefinition @EventListener事件监听处理对象
+		   */
 		registerAnnotationConfigProcessors(registry, null);
 	}
 
