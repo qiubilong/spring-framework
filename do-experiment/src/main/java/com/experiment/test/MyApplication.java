@@ -63,5 +63,8 @@ public class MyApplication {
 
 		applicationContext.publishEvent("发布事件123");
 
+		applicationContext.close();
+
+
 	}
 }

@@ -15,9 +15,9 @@ public class ListenerByImpl implements ApplicationListener<ApplicationEvent> {
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
-		System.out.println("ListenerByImpl event="+event);
+		System.out.println("ListenerByImplTest event="+event);
 		if(event instanceof PayloadApplicationEvent<?> applicationEvent){
-			System.out.println("ListenerByImpl PayloadApplicationEvent="+applicationEvent.getPayload());
+			System.out.println("ListenerByImplTest PayloadApplicationEvent="+applicationEvent.getPayload());
 		}
 
 	}
