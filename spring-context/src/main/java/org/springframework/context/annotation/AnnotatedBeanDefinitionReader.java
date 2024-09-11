@@ -68,7 +68,12 @@ public class AnnotatedBeanDefinitionReader {
 	 * @see #setEnvironment(Environment)
 	 */
 	public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry) {
+		/* 注册 ConfigurationClassPostProcessor --> 用于扫描并生成BeanDefinition
+		   注册 AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等BeanPostProcessor
+		   */
 		this(registry, getOrCreateEnvironment(registry));
+		/* getOrCreateEnvironment(registry) --> 创建StandardEnvironment -->加载系统环境变量、JVM环境变量
+		 */
 	}
 
 	/**
@@ -86,11 +91,13 @@ public class AnnotatedBeanDefinitionReader {
 		this.registry = registry;
 		/* @Conditional 条件解析器 */
 		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);
-		/* 注册默认的PostProcessor
-		  BeanFactoryPostProcessor
-		  BeanPostProcessor
+		/* ====================重点========================== */
+		/* 注册 ConfigurationClassPostProcessor --> 用于扫描并生成BeanDefinition
+		   注册 AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等BeanPostProcessor
 		   */
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
+
+		//ConfigurationClassPostProcessor是BeanFactoryPostProcessor
 	}
 
 

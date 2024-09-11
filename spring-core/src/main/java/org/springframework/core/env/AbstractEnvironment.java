@@ -134,7 +134,9 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 */
 	protected AbstractEnvironment(MutablePropertySources propertySources) {
 		this.propertySources = propertySources;
+		/* Property解析器，PropertySourcesPropertyResolver */
 		this.propertyResolver = createPropertyResolver(propertySources);
+		/* 模板模式子类StandardEnvironment，加载系统环境变量、虚拟机JVM变量 */
 		customizePropertySources(propertySources);
 	}
 

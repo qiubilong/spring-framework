@@ -55,9 +55,11 @@ package org.springframework.core.env;
 public class StandardEnvironment extends AbstractEnvironment {
 
 	/** System environment property source name: {@value}. */
+	/* 系统环境变量 */
 	public static final String SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME = "systemEnvironment";
 
 	/** JVM system properties property source name: {@value}. */
+	/* 虚拟机环境变量 */
 	public static final String SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME = "systemProperties";
 
 
@@ -66,6 +68,15 @@ public class StandardEnvironment extends AbstractEnvironment {
 	 * {@link MutablePropertySources} instance.
 	 */
 	public StandardEnvironment() {
+		/*
+		  首先初始化父类，默认调用super()父类构造方法
+		  public AbstractEnvironment() {
+		    this(new MutablePropertySources());
+		  }
+		  加载系统环境变量、JVM环境变量
+		  */
+		super();/* 为了方便阅读，自己添加 */
+
 	}
 
 	/**

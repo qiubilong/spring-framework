@@ -162,7 +162,13 @@ public abstract class AnnotationConfigUtils {
 
 		Set<BeanDefinitionHolder> beanDefs = new LinkedHashSet<>(8);
 
-		/* 添加- BeanFactoryBeanProcessor - ConfigurationClassPostProcessor  --> 扫描@Component生成BeanDefintion */
+		/*
+		 * ConfigurationClassPostProcessor
+		 * ConfigurationClassPostProcessor
+		 * ConfigurationClassPostProcessor
+		 * 重要的事情说三遍
+		 */
+		/* 添加- BeanFactoryBeanProcessor - ConfigurationClassPostProcessor  --> 扫描配置生成BeanDefinition */
 		if (!registry.containsBeanDefinition(CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(ConfigurationClassPostProcessor.class);
 			def.setSource(source);
@@ -220,7 +226,7 @@ public abstract class AnnotationConfigUtils {
 			beanDefs.add(registerPostProcessor(registry, def, EVENT_LISTENER_PROCESSOR_BEAN_NAME));
 		}
 
-		/* 添加 - 对象，用于将注解了@EventListener的方法包装成EventListener对象 */
+		/* 添加对象，用于将注解了@EventListener的方法包装成EventListener对象 */
 		if (!registry.containsBeanDefinition(EVENT_LISTENER_FACTORY_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(DefaultEventListenerFactory.class);
 			def.setSource(source);
