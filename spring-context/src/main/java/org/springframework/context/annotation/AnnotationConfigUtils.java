@@ -171,13 +171,13 @@ public abstract class AnnotationConfigUtils {
 		 * ConfigurationClassPostProcessor
 		 * 重要的事情说三遍
 		 */
-		/* 添加- BeanFactoryBeanProcessor - ConfigurationClassPostProcessor  --> 扫描配置生成BeanDefinition */
+		/* 注册BeanDefinition - BeanFactoryBeanProcessor - ConfigurationClassPostProcessor  --> 用户扫描生成BeanDefinition */
 		if (!registry.containsBeanDefinition(CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(ConfigurationClassPostProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-		/* 添加- BeanPostProcessor - AutowiredAnnotationBeanPostProcessor --> 解析依赖注入@Value,@Autowired,@Qualifier  */
+		/* 注册BeanDefinition - BeanPostProcessor - AutowiredAnnotationBeanPostProcessor --> 解析依赖注入@Value,@Autowired,@Qualifier  */
 		if (!registry.containsBeanDefinition(AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(AutowiredAnnotationBeanPostProcessor.class);
 			def.setSource(source);
@@ -222,14 +222,14 @@ public abstract class AnnotationConfigUtils {
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, PERSISTENCE_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-		/* 添加- BeanFactoryPostProcessor - EventListenerMethodProcessor  ->解析 @EventListener  */
+		/* 注册BeanDefinition - Bean工厂处理器BeanFactoryPostProcessor - EventListenerMethodProcessor  ->解析 @EventListener  */
 		if (!registry.containsBeanDefinition(EVENT_LISTENER_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(EventListenerMethodProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, EVENT_LISTENER_PROCESSOR_BEAN_NAME));
 		}
 
-		/* 添加对象，用于将注解了@EventListener的方法包装成EventListener对象 */
+		/* 注册BeanDefinition，用于将注解了@EventListener的方法生成ApplicationListener适配器对象 */
 		if (!registry.containsBeanDefinition(EVENT_LISTENER_FACTORY_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(DefaultEventListenerFactory.class);
 			def.setSource(source);

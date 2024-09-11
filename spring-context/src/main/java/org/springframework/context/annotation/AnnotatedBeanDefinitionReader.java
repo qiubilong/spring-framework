@@ -68,9 +68,10 @@ public class AnnotatedBeanDefinitionReader {
 	 * @see #setEnvironment(Environment)
 	 */
 	public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry) {
-		/* 注册BeanDefinition  - ConfigurationClassPostProcessor --> 用于扫描并生成BeanDefinition
-		   注册BeanDefinition  - AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等BeanPostProcessor
-		   */
+	    /* 注册BeanDefinition BeanFactoryProcessor -> ConfigurationClassPostProcessor -> 用户扫描生成BeanDefinition
+		   注册BeanDefinition BeanPostProcessor    -> AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor、InitDestroyAnnotationBeanPostProcessor
+		   注册BeanDefinition @EventListener事件监听处理对象
+		 */
 		this(registry, getOrCreateEnvironment(registry));
 		/* getOrCreateEnvironment(registry) --> 创建StandardEnvironment -->加载系统环境变量、JVM环境变量
 		 */
@@ -93,12 +94,12 @@ public class AnnotatedBeanDefinitionReader {
 		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);
 
 		/* ====================重点========================== */
-		/* 注册 ConfigurationClassPostProcessor --> 用于扫描并生成BeanDefinition
-		   注册 AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等BeanPostProcessor
-		   */
-		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
 
-		//ConfigurationClassPostProcessor是BeanFactoryPostProcessor
+		/* 注册BeanDefinition BeanFactoryProcessor -> ConfigurationClassPostProcessor -> 用户扫描生成BeanDefinition
+		   注册BeanDefinition BeanPostProcessor    -> AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor、InitDestroyAnnotationBeanPostProcessor
+		   注册BeanDefinition @EventListener事件监听处理对象
+		 */
+		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
 	}
 
 

@@ -70,7 +70,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 		   this.beanFactory = new DefaultListableBeanFactory();
 		} */
 		StartupStep createAnnotatedBeanDefReader = this.getApplicationStartup().start("spring.context.annotated-bean-reader.create");
-		/* 配置类解析器
+		/* 注入配置
 		*  注入BeanDefinition - BeanFactoryPostProcessor - ConfigurationClassPostProcessor --> 用于扫描生成BeanDefinition
 		*  注入BeanDefinition - BeanPostProcessor        - AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor等
 		*  注入BeanDefinition - @EventListener解析相关class

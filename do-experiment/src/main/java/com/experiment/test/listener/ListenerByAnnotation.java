@@ -11,8 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ListenerByAnnotation {
 
+	/* EventListenerMethodProcessor (BeanFactory处理器) --> DefaultEventListenerFactory --> 创建ApplicationListener适配器  --> 添加到容器的listener列表
+	*   */
 	@EventListener
 	public void listenerByAnnotationTest(ApplicationEvent event){
 		System.out.println("listenerByAnnotationTest,event="+event);
 	}
+	//EventListenerMethodProcessor是一个BeanFactoryPostProcessor
 }

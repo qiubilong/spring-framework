@@ -95,7 +95,7 @@ public class EventListenerMethodProcessor
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
-
+		/* 实例化DefaultEventListenerFactory对象 */
 		Map<String, EventListenerFactory> beans = beanFactory.getBeansOfType(EventListenerFactory.class, false, false);
 		List<EventListenerFactory> factories = new ArrayList<>(beans.values());
 		AnnotationAwareOrderComparator.sort(factories);
@@ -103,6 +103,7 @@ public class EventListenerMethodProcessor
 	}
 
 
+	/* 所有非懒加载bean创建后，回调拓展点 */
 	@Override
 	public void afterSingletonsInstantiated() {
 		ConfigurableListableBeanFactory beanFactory = this.beanFactory;
@@ -137,6 +138,7 @@ public class EventListenerMethodProcessor
 						}
 					}
 					try {
+						/* 扫描 @EventListener 注解 */
 						processBean(beanName, type);
 					}
 					catch (Throwable ex) {
@@ -177,13 +179,14 @@ public class EventListenerMethodProcessor
 				// Non-empty set of methods
 				ConfigurableApplicationContext context = this.applicationContext;
 				Assert.state(context != null, "No ApplicationContext set");
-				List<EventListenerFactory> factories = this.eventListenerFactories;
+				List<EventListenerFactory> factories = this.eventListenerFactories;/* DefaultEventListenerFactory */
 				Assert.state(factories != null, "EventListenerFactory List not initialized");
 				for (Method method : annotatedMethods.keySet()) {
 					for (EventListenerFactory factory : factories) {
 						if (factory.supportsMethod(method)) {
+							/* 存在注解@EventListener的方法 */
 							Method methodToUse = AopUtils.selectInvocableMethod(method, context.getType(beanName));
-							/* @EventListener --> ApplicationListener ,将添加了@EventListener的方法封装成ApplicationListener  */
+							/* 使用DefaultEventListenerFactory 创建ApplicationListener适配器 */
 							ApplicationListener<?> applicationListener =
 									factory.createApplicationListener(beanName, targetType, methodToUse);
 							if (applicationListener instanceof ApplicationListenerMethodAdapter alma) {
