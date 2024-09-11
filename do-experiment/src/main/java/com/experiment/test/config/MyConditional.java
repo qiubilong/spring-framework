@@ -9,10 +9,11 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
  * @author chenxuegui
  * @since 2024/9/11
  */
+/* @Condition条件匹配 */
 public class MyConditional implements Condition {
 	@Override
 	public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
 		System.out.println("MyConditional -> "+ metadata);
-		return false;
+		return true;
 	}
 }

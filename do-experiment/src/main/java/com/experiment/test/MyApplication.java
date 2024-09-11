@@ -61,5 +61,7 @@ public class MyApplication {
 
 		System.out.println(applicationContext.getBean(MessageSource.class).getMessage("test2", null, new Locale("en")));
 
+		applicationContext.publishEvent("发布事件123");
+
 	}
 }

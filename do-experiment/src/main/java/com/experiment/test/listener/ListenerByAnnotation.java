@@ -1,6 +1,7 @@
 package com.experiment.test.listener;
 
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ public class ListenerByAnnotation {
 	@EventListener
 	public void listenerByAnnotationTest(ApplicationEvent event){
 		System.out.println("listenerByAnnotationTest,event="+event);
+
 	}
 	//EventListenerMethodProcessor是一个BeanFactoryPostProcessor
 }
