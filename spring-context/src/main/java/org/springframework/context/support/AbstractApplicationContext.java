@@ -551,7 +551,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
-			/* 模板方法，App(非Web)ApplicationContext仅能refresh()一次 */
+			//App(非Web)ApplicationContext仅能refresh()一次
+			/* 模板方法，取得DefaultListBeanFactory */
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
@@ -563,7 +564,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
 				// Invoke factory processors registered as beans in the context.
-				/* 调用Bean工厂处理器，BeanFactoryProcessor */
+				/* =============重点================= */
+				/* =============重点================= */
+				/* =============重点================= */
+				/* 调用Bean工厂处理器BeanFactoryProcessor --> 扫描注册BeanDefinition */
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
@@ -750,7 +754,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * <p>Must be called before singleton instantiation.
 	 */
 	protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
+		/* 寻找BeanDefinitionRegistryPostProcessor -- > 调用postProcessBeanDefinitionRegistry -> 扫描注册BeanDefinition */
 		PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(beanFactory, getBeanFactoryPostProcessors());
+		//BeanDefinitionRegistryPostProcessor是BeanFactoryPostProcessor
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found in the meantime
 		// (e.g. through an @Bean method registered by ConfigurationClassPostProcessor)

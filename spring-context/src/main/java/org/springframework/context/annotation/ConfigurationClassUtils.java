@@ -96,6 +96,7 @@ public abstract class ConfigurationClassUtils {
 			BeanDefinition beanDef, MetadataReaderFactory metadataReaderFactory) {
 
 		String className = beanDef.getBeanClassName();
+		/* @Bean得到的BeanDefinition不允许当做配置类 */
 		if (className == null || beanDef.getFactoryMethodName() != null) {
 			return false;
 		}
@@ -132,10 +133,12 @@ public abstract class ConfigurationClassUtils {
 			}
 		}
 
+		/* 存在注解 @Configuration --> 需要生成配置类增加子类 --> 拦截生成bean的方法 --> 保证bean的单例 */
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
+		/* 是否配置类 --> 存在 @Component、@ComponentScan、@Import、@ImportSource、@Bean --> 配置类 */
 		else if (config != null || isConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		}
