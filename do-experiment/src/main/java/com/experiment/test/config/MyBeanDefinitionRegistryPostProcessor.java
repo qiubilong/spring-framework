@@ -1,7 +1,10 @@
 package com.experiment.test.config;
 
 import com.experiment.spring.test.service.MyUserInfoService;
+import com.experiment.test.constructor.ConstructByBeanDefinition;
+import com.experiment.test.service.UserInfoService;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -34,6 +37,13 @@ public class MyBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegi
     /* BeanFactoryPostProcessor拓展类，用于扫描注册BeanDefinition，如spring使用ConfigurationClassPostProcessor来扫描spring管理的bean */
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+
+		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition().getBeanDefinition();
+		beanDefinition.setBeanClassName(ConstructByBeanDefinition.class.getName());
+		/* 相当于手动指定构造函数 */
+		beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(UserInfoService.class);
+
+		registry.registerBeanDefinition("constructByBeanDefinition",beanDefinition);
 
 	}
 }
