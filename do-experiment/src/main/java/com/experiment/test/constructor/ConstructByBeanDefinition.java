@@ -15,7 +15,7 @@ public class ConstructByBeanDefinition {
 	*/
 
 	public ConstructByBeanDefinition(UserInfoService userInfoService){
-		System.out.println("ConstructByBeanDefinition(UserInfoService userInfoService)");
+		System.out.println("构造函数 - ConstructByBeanDefinition(UserInfoService userInfoService)");
 
 	}
 

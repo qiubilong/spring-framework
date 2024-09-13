@@ -6,6 +6,7 @@ import com.experiment.test.service.UserInfoService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
@@ -41,7 +42,7 @@ public class MyBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegi
 		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition().getBeanDefinition();
 		beanDefinition.setBeanClassName(ConstructByBeanDefinition.class.getName());
 		/* 相当于手动指定构造函数 */
-		beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(UserInfoService.class);
+		beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(new RuntimeBeanReference(UserInfoService.class));
 
 		registry.registerBeanDefinition("constructByBeanDefinition",beanDefinition);
 
