@@ -1158,14 +1158,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					"Bean class isn't public, and non-public access not allowed: " + beanClass.getName());
 		}
 
-		/* Supplier方式 - 创建 */
+		/* Supplier 方式创建 */
 		Supplier<?> instanceSupplier = mbd.getInstanceSupplier();
 		if (instanceSupplier != null) {
 			return obtainFromSupplier(instanceSupplier, beanName, mbd);
 		}
 
 
-		/* 工厂方法方式 - 创建，如 @Bean */
+		/* @Bean 方式创建 */
 		if (mbd.getFactoryMethodName() != null) {
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
@@ -1198,7 +1198,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			return autowireConstructor(beanName, mbd, ctors, args);
 		}
 
-		// Preferred constructors for default construction?
+		//忽略 Preferred constructors for default construction?
 		ctors = mbd.getPreferredConstructors();
 		if (ctors != null) {
 			return autowireConstructor(beanName, mbd, ctors, null);
