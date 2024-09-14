@@ -614,11 +614,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		if (earlySingletonExposure) {
 			Object earlySingletonReference = getSingleton(beanName, false);
+			/* earlySingletonReference != null --> 发生了循环依赖，提前生成了动态代理对象  */
 			if (earlySingletonReference != null) {
+				/* exposedObject == bean --> 仍然是原始对象 --> 返回提前生成的动态代理对象*/
 				if (exposedObject == bean) {
 					exposedObject = earlySingletonReference;
 				}
+				/* exposedObject != bean --> 循环依赖提前生成的动态代理对象与最后生成的动态代理对象不同 --> 报错 */
 				else if (!this.allowRawInjectionDespiteWrapping && hasDependentBean(beanName)) {
+					//取出依赖的bean的对象
 					String[] dependentBeans = getDependentBeans(beanName);
 					Set<String> actualDependentBeans = new LinkedHashSet<>(dependentBeans.length);
 					for (String dependentBean : dependentBeans) {

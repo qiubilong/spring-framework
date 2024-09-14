@@ -1,4 +1,4 @@
-package com.experiment.test.service.circularRef;
+package com.experiment.test.circularRef;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -17,7 +17,7 @@ public class UserInfoLazyService {
 	private ApplicationContext applicationContext;
 
 	@Autowired
-	@Lazy /* 注入代理类，用到时再到容器中取（buildLazyResolutionProxy） */
+	@Lazy /* 注入代理类，运行时从容器中取（buildLazyResolutionProxy） */
 	private UserInfoLazyService userInfoLazyService;
 
 	public void getService() {

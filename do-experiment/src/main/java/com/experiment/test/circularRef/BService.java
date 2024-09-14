@@ -1,6 +1,5 @@
-package com.experiment.test.service.circularRef;
+package com.experiment.test.circularRef;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**

@@ -14,10 +14,12 @@ dependencies {
     implementation 'jakarta.annotation:jakarta.annotation-api:2.0'
 
     api(project(":spring-aop"))
+    api(project(":spring-aspects"))
     api(project(":spring-beans"))
     api(project(":spring-core"))
     api(project(":spring-context"))
     api(project(":spring-expression"))
+    api(project(":spring-tx"))
 
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
