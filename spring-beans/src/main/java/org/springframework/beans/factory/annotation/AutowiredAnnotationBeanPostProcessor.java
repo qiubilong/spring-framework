@@ -384,6 +384,8 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 						}
 						/* @Autowired注解的构造函数 */
 						if (ann != null) {
+							/* 多个@Autowied声明的构造函数 --> 报错 */
+							//简单化，不考虑@Autowied(required = false)情况
 							if (requiredConstructor != null) {
 								throw new BeanCreationException(beanName,
 										"Invalid autowire-marked constructor: " + candidate +
