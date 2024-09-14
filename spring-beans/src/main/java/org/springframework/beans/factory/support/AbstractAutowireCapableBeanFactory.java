@@ -1409,17 +1409,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				}
 			}
 		}
-		/* field和其setXXX */
+		/* bean 指定依赖注入方式 AutowireMode (Autowire.BY_TYPE 或者Autowire.BY_NAME) --> setXXX  --> 注入依赖
+		*  spring已经废弃这种注入方式，推荐使用@Autowired来注入依赖，开发者更加清晰地看到依赖关系，增加代码可读性和维护性
+		*  */
 		PropertyValues pvs = (mbd.hasPropertyValues() ? mbd.getPropertyValues() : null);
-		/* @Bean(autowire= Autowire.BY_NAME)，已经废弃 */
 		int resolvedAutowireMode = mbd.getResolvedAutowireMode();
 		if (resolvedAutowireMode == AUTOWIRE_BY_NAME || resolvedAutowireMode == AUTOWIRE_BY_TYPE) {
 			MutablePropertyValues newPvs = new MutablePropertyValues(pvs);
 			// Add property values based on autowire by name if applicable.
+			//name注入 -->  setXXX--> 属性XXX --> 注入依赖
 			if (resolvedAutowireMode == AUTOWIRE_BY_NAME) {
 				autowireByName(beanName, mbd, bw, newPvs);
 			}
 			// Add property values based on autowire by type if applicable.
+			//class注入 --> setXXX --> 参数类型 --> 注入依赖
 			if (resolvedAutowireMode == AUTOWIRE_BY_TYPE) {
 				autowireByType(beanName, mbd, bw, newPvs);
 			}

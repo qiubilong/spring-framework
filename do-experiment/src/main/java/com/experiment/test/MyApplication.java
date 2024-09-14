@@ -1,12 +1,13 @@
 package com.experiment.test;
 
 import com.experiment.spring.test.service.MyUserInfoService;
+import com.experiment.test.autowired.AutowiredByTypeService;
 import com.experiment.test.config.MyAppConfig;
 import com.experiment.test.factory.OrderFeignService;
 import com.experiment.test.service.PrizeService;
 import com.experiment.test.circularRef.UserInfoLazyService;
 import com.experiment.test.service.UserInfoService;
-import com.experiment.test.service.lookup.LookupService;
+import com.experiment.test.autowired.lookup.LookupService;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.MutablePropertySources;
@@ -63,8 +64,8 @@ public class MyApplication {
 
 		applicationContext.publishEvent("发布事件123");
 
-		applicationContext.close();
 
+		applicationContext.getBean(AutowiredByTypeService.class).test();
 
 	}
 }

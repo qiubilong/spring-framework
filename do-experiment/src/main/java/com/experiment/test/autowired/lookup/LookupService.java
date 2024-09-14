@@ -1,4 +1,4 @@
-package com.experiment.test.service.lookup;
+package com.experiment.test.autowired.lookup;
 
 import com.experiment.test.service.pay.IPayService;
 import org.springframework.beans.factory.annotation.Lookup;

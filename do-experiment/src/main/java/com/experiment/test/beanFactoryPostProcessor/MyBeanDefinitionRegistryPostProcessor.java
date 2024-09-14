@@ -1,16 +1,15 @@
-package com.experiment.test.config;
+package com.experiment.test.beanFactoryPostProcessor;
 
 import com.experiment.spring.test.service.MyUserInfoService;
+import com.experiment.test.autowired.AutowiredByTypeService;
 import com.experiment.test.constructor.ConstructByBeanDefinition;
 import com.experiment.test.service.UserInfoService;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.support.*;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,12 +38,18 @@ public class MyBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegi
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
 
+		/* 指定构造函数  */
 		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition().getBeanDefinition();
 		beanDefinition.setBeanClassName(ConstructByBeanDefinition.class.getName());
-		/* 相当于手动指定构造函数 */
 		beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(new RuntimeBeanReference(UserInfoService.class));
-
 		registry.registerBeanDefinition("constructByBeanDefinition",beanDefinition);
 
+
+		/* 指定AutowireMode自动setXXX注入依赖, spring已经废弃，推荐使用@Autowired注入依赖关系更加清晰 */
+		AbstractBeanDefinition beanDefinition1 = BeanDefinitionBuilder.genericBeanDefinition().getBeanDefinition();
+		beanDefinition1.setBeanClass(AutowiredByTypeService.class);
+		beanDefinition1.setAutowireMode(Autowire.BY_TYPE.value());
+		//beanDefinition1.setAutowireMode(Autowire.BY_NAME.value());
+		registry.registerBeanDefinition("autowiredByTypeService",beanDefinition1);
 	}
 }
