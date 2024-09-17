@@ -309,10 +309,11 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
-		/* 处理 @Import */
+		/* 处理 @Import  --> ImportSelector  --> ImportBeanDefinitionRegistrar */
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
 		// Process any @ImportResource annotations
+		/* 处理 @ImportResource --> XML path  */
 		AnnotationAttributes importResource =
 				AnnotationConfigUtils.attributesFor(sourceClass.getMetadata(), ImportResource.class);
 		if (importResource != null) {
@@ -325,14 +326,17 @@ class ConfigurationClassParser {
 		}
 
 		// Process individual @Bean methods
+		/* 处理 @Bean  */
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));
 		}
 
 		// Process default methods on interfaces
+		/* 处理Interface --> @Bean */
 		processInterfaces(configClass, sourceClass);
 
+		/* 继续处理父类 */
 		// Process superclass, if any
 		if (sourceClass.getMetadata().hasSuperClass()) {
 			String superclass = sourceClass.getMetadata().getSuperClassName();
@@ -442,6 +446,7 @@ class ConfigurationClassParser {
 	private Set<SourceClass> getImports(SourceClass sourceClass) throws IOException {
 		Set<SourceClass> imports = new LinkedHashSet<>();
 		Set<SourceClass> visited = new LinkedHashSet<>();
+		/* @Import声明的class */
 		collectImports(sourceClass, imports, visited);
 		return imports;
 	}
@@ -469,6 +474,7 @@ class ConfigurationClassParser {
 					collectImports(annotation, imports, visited);
 				}
 			}
+			/* @Import声明的class */
 			imports.addAll(sourceClass.getAnnotationAttributes(Import.class.getName(), "value"));
 		}
 	}
@@ -514,7 +520,7 @@ class ConfigurationClassParser {
 						// Candidate class is an ImportBeanDefinitionRegistrar ->
 						// delegate to it to register additional bean definitions
 						Class<?> candidateClass = candidate.loadClass();
-						/*  */
+						/* 处理 ImportBeanDefinitionRegistrar */
 						ImportBeanDefinitionRegistrar registrar =
 								ParserStrategyUtils.instantiateClass(candidateClass, ImportBeanDefinitionRegistrar.class,
 										this.environment, this.resourceLoader, this.registry);

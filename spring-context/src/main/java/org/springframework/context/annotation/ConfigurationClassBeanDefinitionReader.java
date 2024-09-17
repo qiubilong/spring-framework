@@ -117,7 +117,7 @@ class ConfigurationClassBeanDefinitionReader {
 	public void loadBeanDefinitions(Set<ConfigurationClass> configurationModel) {
 		TrackedConditionEvaluator trackedConditionEvaluator = new TrackedConditionEvaluator();
 		for (ConfigurationClass configClass : configurationModel) {
-			/* 处理配置类声明的bean */
+			/* 处理配置类解析得到的bean --> @Import、@ImportReSource、@Bean --> 生成注册BeanDefinition */
 			loadBeanDefinitionsForConfigurationClass(configClass, trackedConditionEvaluator);
 		}
 	}
