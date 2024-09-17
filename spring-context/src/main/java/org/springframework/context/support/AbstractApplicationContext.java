@@ -566,7 +566,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				/* =============重点================= */
 				/* =============重点================= */
 				/* =============重点================= */
-				/* 调用Bean工厂处理器BeanFactoryProcessor --> 扫描注册BeanDefinition */
+				/* 调用Bean工厂处理器BeanFactoryProcessor --> 扫描配置类  --> 注册BeanDefinition */
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.

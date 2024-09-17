@@ -16,9 +16,8 @@ import java.util.Random;
  */
 @ComponentScan("com.experiment.test")
 @Configuration(enforceUniqueMethods=false)/* 加不加@Configuration可以实例化@Bean，加@Configuration会生成代理配置类，保证内部多次方法调用只会生成一个bean  */
-@PropertySource("classpath:spring.properties") /* 通过environment加载资源 */
-@EnableAsync
-@EnableAspectJAutoProxy
+//@EnableAsync
+//@EnableAspectJAutoProxy
 @Conditional(MyConditional.class)
 public class MyAppConfig {
 

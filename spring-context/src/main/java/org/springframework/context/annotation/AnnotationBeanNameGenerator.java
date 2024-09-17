@@ -68,6 +68,7 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 	 * as used for component scanning purposes.
 	 * @since 5.2
 	 */
+	/* beanName生成器 --> 单例  -->   */
 	public static final AnnotationBeanNameGenerator INSTANCE = new AnnotationBeanNameGenerator();
 
 	private static final String COMPONENT_ANNOTATION_CLASSNAME = "org.springframework.stereotype.Component";

@@ -279,9 +279,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 					"postProcessBeanFactory already called on this post-processor against " + registry);
 		}
 		this.registriesPostProcessed.add(registryId);
-		/* 扫描注册BeanDefinition */
-		/* 扫描注册BeanDefinition */
-		/* 扫描注册BeanDefinition */
+		/* 寻找配置类 --> 扫描注册BeanDefinition */
+		/* 寻找配置类 --> 扫描注册BeanDefinition */
+		/* 寻找配置类 --> 扫描注册BeanDefinition */
 		processConfigBeanDefinitions(registry);
 	}
 
@@ -396,8 +396,10 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 		Set<BeanDefinitionHolder> candidates = new LinkedHashSet<>(configCandidates);
 		Set<ConfigurationClass> alreadyParsed = new HashSet<>(configCandidates.size());
+		/* 循环解析配置类，因为配置类可能会声明了新的配置类 */
 		do {
 			StartupStep processConfig = this.applicationStartup.start("spring.context.config-classes.parse");
+			/* 解析配置类   */
 			parser.parse(candidates);
 			parser.validate();
 
@@ -410,6 +412,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
+			/* 处理配置类声明的bean --> 生成注册BeanDefinition */
 			this.reader.loadBeanDefinitions(configClasses);
 			alreadyParsed.addAll(configClasses);
 			processConfig.tag("classCount", () -> String.valueOf(configClasses.size())).end();
