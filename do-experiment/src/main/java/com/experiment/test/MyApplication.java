@@ -4,7 +4,7 @@ import com.experiment.spring.test.service.MyUserInfoService;
 import com.experiment.test.autowired.AutowiredByTypeService;
 import com.experiment.test.config.MyAppConfig;
 import com.experiment.test.factory.OrderFeignService;
-import com.experiment.test.mybatis.service.ExchangeService;
+import com.experiment.test.mybatis.test.service.ExchangeService;
 import com.experiment.test.service.PrizeService;
 import com.experiment.test.circularRef.UserInfoLazyService;
 import com.experiment.test.service.UserInfoService;

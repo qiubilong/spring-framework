@@ -1,4 +1,4 @@
-package com.experiment.test.mybatis.mapper;
+package com.experiment.test.mybatis.test.mapper;
 
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.experiment.test.mybatis.factory;
+package com.experiment.test.mybatis.spring;
 
 import org.springframework.beans.factory.FactoryBean;
 
