@@ -16,6 +16,8 @@ public class MyBatisFactoryBean implements FactoryBean {
 
 	@Override
 	public Object getObject() {
+
+		//jdk动态代理
 		return Proxy.newProxyInstance(MyBatisFactoryBean.class.getClassLoader(), new Class[]{mapperInterface}, new InvocationHandler() {
 			@Override
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

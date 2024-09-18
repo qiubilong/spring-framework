@@ -29,6 +29,7 @@ public class MyBatisImportBeanDefinitionRegistrar implements ImportBeanDefinitio
 
 		MybatisClassPathBeanDefinitionScanner scanner = new MybatisClassPathBeanDefinitionScanner(registry);
 
+		/* 扫描到所有接口都是候选者，包括Interface */
 		scanner.addIncludeFilter(new TypeFilter() {
 			@Override
 			public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
@@ -37,14 +38,5 @@ public class MyBatisImportBeanDefinitionRegistrar implements ImportBeanDefinitio
 		});
 
 		scanner.scan(path);
-		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition().getBeanDefinition();
-		beanDefinition.setBeanClassName(MyBatisFactoryBean.class.getName());
-		beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(OrderMapper.class);
-		registry.registerBeanDefinition("orderMapper",beanDefinition);
-
-		BeanDefinition beanDefinition1 = BeanDefinitionBuilder.genericBeanDefinition().getBeanDefinition();
-		beanDefinition1.setBeanClassName(MyBatisFactoryBean.class.getName());
-		beanDefinition1.getConstructorArgumentValues().addGenericArgumentValue(UserMapper.class);
-		registry.registerBeanDefinition("userMapper",beanDefinition1);
 	}
 }

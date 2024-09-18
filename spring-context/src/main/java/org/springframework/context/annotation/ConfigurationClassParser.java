@@ -470,6 +470,7 @@ class ConfigurationClassParser {
 		if (visited.add(sourceClass)) {
 			for (SourceClass annotation : sourceClass.getAnnotations()) {
 				String annName = annotation.getMetadata().getClassName();
+				/* 递归搜索@Import */
 				if (!annName.equals(Import.class.getName())) {
 					collectImports(annotation, imports, visited);
 				}
@@ -977,6 +978,7 @@ class ConfigurationClassParser {
 				}
 			}
 			else {
+				/* 得到注解 */
 				for (String className : this.metadata.getAnnotationTypes()) {
 					if (!className.startsWith("java")) {
 						try {
