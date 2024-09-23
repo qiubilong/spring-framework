@@ -9,8 +9,12 @@ import org.springframework.aop.Pointcut;
 import org.springframework.aop.PointcutAdvisor;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -21,11 +25,25 @@ import java.lang.reflect.Method;
  * @author chenxuegui
  * @since 2024/9/23
  */
-@Component
+@Configuration
 public class AopConfig {
 
-
+	@Bean/* DefaultAdvisorAutoProxyCreator -->PointcutAdvisor --> Pointcut --> Bean + Advice --> AOP代理对象   */
+	DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator(){
+		DefaultAdvisorAutoProxyCreator autoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+		return autoProxyCreator;
+	}
 	@Bean
+	DefaultPointcutAdvisor defaultPointcutAdvisor(){
+		DefaultPointcutAdvisor defaultPointcutAdvisor = new DefaultPointcutAdvisor();
+		defaultPointcutAdvisor.setPointcut(new NameMatchMethodPointcut().addMethodName("doBuyPrize"));
+		defaultPointcutAdvisor.setAdvice(myMethodAroundAdvice());
+		return defaultPointcutAdvisor;
+	}
+
+
+
+	@Bean /* BeanName通配符，配置AOP */
 	BeanNameAutoProxyCreator beanNameAutoProxyCreator(){
 		BeanNameAutoProxyCreator beanNameAutoProxyCreator = new BeanNameAutoProxyCreator();
 		//bean 名字通配符
@@ -43,7 +61,7 @@ public class AopConfig {
 	}
 
 
-	@Bean /* 针对单个Bean配置Aop */
+	@Bean /* 针对单个Bean配置AOP */
 	ProxyFactoryBean userServiceAopByFactoryBean(){
 
 		UserServiceAopImpl target = new UserServiceAopImpl();

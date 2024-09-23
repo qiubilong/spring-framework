@@ -2,6 +2,7 @@ package com.experiment.test;
 
 import com.experiment.spring.test.service.MyUserInfoService;
 import com.experiment.test.aop.api.UserServiceAopApi;
+import com.experiment.test.aop.impl.MallAopService;
 import com.experiment.test.aop.impl.UserServiceAopImpl;
 import com.experiment.test.autowired.AutowiredByTypeService;
 import com.experiment.test.config.MyAppConfig;
@@ -79,5 +80,8 @@ public class MyApplication {
 		userServiceAopByFactoryBean.ping();*/
 		UserServiceAopImpl userServiceAopImpl = (UserServiceAopImpl)applicationContext.getBean("userServiceAopImpl");
 		userServiceAopImpl.ping();
+		System.out.println();
+		applicationContext.getBean(MallAopService.class).doBuyPrize();
+
 	}
 }
