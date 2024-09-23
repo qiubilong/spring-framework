@@ -1,6 +1,6 @@
 package com.experiment.test.aop;
 
-import com.experiment.test.aop.impl.UserServiceImpl;
+import com.experiment.test.aop.impl.UserServiceAopImpl;
 import org.springframework.cglib.proxy.*;
 
 import java.lang.reflect.Method;
@@ -8,10 +8,10 @@ import java.lang.reflect.Method;
 public class TestCglib {
 
 	public static void main(String[] args) {
-		UserServiceImpl target = new UserServiceImpl();
+		UserServiceAopImpl target = new UserServiceAopImpl();
 
 		Enhancer enhancer = new Enhancer();
-		enhancer.setSuperclass(UserServiceImpl.class);
+		enhancer.setSuperclass(UserServiceAopImpl.class);
 		enhancer.setCallbacks(new Callback[]{new MethodInterceptor() {
 			@Override
 			public Object intercept(Object enhancedObj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
@@ -33,7 +33,7 @@ public class TestCglib {
 			}
 		});
 
-		UserServiceImpl userService = (UserServiceImpl)enhancer.create();
+		UserServiceAopImpl userService = (UserServiceAopImpl)enhancer.create();
 		userService.ping();
 		userService.test();
 

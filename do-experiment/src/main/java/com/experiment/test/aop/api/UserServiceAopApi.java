@@ -1,6 +1,6 @@
 package com.experiment.test.aop.api;
 
-public interface UserServiceApi {
+public interface UserServiceAopApi {
 
 	public void ping();
 

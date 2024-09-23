@@ -5,6 +5,6 @@ import org.springframework.stereotype.Component;
 
 public interface UserMapper {
 
-	@Select("select 'user'")
+	@Select("select 'UserMapper.selectById'")
 	public String selectById();
 }
