@@ -6,6 +6,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+
+@SuppressWarnings({"rawtypes"})//忽略gradle泛型检查
 public class MyBatisFactoryBeanV0 implements FactoryBean {
 
 	private final Class<?> mapperInterface;

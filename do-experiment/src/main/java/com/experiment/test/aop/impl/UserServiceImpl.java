@@ -11,6 +11,6 @@ public class UserServiceImpl implements UserServiceApi {
 	@Override
 	public void test() {
 		System.out.println("userService test");
-
+		throw new NullPointerException();
 	}
 }

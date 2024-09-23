@@ -12,7 +12,7 @@ public class TestJdkProxy {
 
 		UserServiceImpl target = new UserServiceImpl();
 
-		UserServiceApi userService = (UserServiceApi) Proxy.newProxyInstance(TestJdkProxy.class.getClassLoader(), new Class[]{UserServiceApi.class}, new InvocationHandler() {
+		UserServiceApi userService = (UserServiceApi) Proxy.newProxyInstance(TestJdkProxy.class.getClassLoader(), new Class<?>[]{UserServiceApi.class}, new InvocationHandler() {
 			@Override
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				System.out.println("before");

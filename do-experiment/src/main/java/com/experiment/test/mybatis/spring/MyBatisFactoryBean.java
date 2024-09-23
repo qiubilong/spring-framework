@@ -5,7 +5,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
+@SuppressWarnings({"rawtypes"})//忽略gradle泛型检查
 public class MyBatisFactoryBean implements FactoryBean {
 
 	private final Class<?> mapperInterface;
