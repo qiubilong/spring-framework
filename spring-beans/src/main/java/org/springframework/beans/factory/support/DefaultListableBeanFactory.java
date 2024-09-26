@@ -157,6 +157,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private AutowireCandidateResolver autowireCandidateResolver = SimpleAutowireCandidateResolver.INSTANCE;
 
 	/** Map from dependency type to corresponding autowired value. */
+	/* spring 内部 bean对象 */
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
 
 	/** Map of bean definition objects, keyed by bean name. */
@@ -1380,13 +1381,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				}
 			}
 
-			/* 注入-集合，如 @Autowired List<xxxService> xxxServices 或  @Autowired Map<String,xxxService> xxxServicesMap*/
+			/* 注入-集合Bean，如 @Autowired List<xxxService> xxxServices 或  @Autowired Map<String,xxxService> xxxServicesMap*/
 			Object multipleBeans = resolveMultipleBeans(descriptor, beanName, autowiredBeanNames, typeConverter);
 			if (multipleBeans != null) {
 				return multipleBeans;
 			}
 
-			/* 注入-单个 */
+			/* 注入-单个Bean -->筛选候选者 class --> @Qualifier */
 			Map<String, Object> matchingBeans = findAutowireCandidates(beanName, type, descriptor);
 			if (matchingBeans.isEmpty()) {
 				if (isRequired(descriptor)) {
@@ -1592,7 +1593,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		String[] candidateNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 				this, requiredType, true, descriptor.isEager());
 		Map<String, Object> result = CollectionUtils.newLinkedHashMap(candidateNames.length);
-		/* spring自创建对象，如applicationContext */
+		/* spring内部对象，如applicationContext */
 		for (Map.Entry<Class<?>, Object> classObjectEntry : this.resolvableDependencies.entrySet()) {
 			Class<?> autowiringType = classObjectEntry.getKey();
 			if (autowiringType.isAssignableFrom(requiredType)) {

@@ -143,7 +143,8 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 	 */
 	@Override
 	public boolean isAutowireCandidate(BeanDefinitionHolder bdHolder, DependencyDescriptor descriptor) {
-		/* @Bean.autowireCandidate > 泛型匹配(isAssignableFrom) */
+		/* 从父类到子类依次检查, @Bean.autowireCandidate > 泛型匹配(isAssignableFrom) --> @Qualifier */
+		/* SimpleAutowireCandidateResolver --> GenericTypeAwareAutowireCandidateResolver --> QualifierAnnotationAutowireCandidateResolver   */
 		boolean match = super.isAutowireCandidate(bdHolder, descriptor);
 		if (match) {
 			/* @Qualifier检查 */

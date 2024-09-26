@@ -481,6 +481,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	/* @Value、@Autowired属性注入 */
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
+		/* 寻找注入点 */
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
 		try {
 			/* 属性注入 */
