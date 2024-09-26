@@ -15,6 +15,8 @@ import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -26,6 +28,8 @@ import java.lang.reflect.Method;
  * @since 2024/9/23
  */
 @Configuration
+@EnableAsync
+@EnableAspectJAutoProxy
 public class AopConfig {
 
 	@Bean/* DefaultAdvisorAutoProxyCreator -->PointcutAdvisor --> Pointcut --> Bean + Advice --> AOP代理对象   */

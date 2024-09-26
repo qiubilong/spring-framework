@@ -15,7 +15,7 @@ public class ProxyAService {
 	private ProxyBService proxyBService;
 
 	/* 循环依赖 --> 出现多次动态代理时 --> 最后的代理对象与提前曝光的代理对象不同 --> 报错  */
-	//@Async
+	@Async
 	public void asyn(){
 
 	}
