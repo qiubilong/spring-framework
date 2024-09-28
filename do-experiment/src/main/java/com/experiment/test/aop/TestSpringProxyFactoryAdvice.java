@@ -7,10 +7,17 @@ import com.experiment.test.aop.advice.MyMethodExceptionAdvice;
 import com.experiment.test.aop.api.UserServiceAopApi;
 import com.experiment.test.aop.impl.UserServiceAopImpl;
 import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.cglib.core.DebuggingClassWriter;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /* Advisor = Advice + PointCut   */
 public class TestSpringProxyFactoryAdvice {
 	public static void main(String[] args) {
+		//该设置用于输出cglib动态代理产生的类
+		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\myGit\\spring-framework\\jdk\\proxy1");
 
 		UserServiceAopImpl target = new UserServiceAopImpl();
 
@@ -30,4 +37,5 @@ public class TestSpringProxyFactoryAdvice {
 		//proxy.test();//抛出异常
 
 	}
+
 }

@@ -1,6 +1,7 @@
 package com.experiment.test.aop;
 
 import com.experiment.test.aop.impl.UserServiceAopImpl;
+import org.springframework.cglib.core.DebuggingClassWriter;
 import org.springframework.cglib.proxy.*;
 
 import java.lang.reflect.Method;
@@ -8,6 +9,9 @@ import java.lang.reflect.Method;
 public class TestCglib {
 
 	public static void main(String[] args) {
+
+		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\myGit\\spring-framework\\jdk\\proxy1"); //该设置用于输出cglib动态代理产生的类
+
 		UserServiceAopImpl target = new UserServiceAopImpl();
 
 		Enhancer enhancer = new Enhancer();
@@ -35,7 +39,6 @@ public class TestCglib {
 
 		UserServiceAopImpl userService = (UserServiceAopImpl)enhancer.create();
 		userService.ping();
-		userService.test();
 
 	}
 }

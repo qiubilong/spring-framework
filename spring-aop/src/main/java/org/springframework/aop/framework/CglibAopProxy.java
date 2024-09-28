@@ -169,6 +169,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 		}
 
 		try {
+			/* advised == ProxyFactory */
 			Class<?> rootClass = this.advised.getTargetClass();
 			Assert.state(rootClass != null, "Target class must be available for creating a CGLIB proxy");
 
@@ -185,6 +186,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 			validateClassIfNecessary(proxySuperClass, classLoader);
 
 			// Configure CGLIB Enhancer...
+			/* 基于ASM的Cglib增强器 */
 			Enhancer enhancer = createEnhancer();
 			if (classLoader != null) {
 				enhancer.setClassLoader(classLoader);
@@ -199,12 +201,14 @@ class CglibAopProxy implements AopProxy, Serializable {
 			enhancer.setAttemptLoad(true);
 			enhancer.setStrategy(new ClassLoaderAwareGeneratorStrategy(classLoader));
 
+			/* 创建代理逻辑方法拦截器，最重要的是创建DynamicAdvisedInterceptor */
 			Callback[] callbacks = getCallbacks(rootClass);
 			Class<?>[] types = new Class<?>[callbacks.length];
 			for (int x = 0; x < types.length; x++) {
 				types[x] = callbacks[x].getClass();
 			}
 			// fixedInterceptorMap only populated at this point, after getCallbacks call above
+			/* 代理拦截器过滤器*/
 			enhancer.setCallbackFilter(new ProxyCallbackFilter(
 					this.advised.getConfigurationOnlyCopy(), this.fixedInterceptorMap, this.fixedInterceptorOffset));
 			enhancer.setCallbackTypes(types);
@@ -296,15 +300,17 @@ class CglibAopProxy implements AopProxy, Serializable {
 		// Parameters used for optimization choices...
 		boolean exposeProxy = this.advised.isExposeProxy();
 		boolean isFrozen = this.advised.isFrozen();
-		boolean isStatic = this.advised.getTargetSource().isStatic();
+		boolean isStatic = this.advised.getTargetSource().isStatic();/* 具体固定的代理对象 */
 
 		// Choose an "aop" interceptor (used for AOP calls).
+		/* Aop代理方法拦截器 / */
 		Callback aopInterceptor = new DynamicAdvisedInterceptor(this.advised);
 
 		// Choose a "straight to target" interceptor. (used for calls that are
 		// unadvised but can return this). May be required to expose the proxy.
 		Callback targetInterceptor;
 		if (exposeProxy) {
+			/* 暴露当前代理对象到ThreadLocal  */
 			targetInterceptor = (isStatic ?
 					new StaticUnadvisedExposedInterceptor(this.advised.getTargetSource().getTarget()) :
 					new DynamicUnadvisedExposedInterceptor(this.advised.getTargetSource()));
@@ -459,11 +465,13 @@ class CglibAopProxy implements AopProxy, Serializable {
 		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
 			Object oldProxy = null;
 			try {
+				/* 暴露代理对象到ThreadLocal */
 				oldProxy = AopContext.setCurrentProxy(proxy);
 				Object retVal = AopUtils.invokeJoinpointUsingReflection(this.target, method, args);
 				return processReturnType(proxy, this.target, method, retVal);
 			}
 			finally {
+				/* 还原ThreadLocal */
 				AopContext.setCurrentProxy(oldProxy);
 			}
 		}
@@ -669,22 +677,26 @@ class CglibAopProxy implements AopProxy, Serializable {
 			this.advised = advised;
 		}
 
+		/* 方法拦截器 */
 		@Override
 		@Nullable
 		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
 			Object oldProxy = null;
 			boolean setProxyContext = false;
 			Object target = null;
+			/* advised == ProxyFactory */
 			TargetSource targetSource = this.advised.getTargetSource();
 			try {
 				if (this.advised.exposeProxy) {
 					// Make invocation available if necessary.
+					/* 曝光代理对象到ThreadLocal */
 					oldProxy = AopContext.setCurrentProxy(proxy);
 					setProxyContext = true;
 				}
 				// Get as late as possible to minimize the time we "own" the target, in case it comes from a pool...
 				target = targetSource.getTarget();
 				Class<?> targetClass = (target != null ? target.getClass() : null);
+				/* 寻找ProxyFactory设置的代理逻辑拦截器 */
 				List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
 				Object retVal;
 				// Check whether we only have one InvokerInterceptor: that is,
@@ -699,6 +711,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 				}
 				else {
 					// We need to create a method invocation...
+					/* 创建代理逻辑拦截器责任链，ReflectiveMethodInvocation子类 */
 					retVal = new CglibMethodInvocation(proxy, target, method, args, targetClass, chain, methodProxy).proceed();
 				}
 				return processReturnType(proxy, target, method, retVal);
