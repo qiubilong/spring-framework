@@ -12,8 +12,11 @@ import java.lang.reflect.Method;
 public class MyMethodAfterAdvice implements AfterReturningAdvice {
 	@Override
 	public void afterReturning(Object returnValue, Method method, Object[] args, Object target) throws Throwable {
-		System.out.println("MyMethodAfterAdvice -- 方法执行后");
-		/* 自动调用 MethodInvocation.proceed()  */
+		System.out.println("MyMethodAfterAdvice -- 方法执行后method="+method);
+		/* AfterReturningAdvice会适配成MethodInterceptor,
+		   先执行代理责任链MethodInvocation.proceed()
+		   后执行after代理逻辑
+		 */
 
 	}
 }

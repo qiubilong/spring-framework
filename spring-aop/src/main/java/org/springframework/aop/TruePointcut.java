@@ -26,6 +26,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 final class TruePointcut implements Pointcut, Serializable {
 
+	/* 单例设计模式 */
 	public static final TruePointcut INSTANCE = new TruePointcut();
 
 	/**

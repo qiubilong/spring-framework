@@ -38,6 +38,7 @@ import org.springframework.util.Assert;
 @SuppressWarnings("serial")
 public class MethodBeforeAdviceInterceptor implements MethodInterceptor, BeforeAdvice, Serializable {
 
+	/* 方法执行前-代理逻辑 */
 	private final MethodBeforeAdvice advice;
 
 
@@ -54,7 +55,9 @@ public class MethodBeforeAdviceInterceptor implements MethodInterceptor, BeforeA
 	@Override
 	@Nullable
 	public Object invoke(MethodInvocation mi) throws Throwable {
+		/* 先执行代理逻辑 */
 		this.advice.before(mi.getMethod(), mi.getArguments(), mi.getThis());
+		/* 后执行（能否）被代理方法 */
 		return mi.proceed();
 	}
 

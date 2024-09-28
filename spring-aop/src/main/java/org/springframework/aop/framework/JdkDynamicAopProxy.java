@@ -81,6 +81,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 	private static final Log logger = LogFactory.getLog(JdkDynamicAopProxy.class);
 
 	/** Config used to configure this proxy. */
+	/* ProxyFactory */
 	private final AdvisedSupport advised;
 
 	private final Class<?>[] proxiedInterfaces;
@@ -120,6 +121,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 		if (logger.isTraceEnabled()) {
 			logger.trace("Creating JDK dynamic proxy: " + this.advised.getTargetSource());
 		}
+		/* 创建jdk动态代理，生成代理类class结构示例见jdk\proxy1\$Proxy0.class */
 		return Proxy.newProxyInstance(classLoader, this.proxiedInterfaces, this);
 	}
 
@@ -157,12 +159,15 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 	 * <p>Callers will see exactly the exception thrown by the target,
 	 * unless a hook method throws an exception.
 	 */
+	/* 代理类class结构示例见jdk\proxy1\$Proxy0.class */
+	/* 代理类重写的方法都会转发调用InvocationHandler.invoke()方法 */
 	@Override
 	@Nullable
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Object oldProxy = null;
 		boolean setProxyContext = false;
 
+		/* advised == ProxyFactory */
 		TargetSource targetSource = this.advised.targetSource;
 		Object target = null;
 
@@ -189,6 +194,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 
 			if (this.advised.exposeProxy) {
 				// Make invocation available if necessary.
+				/* 保存代理对象到ThreadLocal */
 				oldProxy = AopContext.setCurrentProxy(proxy);
 				setProxyContext = true;
 			}
@@ -199,6 +205,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 			Class<?> targetClass = (target != null ? target.getClass() : null);
 
 			// Get the interception chain for this method.
+			/* 获取ProxyFactory设置的代理拦截器 （Advice --> MethodInterceptor ) */
 			List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
 
 			// Check whether we have any advice. If we don't, we can fall back on direct
@@ -212,9 +219,11 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 			}
 			else {
 				// We need to create a method invocation...
+				/* 创建代理拦截器责任链 ReflectiveMethodInvocation */
 				MethodInvocation invocation =
 						new ReflectiveMethodInvocation(proxy, target, method, args, targetClass, chain);
 				// Proceed to the joinpoint through the interceptor chain.
+				/* 开始执行代理拦截器责任链 */
 				retVal = invocation.proceed();
 			}
 
@@ -241,6 +250,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 			}
 			if (setProxyContext) {
 				// Restore old proxy.
+				/* 还原ThreadLocal旧值  */
 				AopContext.setCurrentProxy(oldProxy);
 			}
 		}

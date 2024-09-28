@@ -13,6 +13,8 @@ public class MyMethodBeforeAdvice implements MethodBeforeAdvice {
 	@Override
 	public void before(Method method, Object[] args, Object target) throws Throwable {
 		System.out.println("MyMethodBeforeAdvice--方法执行前");
-		/* 自动调用 MethodInvocation.proceed()  */
+		/* MethodBeforeAdvice会封装成MethodInterceptor,
+		   先调用before方法，后调用MethodInvocation.proceed()
+		 */
 	}
 }

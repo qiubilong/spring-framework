@@ -26,7 +26,7 @@ public class TestSpringProxyFactoryAdvisor {
 		/* Advisor = Advice + PointCut   */
 		proxyFactory.addAdvisor(new PointcutAdvisor() {
 
-			//定义哪些方法需要aop
+			//匹配规则 --> 定义哪些方法需要aop
 			@Override
 			public Pointcut getPointcut() {
 				return new StaticMethodMatcherPointcut() {
@@ -38,7 +38,7 @@ public class TestSpringProxyFactoryAdvisor {
 			}
 
 
-			//添加方法执行通知
+			//代理逻辑 --> 添加方法执行通知
 			@Override
 			public Advice getAdvice() {
 				return new MyMethodAroundAdvice();

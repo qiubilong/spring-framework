@@ -76,6 +76,7 @@ public class ThrowsAdviceInterceptor implements MethodInterceptor, AfterAdvice {
 		Assert.notNull(throwsAdvice, "Advice must not be null");
 		this.throwsAdvice = throwsAdvice;
 
+		/* 寻找正确的afterThrowing方法 */
 		Method[] methods = throwsAdvice.getClass().getMethods();
 		for (Method method : methods) {
 			if (method.getName().equals(AFTER_THROWING) &&
@@ -110,11 +111,13 @@ public class ThrowsAdviceInterceptor implements MethodInterceptor, AfterAdvice {
 	@Nullable
 	public Object invoke(MethodInvocation mi) throws Throwable {
 		try {
+			/* 先执行代理逻辑责任链 */
 			return mi.proceed();
 		}
 		catch (Throwable ex) {
 			Method handlerMethod = getExceptionHandler(ex);
 			if (handlerMethod != null) {
+				/* 后执行异常时代理逻辑 */
 				invokeHandlerMethod(mi, ex, handlerMethod);
 			}
 			throw ex;

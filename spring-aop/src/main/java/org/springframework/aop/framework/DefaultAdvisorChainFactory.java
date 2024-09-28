@@ -62,7 +62,9 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 		for (Advisor advisor : advisors) {
 			if (advisor instanceof PointcutAdvisor pointcutAdvisor) {
 				// Add it conditionally.
+				/* 规则配置Pointcut --> class匹配  */
 				if (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) {
+					/* 规则配置Pointcut --> method匹配  */
 					MethodMatcher mm = pointcutAdvisor.getPointcut().getMethodMatcher();
 					boolean match;
 					if (mm instanceof IntroductionAwareMethodMatcher iamm) {
@@ -75,6 +77,8 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 						match = mm.matches(method, actualClass);
 					}
 					if (match) {
+						/* 将 Advice子类 适配成MethodInterceptor */
+						/* MethodBeforeAdvice/AfterReturningAdvice/ThrowsAdvice -- > MethodInterceptor */
 						MethodInterceptor[] interceptors = registry.getInterceptors(advisor);
 						if (mm.isRuntime()) {
 							// Creating a new object instance in the getInterceptors() method

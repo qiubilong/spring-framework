@@ -4,6 +4,7 @@ import com.experiment.test.aop.advice.MyMethodAfterAdvice;
 import com.experiment.test.aop.advice.MyMethodAroundAdvice;
 import com.experiment.test.aop.advice.MyMethodBeforeAdvice;
 import com.experiment.test.aop.advice.MyMethodExceptionAdvice;
+import com.experiment.test.aop.api.UserServiceAopApi;
 import com.experiment.test.aop.impl.UserServiceAopImpl;
 import org.springframework.aop.framework.ProxyFactory;
 
@@ -14,7 +15,9 @@ public class TestSpringProxyFactoryAdvice {
 		UserServiceAopImpl target = new UserServiceAopImpl();
 
 		ProxyFactory proxyFactory = new ProxyFactory();
-		proxyFactory.setTarget(target);
+		proxyFactory.setTarget(target);/* target包装成SingletonTargetSource */
+
+		proxyFactory.setInterfaces(UserServiceAopApi.class);/* JdkDynamicProxy */
 
 		//添加方法执行通知
 		proxyFactory.addAdvice(new MyMethodAfterAdvice());
@@ -22,7 +25,7 @@ public class TestSpringProxyFactoryAdvice {
 		proxyFactory.addAdvice(new MyMethodAroundAdvice());
 		proxyFactory.addAdvice(new MyMethodExceptionAdvice());
 
-		UserServiceAopImpl proxy = (UserServiceAopImpl)proxyFactory.getProxy();
+		UserServiceAopApi proxy = (UserServiceAopApi)proxyFactory.getProxy();
 
 		proxy.ping();
 		//proxy.test();//抛出异常
