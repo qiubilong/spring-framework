@@ -1,6 +1,7 @@
 package com.experiment.test.aop;
 
 import com.experiment.test.aop.advice.MyMethodAroundAdvice;
+import com.experiment.test.aop.api.UserServiceAopApi;
 import com.experiment.test.aop.impl.UserServiceAopImpl;
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Pointcut;
@@ -22,6 +23,8 @@ public class TestSpringProxyFactoryAdvisor {
 
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.setTarget(target);
+
+		proxyFactory.setInterfaces(UserServiceAopApi.class);/* JdkDynamicProxy */
 
 		/* Advisor = Advice + PointCut   */
 		proxyFactory.addAdvisor(new PointcutAdvisor() {
@@ -50,7 +53,7 @@ public class TestSpringProxyFactoryAdvisor {
 			}
 		});
 
-		UserServiceAopImpl proxy = (UserServiceAopImpl)proxyFactory.getProxy();
+		UserServiceAopApi proxy = (UserServiceAopApi)proxyFactory.getProxy();
 
 
 		proxy.ping();

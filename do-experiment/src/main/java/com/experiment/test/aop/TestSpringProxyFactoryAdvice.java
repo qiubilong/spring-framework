@@ -17,7 +17,6 @@ public class TestSpringProxyFactoryAdvice {
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.setTarget(target);/* target包装成SingletonTargetSource */
 
-		proxyFactory.setInterfaces(UserServiceAopApi.class);/* JdkDynamicProxy */
 
 		//添加方法执行通知
 		proxyFactory.addAdvice(new MyMethodAfterAdvice());

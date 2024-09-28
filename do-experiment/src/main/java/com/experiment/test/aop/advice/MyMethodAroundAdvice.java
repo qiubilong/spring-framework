@@ -18,7 +18,7 @@ public class MyMethodAroundAdvice implements MethodInterceptor {
 	public Object invoke(@Nonnull MethodInvocation invocation) throws Throwable {
 
 		System.out.println("MyMethodAroundAdvice --方法前后织入 -- 方法执行前");
-		Object result = invocation.proceed();/* 责任链模式，执行下一个过滤器 */
+		Object result = invocation.proceed();/* 责任链模式，执行下一个拦截器 */
 		System.out.println("MyMethodAroundAdvice --方法前后织入 -- 方法执行前");
 
 		return result;
