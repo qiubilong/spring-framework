@@ -1,7 +1,6 @@
 package com.experiment.test;
 
 import com.experiment.spring.test.service.MyUserInfoService;
-import com.experiment.test.aop.api.UserServiceAopApi;
 import com.experiment.test.aop.impl.MallAopService;
 import com.experiment.test.aop.impl.UserServiceAopImpl;
 import com.experiment.test.autowired.AutowiredByTypeService;
@@ -12,6 +11,7 @@ import com.experiment.test.service.PrizeService;
 import com.experiment.test.circularRef.UserInfoLazyService;
 import com.experiment.test.service.UserInfoService;
 import com.experiment.test.autowired.lookup.LookupService;
+import org.springframework.cglib.core.DebuggingClassWriter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.MutablePropertySources;
@@ -25,6 +25,10 @@ import java.util.Locale;
 public class MyApplication {
 
 	public static void main(String[] args) {
+
+		//aop
+		System.setProperty("jdk.proxy.ProxyGenerator.saveGeneratedFiles", "true");//保存jdk生成的代理类class文件
+		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, System.getProperty("user.dir")+"/jdk/proxy1"); //保存cglib生成的动态代理类class文件
 
 		for (int i = 0; i < 10; i++) {
 			System.out.println();
@@ -76,12 +80,15 @@ public class MyApplication {
 		System.out.println();
 
 		//aop
+		System.setProperty("jdk.proxy.ProxyGenerator.saveGeneratedFiles", "true");//保存jdk生成的代理类class文件
+		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, System.getProperty("user.dir")+"/jdk/proxy1"); //保存cglib生成的动态代理类class文件
+
 	/*	UserServiceAopApi userServiceAopByFactoryBean = (UserServiceAopApi) applicationContext.getBean("userServiceAopByFactoryBean");
 		userServiceAopByFactoryBean.ping();*/
 		UserServiceAopImpl userServiceAopImpl = (UserServiceAopImpl)applicationContext.getBean("userServiceAopImpl");
 		userServiceAopImpl.ping();
 		System.out.println();
-		applicationContext.getBean(MallAopService.class).doBuyPrize();
+		applicationContext.getBean(MallAopService.class).testAop();
 
 	}
 }

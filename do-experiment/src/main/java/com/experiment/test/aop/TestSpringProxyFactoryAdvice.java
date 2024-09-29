@@ -17,7 +17,7 @@ import java.io.InputStream;
 public class TestSpringProxyFactoryAdvice {
 	public static void main(String[] args) {
 		//该设置用于输出cglib动态代理产生的类
-		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\myGit\\spring-framework\\jdk\\proxy1");
+		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, System.getProperty("user.dir")+"/jdk/proxy1");
 
 		UserServiceAopImpl target = new UserServiceAopImpl();
 

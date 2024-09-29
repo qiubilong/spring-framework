@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MallAopService {
 
-	public void doBuyPrize(){
-		System.out.println("MallAopService.doBuyPrize()");
+	public void testAop(){
+		System.out.println("MallAopService.testAop()");
 	}
 }
