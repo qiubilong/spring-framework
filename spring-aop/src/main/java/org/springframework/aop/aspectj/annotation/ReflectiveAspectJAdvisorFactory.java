@@ -132,6 +132,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 				new LazySingletonAspectInstanceFactoryDecorator(aspectInstanceFactory);
 
 		List<Advisor> advisors = new ArrayList<>();
+		/* 遍历aspectClass的所有method */
 		for (Method method : getAdvisorMethods(aspectClass)) {
 			// Prior to Spring Framework 5.2.7, advisors.size() was supplied as the declarationOrderInAspect
 			// to getAdvisor(...) to represent the "current position" in the declared methods list.
@@ -141,6 +142,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 			// discovered via reflection in order to support reliable advice ordering across JVM launches.
 			// Specifically, a value of 0 aligns with the default value used in
 			// AspectJPrecedenceComparator.getAspectDeclarationOrder(Advisor).
+			/* 寻找@Before/@After/@Around + pointcut --> Advisor */
 			Advisor advisor = getAdvisor(method, lazySingletonAspectInstanceFactory, 0, aspectName);
 			if (advisor != null) {
 				advisors.add(advisor);
@@ -148,6 +150,8 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		}
 
 		// If it's a per target aspect, emit the dummy instantiating aspect.
+		//默认是单例aspect,可忽略
+		//isLazilyInstantiated --> 非单例
 		if (!advisors.isEmpty() && lazySingletonAspectInstanceFactory.getAspectMetadata().isLazilyInstantiated()) {
 			Advisor instantiationAdvisor = new SyntheticInstantiationAdvisor(lazySingletonAspectInstanceFactory);
 			advisors.add(0, instantiationAdvisor);
@@ -166,6 +170,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 	private List<Method> getAdvisorMethods(Class<?> aspectClass) {
 		List<Method> methods = new ArrayList<>();
+		/* 获取该类的所有method，排除@PointCut注解方法 */
 		ReflectionUtils.doWithMethods(aspectClass, methods::add, adviceMethodFilter);
 		if (methods.size() > 1) {
 			methods.sort(adviceMethodComparator);
@@ -203,25 +208,27 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 			int declarationOrderInAspect, String aspectName) {
 
 		validate(aspectInstanceFactory.getAspectMetadata().getAspectClass());
-
+		/* 匹配表达式PointCut */
 		AspectJExpressionPointcut expressionPointcut = getPointcut(
 				candidateAdviceMethod, aspectInstanceFactory.getAspectMetadata().getAspectClass());
 		if (expressionPointcut == null) {
 			return null;
 		}
-
+		/* 返回Advisor == PointCut + Advice */
 		return new InstantiationModelAwarePointcutAdvisorImpl(expressionPointcut, candidateAdviceMethod,
 				this, aspectInstanceFactory, declarationOrderInAspect, aspectName);
 	}
 
 	@Nullable
 	private AspectJExpressionPointcut getPointcut(Method candidateAdviceMethod, Class<?> candidateAspectClass) {
+		/*扫描注解 Pointcut.class, Around.class, Before.class, After.class, AfterReturning.class, AfterThrowing.class*/
 		AspectJAnnotation aspectJAnnotation =
 				AbstractAspectJAdvisorFactory.findAspectJAnnotationOnMethod(candidateAdviceMethod);
 		if (aspectJAnnotation == null) {
 			return null;
 		}
 
+		/* 返回匹配表达式 */
 		AspectJExpressionPointcut ajexp =
 				new AspectJExpressionPointcut(candidateAspectClass, new String[0], new Class<?>[0]);
 		ajexp.setExpression(aspectJAnnotation.getPointcutExpression());
@@ -259,7 +266,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		}
 
 		AbstractAspectJAdvice springAdvice;
-
+		/* 生成不同的Advice */
 		switch (aspectJAnnotation.getAnnotationType()) {
 			case AtPointcut -> {
 				if (logger.isDebugEnabled()) {
@@ -267,9 +274,9 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 				}
 				return null;
 			}
-			case AtAround -> springAdvice = new AspectJAroundAdvice(
+			case AtAround -> springAdvice = new AspectJAroundAdvice( /* @Around */
 					candidateAdviceMethod, expressionPointcut, aspectInstanceFactory);
-			case AtBefore -> springAdvice = new AspectJMethodBeforeAdvice(
+			case AtBefore -> springAdvice = new AspectJMethodBeforeAdvice( /* @Before */
 					candidateAdviceMethod, expressionPointcut, aspectInstanceFactory);
 			case AtAfter -> springAdvice = new AspectJAfterAdvice(
 					candidateAdviceMethod, expressionPointcut, aspectInstanceFactory);

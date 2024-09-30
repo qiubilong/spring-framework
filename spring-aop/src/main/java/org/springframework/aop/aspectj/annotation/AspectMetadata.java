@@ -102,6 +102,7 @@ public class AspectMetadata implements Serializable {
 
 		switch (this.ajType.getPerClause().getKind()) {
 			case SINGLETON -> {
+				/* 默认都是单例Aspect */
 				this.perClausePointcut = Pointcut.TRUE;
 			}
 			case PERTARGET, PERTHIS -> {

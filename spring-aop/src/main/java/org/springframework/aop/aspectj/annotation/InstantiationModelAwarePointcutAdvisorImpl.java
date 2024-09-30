@@ -109,6 +109,7 @@ final class InstantiationModelAwarePointcutAdvisorImpl
 		}
 		else {
 			// A singleton aspect.
+			/* 单例Aspect */
 			this.pointcut = this.declaredPointcut;
 			this.lazy = false;
 			this.instantiatedAdvice = instantiateAdvice(this.declaredPointcut);
@@ -147,6 +148,7 @@ final class InstantiationModelAwarePointcutAdvisorImpl
 	}
 
 	private Advice instantiateAdvice(AspectJExpressionPointcut pointcut) {
+		/* 生成代理逻辑Advice */
 		Advice advice = this.aspectJAdvisorFactory.getAdvice(this.aspectJAdviceMethod, pointcut,
 				this.aspectInstanceFactory, this.declarationOrder, this.aspectName);
 		return (advice != null ? advice : EMPTY_ADVICE);

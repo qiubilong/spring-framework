@@ -122,6 +122,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	@SuppressWarnings("unchecked")
 	@Nullable
 	protected static AspectJAnnotation findAspectJAnnotationOnMethod(Method method) {
+		/*扫描注解 Pointcut.class, Around.class, Before.class, After.class, AfterReturning.class, AfterThrowing.class*/
 		for (Class<?> annotationType : ASPECTJ_ANNOTATION_CLASSES) {
 			AspectJAnnotation annotation = findAnnotation(method, (Class<Annotation>) annotationType);
 			if (annotation != null) {
@@ -182,6 +183,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 			this.annotation = annotation;
 			this.annotationType = determineAnnotationType(annotation);
 			try {
+				/* 匹配表达式 */
 				this.pointcutExpression = resolvePointcutExpression(annotation);
 				Object argNames = AnnotationUtils.getValue(annotation, "argNames");
 				this.argumentNames = (argNames instanceof String names ? names : "");
