@@ -40,7 +40,6 @@ public class MyApplication {
 
 		applicationContext.refresh();/* 加载配置，生成非懒加载bean */
 
-
 		//通过别名查询
 		UserInfoService userInfoService = (UserInfoService) applicationContext.getBean("com.experiment.test.service.UserInfoService");
 		userInfoService.queryUsers();

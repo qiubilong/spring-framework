@@ -53,6 +53,8 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 
 	@Override
 	public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException {
+		/* config == ProxyFactory */
+
 		/*
 		* isOptimize --> 优化（旧jdk相对来说性能差） --> CglibAop
 		* isProxyTargetClass --> 代理的是class -->  CglibAop

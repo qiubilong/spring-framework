@@ -428,7 +428,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	@Override
 	public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
 			throws BeansException {
-		/* 动态代理Aop --> AnnotationAwareAspectJAutoProxyCreator
+		/* 动态代理Aop --> AnnotationAwareAspectJAutoProxyCreator --> AbstractAutoProxyCreator
 		*
 		* */
 		Object result = existingBean;

@@ -41,7 +41,7 @@ public class TestSpringProxyFactoryAdvisor {
 			}
 
 
-			//代理逻辑 --> 添加方法执行通知
+			//代理逻辑 --> 方法执行通知
 			@Override
 			public Advice getAdvice() {
 				return new MyMethodAroundAdvice();

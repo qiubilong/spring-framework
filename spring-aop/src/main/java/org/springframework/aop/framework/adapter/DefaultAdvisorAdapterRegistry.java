@@ -67,6 +67,7 @@ public class DefaultAdvisorAdapterRegistry implements AdvisorAdapterRegistry, Se
 		}
 		for (AdvisorAdapter adapter : this.adapters) {
 			// Check that it is supported.
+			/* MethodBeforeAdvice/AfterReturningAdvice/ThrowsAdvice -- > MethodInterceptor + Pointcut.TRUE  --> DefaultPointcutAdvisor */
 			if (adapter.supportsAdvice(advice)) {
 				return new DefaultPointcutAdvisor(advice);
 			}

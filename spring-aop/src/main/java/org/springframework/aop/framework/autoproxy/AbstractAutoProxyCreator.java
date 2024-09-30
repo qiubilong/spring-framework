@@ -316,6 +316,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			Object cacheKey = getCacheKey(bean.getClass(), beanName);
 			/* earlyProxyReferences --> 出现循环依赖，提前生成AOP代理对象，若是则跳过 */
 			if (this.earlyProxyReferences.remove(cacheKey) != bean) {
+				/* 检查能否创建AOP代理类 */
 				return wrapIfNecessary(bean, beanName, cacheKey);
 			}
 		}
@@ -481,6 +482,10 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			AutoProxyUtils.exposeTargetClass(clbf, beanName, beanClass);
 		}
 
+		/* jdk/cglib 动态代理工厂 */
+		/*
+		*  JdkDynamicAopProxy -->  DynamicAdvisedInterceptor
+		* */
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.copyFrom(this);
 
@@ -502,10 +507,10 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 				evaluateProxyInterfaces(beanClass, proxyFactory);
 			}
 		}
-
+		/* Advice  --> DefaultPointcutAdvisor */
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
 		proxyFactory.addAdvisors(advisors);
-		proxyFactory.setTargetSource(targetSource);
+		proxyFactory.setTargetSource(targetSource);/* 目标对象bean */
 		customizeProxyFactory(proxyFactory);
 
 		proxyFactory.setFrozen(this.freezeProxy);
@@ -518,6 +523,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		if (classLoader instanceof SmartClassLoader smartClassLoader && classLoader != beanClass.getClassLoader()) {
 			classLoader = smartClassLoader.getOriginalClassLoader();
 		}
+		/*  proxyFactory.getProxy(classLoader)) --> 创建代理类  */
 		return (classOnly ? proxyFactory.getProxyClass(classLoader) : proxyFactory.getProxy(classLoader));
 	}
 
@@ -585,6 +591,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 		Advisor[] advisors = new Advisor[allInterceptors.size()];
 		for (int i = 0; i < allInterceptors.size(); i++) {
+			/* Advice --> DefaultPointcutAdvisor  */
 			advisors[i] = this.advisorAdapterRegistry.wrap(allInterceptors.get(i));
 		}
 		return advisors;

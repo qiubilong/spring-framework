@@ -195,12 +195,14 @@ class CglibAopProxy implements AopProxy, Serializable {
 					enhancer.setUseCache(false);
 				}
 			}
-			enhancer.setSuperclass(proxySuperClass);
+			enhancer.setSuperclass(proxySuperClass);/* 代理class */
 			enhancer.setInterfaces(AopProxyUtils.completeProxiedInterfaces(this.advised));
 			enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);
 			enhancer.setAttemptLoad(true);
 			enhancer.setStrategy(new ClassLoaderAwareGeneratorStrategy(classLoader));
 
+			/* 创建代理逻辑方法拦截器，最重要的是创建DynamicAdvisedInterceptor */
+			/* 创建代理逻辑方法拦截器，最重要的是创建DynamicAdvisedInterceptor */
 			/* 创建代理逻辑方法拦截器，最重要的是创建DynamicAdvisedInterceptor */
 			Callback[] callbacks = getCallbacks(rootClass);
 			Class<?>[] types = new Class<?>[callbacks.length];
@@ -214,6 +216,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 			enhancer.setCallbackTypes(types);
 
 			// Generate the proxy class and create a proxy instance.
+			/* createProxyClassAndInstance(enhancer, callbacks)) --> 创建代理对象  */
 			return (classOnly ? createProxyClass(enhancer) : createProxyClassAndInstance(enhancer, callbacks));
 		}
 		catch (CodeGenerationException | IllegalArgumentException ex) {
@@ -303,7 +306,9 @@ class CglibAopProxy implements AopProxy, Serializable {
 		boolean isStatic = this.advised.getTargetSource().isStatic();/* 具体固定的代理对象 */
 
 		// Choose an "aop" interceptor (used for AOP calls).
-		/* Aop代理方法拦截器 / */
+		/* Aop代理方法拦截器 */
+		/* Aop代理方法拦截器 */
+		/* Aop代理方法拦截器 */
 		Callback aopInterceptor = new DynamicAdvisedInterceptor(this.advised);
 
 		// Choose a "straight to target" interceptor. (used for calls that are
@@ -694,7 +699,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 					setProxyContext = true;
 				}
 				// Get as late as possible to minimize the time we "own" the target, in case it comes from a pool...
-				target = targetSource.getTarget();
+				target = targetSource.getTarget();/* 目标对象 */
 				Class<?> targetClass = (target != null ? target.getClass() : null);
 				/* 寻找ProxyFactory设置的代理逻辑拦截器 */
 				List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);

@@ -249,6 +249,7 @@ public abstract class AopUtils {
 			for (Method method : methods) {
 				if (introductionAwareMethodMatcher != null ?
 						introductionAwareMethodMatcher.matches(method, targetClass, hasIntroductions) :
+						/* 方法匹配 */
 						methodMatcher.matches(method, targetClass)) {
 					return true;
 				}
@@ -285,6 +286,7 @@ public abstract class AopUtils {
 			return ia.getClassFilter().matches(targetClass);
 		}
 		else if (advisor instanceof PointcutAdvisor pca) {
+			/* 匹配Advisor */
 			return canApply(pca.getPointcut(), targetClass, hasIntroductions);
 		}
 		else {
@@ -317,6 +319,7 @@ public abstract class AopUtils {
 				// already processed
 				continue;
 			}
+			/* 匹配Advisor */
 			if (canApply(candidate, clazz, hasIntroductions)) {
 				eligibleAdvisors.add(candidate);
 			}
