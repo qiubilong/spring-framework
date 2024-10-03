@@ -341,9 +341,12 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 
 		// If the transaction attribute is null, the method is non-transactional.
 		TransactionAttributeSource tas = getTransactionAttributeSource();
+		/* 获取事务@Transactional配置信息 */
 		final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
+		/* 获取事务管理器 */
 		final TransactionManager tm = determineTransactionManager(txAttr);
 
+		//忽略reactive
 		if (this.reactiveAdapterRegistry != null && tm instanceof ReactiveTransactionManager rtm) {
 			boolean isSuspendingFunction = KotlinDetector.isSuspendingFunction(method);
 			boolean hasSuspendingFlowReturnType = isSuspendingFunction &&
@@ -377,21 +380,26 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			return result;
 		}
 
+		/* 检查是否PlatformTransactionManager */
 		PlatformTransactionManager ptm = asPlatformTransactionManager(tm);
+		/* 事务唯一表示 class+method */
 		final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);
-
+		//一般是不支持callback的事务管理器
 		if (txAttr == null || !(ptm instanceof CallbackPreferringPlatformTransactionManager cpptm)) {
 			// Standard transaction demarcation with getTransaction and commit/rollback calls.
+			/* 涉及事务传播机制，有必要就创建新事物 */
 			TransactionInfo txInfo = createTransactionIfNecessary(ptm, txAttr, joinpointIdentification);
-
+			/* 每次method调用都会创建一个txInfo，txInfo可能代表 新建事务/已有事务/无事务，每个txInfo代表一个逻辑事务，它们可能属于同一个物理事务 */
 			Object retVal;
 			try {
 				// This is an around advice: Invoke the next interceptor in the chain.
 				// This will normally result in a target object being invoked.
+				/* 执行下一个方法拦截器，最终调用被代理对的方法 */
 				retVal = invocation.proceedWithInvocation();
 			}
 			catch (Throwable ex) {
 				// target invocation exception
+				/* 发生异常，进行回滚 */
 				completeTransactionAfterThrowing(txInfo, ex);
 				throw ex;
 			}
@@ -406,7 +414,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 					retVal = VavrDelegate.evaluateTryFailure(retVal, txAttr, status);
 				}
 			}
-
+			/* 正常，提交事务 */
 			commitTransactionAfterReturning(txInfo);
 			return retVal;
 		}
@@ -490,7 +498,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 		if (txAttr == null || this.beanFactory == null) {
 			return getTransactionManager();
 		}
-
+		/* 指定事务管理器 */
 		String qualifier = txAttr.getQualifier();
 		if (StringUtils.hasText(qualifier)) {
 			return determineQualifiedTransactionManager(this.beanFactory, qualifier);
@@ -499,6 +507,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			return determineQualifiedTransactionManager(this.beanFactory, this.transactionManagerBeanName);
 		}
 		else {
+			/* 默认事务管理器 */
 			TransactionManager defaultTransactionManager = getTransactionManager();
 			if (defaultTransactionManager == null) {
 				defaultTransactionManager = this.transactionManagerCache.get(DEFAULT_TRANSACTION_MANAGER_KEY);
@@ -598,6 +607,9 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 		TransactionStatus status = null;
 		if (txAttr != null) {
 			if (tm != null) {
+				/* DataSourceTransactionManager --> AbstractPlatformTransactionManager
+				* 涉及事务传播机制，有必要就创建新事务
+				* */
 				status = tm.getTransaction(txAttr);
 			}
 			else {

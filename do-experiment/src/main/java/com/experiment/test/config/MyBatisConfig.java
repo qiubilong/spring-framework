@@ -1,13 +1,10 @@
-package com.experiment.test.mybatis.test.config;
+package com.experiment.test.config;
 
-import com.experiment.test.mybatis.spring.MyBatisImportBeanDefinitionRegistrar;
 import com.experiment.test.mybatis.spring.MyBatisMapperScan;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

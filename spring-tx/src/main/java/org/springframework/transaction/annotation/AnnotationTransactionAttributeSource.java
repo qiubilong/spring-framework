@@ -102,6 +102,7 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 			}
 		}
 		else {
+			/* SpringTransactionAnnotationParser解析@Transactional */
 			this.annotationParsers = Collections.singleton(new SpringTransactionAnnotationParser());
 		}
 	}
@@ -156,6 +157,7 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 	@Override
 	@Nullable
 	protected TransactionAttribute findTransactionAttribute(Method method) {
+		/* 检查@Transational注解 */
 		return determineTransactionAttribute(method);
 	}
 
@@ -172,6 +174,7 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 	@Nullable
 	protected TransactionAttribute determineTransactionAttribute(AnnotatedElement element) {
 		for (TransactionAnnotationParser parser : this.annotationParsers) {
+			/* SpringTransactionAnnotationParser --> 检查@Transactional注解 */
 			TransactionAttribute attr = parser.parseTransactionAnnotation(element);
 			if (attr != null) {
 				return attr;

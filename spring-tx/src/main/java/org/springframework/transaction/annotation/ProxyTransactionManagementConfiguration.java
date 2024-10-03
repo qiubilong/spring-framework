@@ -41,14 +41,15 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 @ImportRuntimeHints(TransactionRuntimeHints.class)
 public class ProxyTransactionManagementConfiguration extends AbstractTransactionManagementConfiguration {
 
+	/* 事务Advisor */
 	@Bean(name = TransactionManagementConfigUtils.TRANSACTION_ADVISOR_BEAN_NAME)
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public BeanFactoryTransactionAttributeSourceAdvisor transactionAdvisor(
 			TransactionAttributeSource transactionAttributeSource, TransactionInterceptor transactionInterceptor) {
 
 		BeanFactoryTransactionAttributeSourceAdvisor advisor = new BeanFactoryTransactionAttributeSourceAdvisor();
-		advisor.setTransactionAttributeSource(transactionAttributeSource);
-		advisor.setAdvice(transactionInterceptor);
+		advisor.setTransactionAttributeSource(transactionAttributeSource);/* 事务注解@Transaction配置信息解析工具类，相当于Pointcut */
+		advisor.setAdvice(transactionInterceptor);/* 实现事务的方法拦截器MethodInterceptor */
 		if (this.enableTx != null) {
 			advisor.setOrder(this.enableTx.<Integer>getNumber("order"));
 		}
@@ -59,9 +60,11 @@ public class ProxyTransactionManagementConfiguration extends AbstractTransaction
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public TransactionAttributeSource transactionAttributeSource() {
 		// Accept protected @Transactional methods on CGLIB proxies, as of 6.0.
+		/* 解析@Transactional注解，父类AbstractFallbackTransactionAttributeSource */
 		return new AnnotationTransactionAttributeSource(false);
 	}
 
+	/* 实现事务的方法拦截器MethodInterceptor */
 	@Bean
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public TransactionInterceptor transactionInterceptor(TransactionAttributeSource transactionAttributeSource) {

@@ -121,12 +121,14 @@ public abstract class AbstractFallbackTransactionAttributeSource
 		}
 		else {
 			// We need to work it out.
+			/* 解析@Transactional注解配置信息 */
 			TransactionAttribute txAttr = computeTransactionAttribute(method, targetClass);
 			// Put it in the cache.
 			if (txAttr == null) {
 				this.attributeCache.put(cacheKey, NULL_TRANSACTION_ATTRIBUTE);
 			}
 			else {
+				/* txAttr --> RuleBasedTransactionAttribute -->父类 DefaultTransactionAttribute  */
 				String methodIdentification = ClassUtils.getQualifiedMethodName(method, targetClass);
 				if (txAttr instanceof DefaultTransactionAttribute dta) {
 					dta.setDescriptor(methodIdentification);
@@ -172,6 +174,7 @@ public abstract class AbstractFallbackTransactionAttributeSource
 		Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
 
 		// First try is the method in the target class.
+		/* 检查方法@Transactional */
 		TransactionAttribute txAttr = findTransactionAttribute(specificMethod);
 		if (txAttr != null) {
 			return txAttr;

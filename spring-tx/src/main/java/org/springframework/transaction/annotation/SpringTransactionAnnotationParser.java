@@ -54,6 +54,7 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 		AnnotationAttributes attributes = AnnotatedElementUtils.findMergedAnnotationAttributes(
 				element, Transactional.class, false, false);
 		if (attributes != null) {
+			/* 解析@Transactional注解 */
 			return parseTransactionAnnotation(attributes);
 		}
 		else {
@@ -67,7 +68,7 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 
 	protected TransactionAttribute parseTransactionAnnotation(AnnotationAttributes attributes) {
 		RuleBasedTransactionAttribute rbta = new RuleBasedTransactionAttribute();
-
+		/* 事务传播机制 */
 		Propagation propagation = attributes.getEnum("propagation");
 		rbta.setPropagationBehavior(propagation.value());
 		Isolation isolation = attributes.getEnum("isolation");
@@ -83,6 +84,7 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 		rbta.setQualifier(attributes.getString("value"));
 		rbta.setLabels(Set.of(attributes.getStringArray("label")));
 
+		/* 回归规则 */
 		List<RollbackRuleAttribute> rollbackRules = new ArrayList<>();
 		for (Class<?> rbRule : attributes.getClassArray("rollbackFor")) {
 			rollbackRules.add(new RollbackRuleAttribute(rbRule));
