@@ -59,4 +59,5 @@ settings.gradle.projectsLoaded {
 	}
 }
 include 'do-experiment'
+include 'do-experiment-web'
 

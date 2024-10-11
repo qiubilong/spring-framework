@@ -353,7 +353,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
 				}
 			}
-			/* 检查是否配置类 --> @Component、@ComponentScan、@Import、@ImportResource、@Bean -->  配置类  */
+			/* 检查是否配置类 --> @Configuration、@Component、@ComponentScan、@Import、@ImportResource、@Bean -->  配置类  */
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
 				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
@@ -412,7 +412,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
-			/* 处理配置类解析得到的bean --> @Import、@ImportReSource、@Bean --> 生成注册BeanDefinition */
+			/* 处理配置类解析得到的bean --> @Import、@ImportResource、@Bean --> 生成注册BeanDefinition */
 			this.reader.loadBeanDefinitions(configClasses);
 			alreadyParsed.addAll(configClasses);
 			processConfig.tag("classCount", () -> String.valueOf(configClasses.size())).end();

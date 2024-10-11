@@ -102,7 +102,7 @@ final class PostProcessorRegistrationDelegate {
 			List<BeanDefinitionRegistryPostProcessor> currentRegistryProcessors = new ArrayList<>();
 
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
-			/* 第一步 - 寻找BeanDefinitionRegistryPostProcessor --> 是PriorityOrder子类 --> 实例化   */
+			/* 第一步 - 寻找BeanDefinitionRegistryPostProcessor --> 是PriorityOrder子类 --> 实例化 --> invoke - postProcessBeanDefinitionRegistry   */
 			/* 其实就是找到 ConfigurationClassPostProcessor   */
 			String[] postProcessorNames =
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
@@ -126,6 +126,7 @@ final class PostProcessorRegistrationDelegate {
 			currentRegistryProcessors.clear();
 
 			// Next, invoke the BeanDefinitionRegistryPostProcessors that implement Ordered.
+			/* 第二步 - 寻找BeanDefinitionRegistryPostProcessor --> Ordered子类 --> 实例化 --> invoke - postProcessBeanDefinitionRegistry   */
 			postProcessorNames = beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
 				if (!processedBeans.contains(ppName) && beanFactory.isTypeMatch(ppName, Ordered.class)) {
@@ -139,6 +140,7 @@ final class PostProcessorRegistrationDelegate {
 			currentRegistryProcessors.clear();
 
 			// Finally, invoke all other BeanDefinitionRegistryPostProcessors until no further ones appear.
+			/* 第三步 - 寻找BeanDefinitionRegistryPostProcessor  --> 实例化 --> invoke - postProcessBeanDefinitionRegistry   */
 			boolean reiterate = true;
 			while (reiterate) {
 				reiterate = false;
@@ -168,11 +170,14 @@ final class PostProcessorRegistrationDelegate {
 
 		// Do not initialize FactoryBeans here: We need to leave all regular beans
 		// uninitialized to let the bean factory post-processors apply to them!
+
+		/* 寻找BeanFactoryPostProcessor --> invoke - postProcessBeanFactory   */
 		String[] postProcessorNames =
 				beanFactory.getBeanNamesForType(BeanFactoryPostProcessor.class, true, false);
 
 		// Separate between BeanFactoryPostProcessors that implement PriorityOrdered,
 		// Ordered, and the rest.
+
 		List<BeanFactoryPostProcessor> priorityOrderedPostProcessors = new ArrayList<>();
 		List<String> orderedPostProcessorNames = new ArrayList<>();
 		List<String> nonOrderedPostProcessorNames = new ArrayList<>();

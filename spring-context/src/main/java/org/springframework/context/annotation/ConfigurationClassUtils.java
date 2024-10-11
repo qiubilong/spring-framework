@@ -133,7 +133,7 @@ public abstract class ConfigurationClassUtils {
 			}
 		}
 
-		/* 存在注解 @Configuration --> 需要生成配置类增加子类 --> 拦截生成bean的方法 --> 保证bean的单例 */
+		/* 存在注解 @Configuration --> 需要生成配置类增强子类 --> 拦截生成bean的方法 --> 保证bean的单例 */
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
@@ -169,6 +169,11 @@ public abstract class ConfigurationClassUtils {
 		}
 
 		// Any of the typical annotations found?
+		/* 	@Component
+			@ComponentScan
+			@Import
+			@ImportResource
+		* */
 		for (String indicator : candidateIndicators) {
 			if (metadata.isAnnotated(indicator)) {
 				return true;
@@ -176,6 +181,7 @@ public abstract class ConfigurationClassUtils {
 		}
 
 		// Finally, let's look for @Bean methods...
+		/* 存在@Bean方法,通过@Import导进来存在这种情况 */
 		return hasBeanMethods(metadata);
 	}
 

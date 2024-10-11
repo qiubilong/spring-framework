@@ -1,0 +1,30 @@
+plugins {
+    id 'war'
+    id 'java'
+    id 'java-library'
+}
+
+
+
+repositories {
+    mavenCentral()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.11'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    compileOnly("jakarta.servlet:jakarta.servlet-api")
+
+
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.0'
+
+    api(project(":spring-webmvc"))
+}
+
+test {
+    useJUnitPlatform()
+}
