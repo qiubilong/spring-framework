@@ -53,9 +53,11 @@ public abstract class AbstractDetectingUrlHandlerMapping extends AbstractUrlHand
 	 * Calls the {@link #detectHandlers()} method in addition to the
 	 * superclass's initialization.
 	 */
+	/* 通过继承WebApplicationObjectSupport.ApplicationContextAware，bean初始化时invokeAware回调setApplicationContext触发 */
 	@Override
 	public void initApplicationContext() throws ApplicationContextException {
 		super.initApplicationContext();
+		/* 扫描检查请求处理器Handler */
 		detectHandlers();
 	}
 
@@ -74,7 +76,9 @@ public abstract class AbstractDetectingUrlHandlerMapping extends AbstractUrlHand
 				applicationContext.getBeanNamesForType(Object.class));
 
 		// Take any bean name that we can determine URLs for.
+		/* 取出容器所有的bean */
 		for (String beanName : beanNames) {
+			/* 检测beanName是否以/开头 */
 			String[] urls = determineUrlsForHandler(beanName);
 			if (!ObjectUtils.isEmpty(urls)) {
 				// URL paths found: Let's consider it a handler.

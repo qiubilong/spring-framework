@@ -36,10 +36,15 @@ import org.springframework.web.servlet.ModelAndView;
  * @see Controller
  * @see HttpRequestHandlerAdapter
  */
+/* HandlerAdapter请求处理器适配器，用于解耦不同Handler调用不同的处理方法
+ *
+ *  SimpleControllerHandlerAdapter负责执行,实现了Controller接口的bean对象中的handleRequest方法
+ * */
 public class SimpleControllerHandlerAdapter implements HandlerAdapter {
 
 	@Override
 	public boolean supports(Object handler) {
+		/* bean对象实现了Controller接口 */
 		return (handler instanceof Controller);
 	}
 
@@ -47,7 +52,7 @@ public class SimpleControllerHandlerAdapter implements HandlerAdapter {
 	@Nullable
 	public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
+		/* bean类型强转并调用处理方法 */
 		return ((Controller) handler).handleRequest(request, response);
 	}
 
