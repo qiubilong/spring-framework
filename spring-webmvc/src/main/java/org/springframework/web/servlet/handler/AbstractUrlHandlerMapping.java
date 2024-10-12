@@ -145,10 +145,10 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 	@Override
 	@Nullable
 	protected Object getHandlerInternal(HttpServletRequest request) throws Exception {
-		String lookupPath = initLookupPath(request);
+		String lookupPath = initLookupPath(request);/* 请求uri,如*/
 		Object handler;
 		if (usesPathPatterns()) {
-			RequestPath path = ServletRequestPathUtils.getParsedRequestPath(request);
+			RequestPath path = ServletRequestPathUtils.getParsedRequestPath(request);/* 完整请求路径，如/do_web/app/myBeanName */
 			handler = lookupHandler(path, lookupPath, request);
 		}
 		else {
@@ -188,12 +188,13 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 	@Nullable
 	protected Object lookupHandler(
 			RequestPath path, String lookupPath, HttpServletRequest request) throws Exception {
-
+		/* 直接匹配，返回Handler处理执行器， HandlerExecutionChain = Handler + interceptorList */
 		Object handler = getDirectMatch(lookupPath, request);
 		if (handler != null) {
 			return handler;
 		}
 
+		//模糊匹配
 		// Pattern match?
 		List<PathPattern> matches = null;
 		for (PathPattern pattern : this.pathPatternHandlerMap.keySet()) {
@@ -300,6 +301,7 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 
 	@Nullable
 	private Object getDirectMatch(String urlPath, HttpServletRequest request) throws Exception {
+		/* urlPath匹配的bean对象 */
 		Object handler = this.handlerMap.get(urlPath);
 		if (handler != null) {
 			// Bean name or resolved handler?
@@ -307,6 +309,7 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 				handler = obtainApplicationContext().getBean(handlerName);
 			}
 			validateHandler(handler, request);
+			/* 返回Handler处理执行器 = Handler + interceptorList */
 			return buildPathExposingHandler(handler, urlPath, urlPath, null);
 		}
 		return null;
@@ -337,7 +340,7 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 	 */
 	protected Object buildPathExposingHandler(Object rawHandler, String bestMatchingPattern,
 			String pathWithinMapping, @Nullable Map<String, String> uriTemplateVariables) {
-
+		/* Handler处理器执行链，HandlerExecutionChain == Handler + InterceptorList */
 		HandlerExecutionChain chain = new HandlerExecutionChain(rawHandler);
 		chain.addInterceptor(new PathExposingHandlerInterceptor(bestMatchingPattern, pathWithinMapping));
 		if (!CollectionUtils.isEmpty(uriTemplateVariables)) {
@@ -446,10 +449,10 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 				setDefaultHandler(resolvedHandler);
 			}
 			else {
-				/* 注册Handler处理器， urlPath--bean对象   */
+				/* 注册Handler处理器， urlPath <--> bean对象   */
 				this.handlerMap.put(urlPath, resolvedHandler);
 				if (getPatternParser() != null) {
-					this.pathPatternHandlerMap.put(getPatternParser().parse(urlPath), resolvedHandler);
+					this.pathPatternHandlerMap.put(getPatternParser().parse(urlPath), resolvedHandler);//模糊匹配
 				}
 				if (logger.isTraceEnabled()) {
 					logger.trace("Mapped [" + urlPath + "] onto " + getHandlerDescription(handler));

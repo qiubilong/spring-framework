@@ -37,13 +37,14 @@ import org.springframework.util.CollectionUtils;
  * @since 20.06.2003
  * @see HandlerInterceptor
  */
+/* Handler处理器执行链 == handler +  interceptorList */
 public class HandlerExecutionChain {
 
 	private static final Log logger = LogFactory.getLog(HandlerExecutionChain.class);
 
-	private final Object handler;
+	private final Object handler;/* 请求处理器Handler */
 
-	private final List<HandlerInterceptor> interceptorList = new ArrayList<>();
+	private final List<HandlerInterceptor> interceptorList = new ArrayList<>(); /* Handler拦截器 */
 
 	private int interceptorIndex = -1;
 

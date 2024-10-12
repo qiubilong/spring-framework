@@ -505,8 +505,11 @@ public class DispatcherServlet extends FrameworkServlet {
 		initMultipartResolver(context);
 		initLocaleResolver(context);
 		initThemeResolver(context);
+
 		initHandlerMappings(context);
+		/* 初始化HandlerAdapter，用于封装执行不同Handler的调用 */
 		initHandlerAdapters(context);
+
 		initHandlerExceptionResolvers(context);
 		initRequestToViewNameTranslator(context);
 		initViewResolvers(context);
@@ -619,6 +622,14 @@ public class DispatcherServlet extends FrameworkServlet {
 		// Ensure we have at least one HandlerMapping, by registering
 		// a default HandlerMapping if no other mappings are found.
 		if (this.handlerMappings == null) {
+
+			/* 加载DispatcherServlet.properties中定义的请求处理器映射器HandlerMapping */
+/*  HandlerMapping负责去寻找Handler，并保存路径和Handler的映射关系
+ org.springframework.web.servlet.HandlerMapping=
+org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping                  -->负责寻找实现了Controller接口的bean对象
+org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping,\
+org.springframework.web.servlet.function.support.RouterFunctionMapping
+ */
 			this.handlerMappings = getDefaultStrategies(context, HandlerMapping.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No HandlerMappings declared for servlet '" + getServletName() +
@@ -665,6 +676,15 @@ public class DispatcherServlet extends FrameworkServlet {
 		// Ensure we have at least some HandlerAdapters, by registering
 		// default HandlerAdapters if no other adapters are found.
 		if (this.handlerAdapters == null) {
+
+			/* 加载DispatcherServlet.properties中定义默认HandlerAdapter
+
+org.springframework.web.servlet.HandlerAdapter=
+org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter,\
+org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter,\
+org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter,\
+org.springframework.web.servlet.function.support.HandlerFunctionAdapter
+			* */
 			this.handlerAdapters = getDefaultStrategies(context, HandlerAdapter.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No HandlerAdapters declared for servlet '" + getServletName() +
@@ -875,6 +895,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				// Load default strategy implementations from properties file.
 				// This is currently strictly internal and not meant to be customized
 				// by application developers.
+				/* 加载 DispatcherServlet.properties文件 */
 				ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH, DispatcherServlet.class);
 				defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);
 			}
@@ -891,6 +912,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			for (String className : classNames) {
 				try {
 					Class<?> clazz = ClassUtils.forName(className, DispatcherServlet.class.getClassLoader());
+					/* 调用ApplicationContext实例化策略组件，使组件经过完整的bean生命周期 */
 					Object strategy = createDefaultStrategy(context, clazz);
 					strategies.add((T) strategy);
 				}
@@ -966,6 +988,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		RequestPath previousRequestPath = null;
 		if (this.parseRequestPath) {
+			/* 解析请求路径，如/do_web/app/myBeanName */
 			previousRequestPath = (RequestPath) request.getAttribute(ServletRequestPathUtils.PATH_ATTRIBUTE);
 			ServletRequestPathUtils.parseAndCache(request);
 		}
@@ -1038,6 +1061,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @throws Exception in case of any kind of processing failure
 	 */
 	@SuppressWarnings("deprecation")
+	/* http请求派发总入口 --> HandlerMapping匹配请求处理器Handler -->  HandlerAdapter调用Handler处理逻辑 */
 	protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpServletRequest processedRequest = request;
 		HandlerExecutionChain mappedHandler = null;
@@ -1270,7 +1294,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	@Nullable
 	protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
+		/* handlerMappings == BeanNameUrlHandlerMapping、RequestMappingHandlerMapping、RouterFunctionMapping  */
 		if (this.handlerMappings != null) {
+			/* 匹配当前请求的Handler */
 			for (HandlerMapping mapping : this.handlerMappings) {
 				HandlerExecutionChain handler = mapping.getHandler(request);
 				if (handler != null) {
