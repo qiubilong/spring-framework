@@ -149,7 +149,7 @@ public class InternalResourceView extends AbstractUrlBasedView {
 		String dispatcherPath = prepareForRendering(request, response);
 
 		// Obtain a RequestDispatcher for the target resource (typically a JSP).
-		/* 生成jsp渲染转发器，由Tomcat负责渲染输出页面 */
+		/* jsp渲染转发器，生成jsp页面路径，由Tomcat重新转发请求到DispatcherServlet渲染页面 */
 		//freemarker由FreeMarkerView视图解析器自己渲染输出
 		RequestDispatcher rd = getRequestDispatcher(request, dispatcherPath);//ApplicationDispatcher
 		if (rd == null) {
@@ -171,7 +171,7 @@ public class InternalResourceView extends AbstractUrlBasedView {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Forwarding to [" + getUrl() + "]");
 			}
-			/* tomcat负责渲染输出页面 */
+			/* 由Tomcat重新转发请求到DispatcherServlet渲染页面 */
 			rd.forward(request, response);
 		}
 	}

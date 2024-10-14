@@ -1187,7 +1187,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 
 		// Did the handler return a view to render?
 		if (mv != null && !mv.wasCleared()) {
-			/* 渲染视图页面 */
+			/* 创建并渲染视图页面 */
 			render(mv, request, response);
 			if (errorView) {
 				WebUtils.clearErrorRequestAttributes(request);
@@ -1454,6 +1454,7 @@ org.springframework.web.servlet.HandlerAdapter=
 				request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, mv.getStatus());
 				response.setStatus(mv.getStatus().value());
 			}
+			/* 渲染视图 */
 			view.render(mv.getModelInternal(), request, response);
 		}
 		catch (Exception ex) {
