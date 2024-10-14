@@ -1077,14 +1077,17 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
-				// Determine handler for the current request.
+				// Determine handler for the current request
+				/* 匹配当前请求的处理器，HandlerExecutionChain = Handler + interceptorList   */
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
+					// 404
 					noHandlerFound(processedRequest, response);
 					return;
 				}
 
 				// Determine handler adapter for the current request.
+				/* 匹配Handler的HandlerAdapter，用于封装不同Handler的执行细节 */
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
 				// Process last-modified header, if supported by the handler.
@@ -1097,11 +1100,12 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 					}
 				}
 
-				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
+				if (!mappedHandler.applyPreHandle(processedRequest, response)) {//拦截器 - 处理器handler执行前
 					return;
 				}
 
 				// Actually invoke the handler.
+				/* 执行Handler */
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				if (asyncManager.isConcurrentHandlingStarted()) {
@@ -1109,7 +1113,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 				}
 
 				applyDefaultViewName(processedRequest, mv);
-				mappedHandler.applyPostHandle(processedRequest, response, mv);
+				mappedHandler.applyPostHandle(processedRequest, response, mv);//拦截器 - 处理器handler执行后
 			}
 			catch (Exception ex) {
 				dispatchException = ex;
@@ -1332,6 +1336,13 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 	 * @throws ServletException if no HandlerAdapter can be found for the handler. This is a fatal error.
 	 */
 	protected HandlerAdapter getHandlerAdapter(Object handler) throws ServletException {
+		/*
+org.springframework.web.servlet.HandlerAdapter=
+    org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter,\
+	org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter,  ----负责执行实现了Controller接口的Handler
+	org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter,\
+	org.springframework.web.servlet.function.support.HandlerFunctionAdapter
+		*/
 		if (this.handlerAdapters != null) {
 			for (HandlerAdapter adapter : this.handlerAdapters) {
 				if (adapter.supports(handler)) {

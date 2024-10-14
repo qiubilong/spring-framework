@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <web-app>
-  <!--  tomcat加载解析web.xml &ndash;&gt; 实例初始化DispatcherServlet &ndash;&gt; 创建WebXmlApplicationContext-->
+  <!--  tomcat加载解析web.xml &ndash;&gt; 实例初始化DispatcherServlet &ndash;&gt; 创建容器WebXmlApplicationContext-->
 	<servlet>
 		<servlet-name>app</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

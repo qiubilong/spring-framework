@@ -149,6 +149,7 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 		Object handler;
 		if (usesPathPatterns()) {
 			RequestPath path = ServletRequestPathUtils.getParsedRequestPath(request);/* 完整请求路径，如/do_web/app/myBeanName */
+			/* 返回Handler处理执行器， HandlerExecutionChain = Handler + interceptorList */
 			handler = lookupHandler(path, lookupPath, request);
 		}
 		else {
@@ -159,10 +160,10 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 			// expose the PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE for it as well.
 			Object rawHandler = null;
 			if (StringUtils.matchesCharacter(lookupPath, '/')) {
-				rawHandler = getRootHandler();
+				rawHandler = getRootHandler();// lookupPath == /
 			}
 			if (rawHandler == null) {
-				rawHandler = getDefaultHandler();
+				rawHandler = getDefaultHandler();//默认处理器匹配路径/*
 			}
 			if (rawHandler != null) {
 				// Bean name or resolved handler?
