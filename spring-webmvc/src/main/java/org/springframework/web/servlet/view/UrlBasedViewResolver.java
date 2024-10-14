@@ -570,11 +570,12 @@ public class UrlBasedViewResolver extends AbstractCachingViewResolver implements
 	 * @see #loadView(String, java.util.Locale)
 	 */
 	protected AbstractUrlBasedView buildView(String viewName) throws Exception {
+		/* 创建jsp视图 InternalResourceView */
 		AbstractUrlBasedView view = instantiateView();
 		/* 设置完整的viewUrl = 前缀 + 视图名 + 后缀 */
 		view.setUrl(getPrefix() + viewName + getSuffix());
 		view.setAttributesMap(getAttributesMap());
-
+		//下面都是null，忽略
 		String contentType = getContentType();
 		if (contentType != null) {
 			view.setContentType(contentType);

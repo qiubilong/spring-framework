@@ -15,11 +15,11 @@ import org.springframework.web.servlet.mvc.Controller;
    spring有四种处理器
    1、实现了Controller接口的bean对象，spring早期古老的处理器 -- BeanNameUrlHandlerMapping负责检测保存映射关系 -->  SimpleControllerHandlerAdapter负责转发执行
 * */
-@Component("/beanNameHandlerController")
-public class BeanNameHandlerController implements Controller {
+@Component("/beanNameUrlHandlerController")
+public class BeanNameUrlHandlerController implements Controller {
 	@Override
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView modelAndView = new ModelAndView("beanNameHandler");
+		ModelAndView modelAndView = new ModelAndView("beanNameUrlHandler");
 		modelAndView.addObject("Title", "beanNameHandlerController");
 		modelAndView.addObject("END", "handlerControllerByBeanName");
 		return modelAndView;
