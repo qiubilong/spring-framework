@@ -789,6 +789,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 		// Ensure we have at least one ViewResolver, by registering
 		// a default ViewResolver if no other resolvers are found.
 		if (this.viewResolvers == null) {
+			/* 实例化jsp视图解析器 */
 			this.viewResolvers = getDefaultStrategies(context, ViewResolver.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No ViewResolvers declared for servlet '" + getServletName() +
@@ -1123,6 +1124,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 				// making them available for @ExceptionHandler methods and other scenarios.
 				dispatchException = new ServletException("Handler dispatch failed: " + err, err);
 			}
+			/* 处理返回结果，渲染页面 */
 			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
 		}
 		catch (Exception ex) {
@@ -1170,6 +1172,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 
 		boolean errorView = false;
 
+		//异常视图页面
 		if (exception != null) {
 			if (exception instanceof ModelAndViewDefiningException mavDefiningException) {
 				logger.debug("ModelAndViewDefiningException encountered", exception);
@@ -1184,6 +1187,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 
 		// Did the handler return a view to render?
 		if (mv != null && !mv.wasCleared()) {
+			/* 渲染视图页面 */
 			render(mv, request, response);
 			if (errorView) {
 				WebUtils.clearErrorRequestAttributes(request);
@@ -1419,12 +1423,13 @@ org.springframework.web.servlet.HandlerAdapter=
 		// Determine locale for request and apply it to the response.
 		Locale locale =
 				(this.localeResolver != null ? this.localeResolver.resolveLocale(request) : request.getLocale());
-		response.setLocale(locale);
+		response.setLocale(locale);//国际化多语言
 
 		View view;
 		String viewName = mv.getViewName();
 		if (viewName != null) {
 			// We need to resolve the view name.
+			/* 解析视图名 */
 			view = resolveViewName(viewName, mv.getModelInternal(), locale, request);
 			if (view == null) {
 				throw new ServletException("Could not resolve view with name '" + mv.getViewName() +
@@ -1489,8 +1494,9 @@ org.springframework.web.servlet.HandlerAdapter=
 			Locale locale, HttpServletRequest request) throws Exception {
 
 		if (this.viewResolvers != null) {
+			/* InternalResourceViewResolver == jsp视图 */
 			for (ViewResolver viewResolver : this.viewResolvers) {
-				View view = viewResolver.resolveViewName(viewName, locale);
+				View view = viewResolver.resolveViewName(viewName, locale);//InternalResourceViewResolver - UrlBasedViewResolver - AbstractCachingViewResolver
 				if (view != null) {
 					return view;
 				}
