@@ -989,12 +989,13 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 
 		RequestPath previousRequestPath = null;
 		if (this.parseRequestPath) {
-			/* 解析请求路径，如/do_web/app/myBeanName */
+			/* 解析请求路径，如/do_web/app/beanNameUrlHandlerController */
 			previousRequestPath = (RequestPath) request.getAttribute(ServletRequestPathUtils.PATH_ATTRIBUTE);
 			ServletRequestPathUtils.parseAndCache(request);
 		}
 
 		try {
+			/* http请求处总入口 */
 			doDispatch(request, response);
 		}
 		finally {
@@ -1082,7 +1083,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 				/* 匹配当前请求的处理器，HandlerExecutionChain = Handler + interceptorList   */
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
-					// 404
+					// 报404
 					noHandlerFound(processedRequest, response);
 					return;
 				}
@@ -1091,7 +1092,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 				/* 匹配Handler的HandlerAdapter，用于封装不同Handler的执行细节 */
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
-				// Process last-modified header, if supported by the handler.
+				// Process last-modified header, if supported by the handler. http缓存有关系
 				String method = request.getMethod();
 				boolean isGet = HttpMethod.GET.matches(method);
 				if (isGet || HttpMethod.HEAD.matches(method)) {

@@ -572,7 +572,7 @@ public class UrlBasedViewResolver extends AbstractCachingViewResolver implements
 	protected AbstractUrlBasedView buildView(String viewName) throws Exception {
 		/* 创建jsp视图 InternalResourceView */
 		AbstractUrlBasedView view = instantiateView();
-		/* 设置完整的viewUrl = 前缀 + 视图名 + 后缀 */
+		/* 设置完整的viewUrl = 前缀 + 视图名 + 后缀 ,例如/WEB-INF/jsp/beanNameUrlHandler.jsp */
 		view.setUrl(getPrefix() + viewName + getSuffix());
 		view.setAttributesMap(getAttributesMap());
 		//下面都是null，忽略

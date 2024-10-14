@@ -877,11 +877,15 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * Override the parent class implementation in order to intercept requests
 	 * using PATCH or non-standard HTTP methods (WebDAV).
 	 */
+	/* DispatcherServlet -- FrameworkServlet -- HttpServlet
+	*  tomcat反射调用DispatcherServlet的service(request, response)方法
+	*  */
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		if (HTTP_SERVLET_METHODS.contains(request.getMethod())) {
+			/* 判断Last-Modified缓存等http处理，最终还是processRequest处理请求 */
 			super.service(request, response);
 		}
 		else {
@@ -1008,6 +1012,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		initContextHolders(request, localeContext, requestAttributes);
 
 		try {
+			/* 继续转发请求 */
 			doService(request, response);
 		}
 		catch (ServletException | IOException ex) {
