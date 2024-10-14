@@ -139,16 +139,19 @@ public class InternalResourceView extends AbstractUrlBasedView {
 			Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		// Expose the model object as request attributes.
+		/* 设置model属性到request.Attribute */
 		exposeModelAsRequestAttributes(model, request);
 
-		// Expose helpers as request attributes, if any.
+		// Expose helpers as request attributes, if any. 支持国际化
 		exposeHelpers(request);
 
 		// Determine the path for the request dispatcher.
 		String dispatcherPath = prepareForRendering(request, response);
 
 		// Obtain a RequestDispatcher for the target resource (typically a JSP).
-		RequestDispatcher rd = getRequestDispatcher(request, dispatcherPath);
+		/* 生成jsp渲染转发器，由Tomcat负责渲染输出页面 */
+		//freemarker由FreeMarkerView视图解析器自己渲染输出
+		RequestDispatcher rd = getRequestDispatcher(request, dispatcherPath);//ApplicationDispatcher
 		if (rd == null) {
 			throw new ServletException("Could not get RequestDispatcher for [" + getUrl() +
 					"]: Check that the corresponding file exists within your web application archive!");
@@ -168,6 +171,7 @@ public class InternalResourceView extends AbstractUrlBasedView {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Forwarding to [" + getUrl() + "]");
 			}
+			/* tomcat负责渲染输出页面 */
 			rd.forward(request, response);
 		}
 	}
