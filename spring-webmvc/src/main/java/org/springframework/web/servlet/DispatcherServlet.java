@@ -1496,7 +1496,7 @@ org.springframework.web.servlet.HandlerAdapter=
 			Locale locale, HttpServletRequest request) throws Exception {
 
 		if (this.viewResolvers != null) {
-			/* InternalResourceViewResolver == jsp视图 */
+			/* InternalResourceViewResolver == jsp视图解析器 */
 			for (ViewResolver viewResolver : this.viewResolvers) {
 				View view = viewResolver.resolveViewName(viewName, locale);//InternalResourceViewResolver - UrlBasedViewResolver - AbstractCachingViewResolver
 				if (view != null) {
