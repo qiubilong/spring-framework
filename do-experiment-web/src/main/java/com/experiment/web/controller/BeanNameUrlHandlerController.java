@@ -20,8 +20,8 @@ public class BeanNameUrlHandlerController implements Controller {
 	@Override
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView modelAndView = new ModelAndView("beanNameUrlHandler");
-		modelAndView.addObject("Title", "beanNameHandlerController");//request.setAttribute(name, value);
-		modelAndView.addObject("END", "handlerControllerByBeanName");
+		modelAndView.addObject("Title", "请求处理器Handlers");//等同于request.setAttribute(name, value);
+		modelAndView.addObject("END", "beanNameHandlerController");
 		return modelAndView;
 	}
 }
