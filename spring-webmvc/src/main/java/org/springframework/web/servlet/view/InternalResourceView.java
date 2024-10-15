@@ -149,10 +149,10 @@ public class InternalResourceView extends AbstractUrlBasedView {
 		String dispatcherPath = prepareForRendering(request, response);
 
 		// Obtain a RequestDispatcher for the target resource (typically a JSP).
-		/* 根据前面设置的jsp页面路径，例如/WEB-INF/jsp/beanNameUrlHandler.jsp，创建jsp渲染转发器。
-		由Tomcat负责输出渲染页面。因为从一个handler请求地址转发到jsp路径，所以叫转发器，也可以单独访问jsp
+		/* 根据前面设置的jsp页面路径，例如/WEB-INF/jsp/beanNameUrlHandler.jsp，创建jsp渲染转发器ApplicationDispatcher。
+		再次由Tomcat JspServlet 转发请求渲染最终页面 。因为从一个handler请求地址转发到jsp路径，所以叫转发器，也可以单独访问jsp
 		*/
-		//freemarker由FreeMarkerView视图解析器自己渲染输出
+		//freemarker由FreeMarkerView视图解析器直接渲染输出页面
 		RequestDispatcher rd = getRequestDispatcher(request, dispatcherPath);//ApplicationDispatcher
 		if (rd == null) {
 			throw new ServletException("Could not get RequestDispatcher for [" + getUrl() +
@@ -173,7 +173,7 @@ public class InternalResourceView extends AbstractUrlBasedView {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Forwarding to [" + getUrl() + "]");
 			}
-			/* 由Tomcat负责输出渲染页面 */
+			/* ApplicationDispatcher . forward ，再次由Tomcat JspServlet 转发请求渲染最终页面 */
 			rd.forward(request, response);
 		}
 	}
