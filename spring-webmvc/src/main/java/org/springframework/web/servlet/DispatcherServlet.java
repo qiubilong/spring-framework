@@ -1190,7 +1190,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 
 		// Did the handler return a view to render?
 		if (mv != null && !mv.wasCleared()) {
-			/* 创建并渲染视图页面 */
+			/* ModelAndView不为空，创建并渲染视图页面 */
 			render(mv, request, response);
 			if (errorView) {
 				WebUtils.clearErrorRequestAttributes(request);
@@ -1208,7 +1208,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 		}
 
 		if (mappedHandler != null) {
-			// Exception (if any) is already handled..
+			// Exception (if any) is already handled..  Handler拦截器 - Handler执行后
 			mappedHandler.triggerAfterCompletion(request, response, null);
 		}
 	}

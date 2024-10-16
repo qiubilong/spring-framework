@@ -26,7 +26,6 @@ import java.io.IOException;
 public class BeanNameHttpRequestHandlerController implements HttpRequestHandler {
 
 
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
