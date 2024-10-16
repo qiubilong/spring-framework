@@ -79,7 +79,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 		*  */
 		this.reader = new AnnotatedBeanDefinitionReader(this);
 		createAnnotatedBeanDefReader.end();
-		/* 创建 @Component扫描器 */
+		/* 创建 ClassPath 扫描器 */
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 
