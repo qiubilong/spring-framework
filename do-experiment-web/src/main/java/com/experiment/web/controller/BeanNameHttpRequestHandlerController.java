@@ -3,8 +3,10 @@ package com.experiment.web.controller;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.IOException;
 
@@ -24,6 +26,7 @@ import java.io.IOException;
 public class BeanNameHttpRequestHandlerController implements HttpRequestHandler {
 
 
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");

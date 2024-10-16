@@ -503,11 +503,12 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	protected void initStrategies(ApplicationContext context) {
 		initMultipartResolver(context);
-		initLocaleResolver(context);
-		initThemeResolver(context);
+		initLocaleResolver(context);//国际化
+		initThemeResolver(context);//主题
 
+		/* 寻找Handler，并保存处理路径 path 和 Handler 的映射关系 */
 		initHandlerMappings(context);
-		/* 初始化HandlerAdapter，用于封装执行不同Handler的调用 */
+		/* 初始化HandlerAdapter，用于封装不同Handler的执行细节 */
 		initHandlerAdapters(context);
 
 		initHandlerExceptionResolvers(context);
@@ -698,6 +699,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
 	 * we default to no exception resolver.
 	 */
+	/* 如果程序员定义了 HandlerExceptionResolver 类型的bean，那么就不再加载DispatcherServlet.properties中默认 HandlerExceptionResolver */
 	private void initHandlerExceptionResolvers(ApplicationContext context) {
 		this.handlerExceptionResolvers = null;
 
