@@ -181,6 +181,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		Assert.notNull(resources, "Resource array must not be null");
 		int count = 0;
 		for (Resource resource : resources) {
+			/* 解析xml，如 WEB-INF/spring-mvc.xml --> 注册BeanDefinition */
 			count += loadBeanDefinitions(resource);
 		}
 		return count;
@@ -217,6 +218,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 			// Resource pattern matching available.
 			try {
 				Resource[] resources = resourcePatternResolver.getResources(location);
+				/* 解析xml，如 WEB-INF/spring-mvc.xml --> 注册BeanDefinition */
 				int count = loadBeanDefinitions(resources);
 				if (actualResources != null) {
 					Collections.addAll(actualResources, resources);

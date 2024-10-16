@@ -146,7 +146,9 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		}
 
 		preProcessXml(root);
+		/* 解析xml --> 注册 BeanDefinition */
 		parseBeanDefinitions(root, this.delegate);
+
 		postProcessXml(root);
 
 		this.delegate = parent;
@@ -172,9 +174,11 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				Node node = nl.item(i);
 				if (node instanceof Element ele) {
 					if (delegate.isDefaultNamespace(ele)) {
+						/* 解析<bean>标签 */
 						parseDefaultElement(ele, delegate);
 					}
 					else {
+						/* 解析其他标签 */
 						delegate.parseCustomElement(ele);
 					}
 				}

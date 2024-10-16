@@ -534,6 +534,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		long startTime = System.currentTimeMillis();
 
 		try {
+			/* 创建WebApplicationContext容器 */
 			this.webApplicationContext = initWebApplicationContext();
 			initFrameworkServlet();
 		}
@@ -565,6 +566,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #setContextConfigLocation
 	 */
 	protected WebApplicationContext initWebApplicationContext() {
+		/* 父子容器，父容器 */
 		WebApplicationContext rootContext =
 				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		WebApplicationContext wac = null;
@@ -592,6 +594,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		}
 		if (wac == null) {
 			// No context instance is defined for this servlet -> create a local one
+			/* 创建WebApplicationContext容器 */
 			wac = createWebApplicationContext(rootContext);
 		}
 
@@ -653,6 +656,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see org.springframework.web.context.support.XmlWebApplicationContext
 	 */
 	protected WebApplicationContext createWebApplicationContext(@Nullable ApplicationContext parent) {
+		/* contextClass == XmlWebApplicationContext  */
 		Class<?> contextClass = getContextClass();
 		if (!ConfigurableWebApplicationContext.class.isAssignableFrom(contextClass)) {
 			throw new ApplicationContextException(
@@ -660,15 +664,18 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 					"': custom WebApplicationContext class [" + contextClass.getName() +
 					"] is not of type ConfigurableWebApplicationContext");
 		}
+		/* 实例化 XmlWebApplicationContext  */
 		ConfigurableWebApplicationContext wac =
 				(ConfigurableWebApplicationContext) BeanUtils.instantiateClass(contextClass);
 
-		wac.setEnvironment(getEnvironment());
+		wac.setEnvironment(getEnvironment());//new StandardServletEnvironment()
 		wac.setParent(parent);
 		String configLocation = getContextConfigLocation();
 		if (configLocation != null) {
+			/* 设置配置文件 /WEB-INF/spring-mvc.xml  */
 			wac.setConfigLocation(configLocation);
 		}
+		/* 执行 XmlWebApplicationContext.refresh()  */
 		configureAndRefreshWebApplicationContext(wac);
 
 		return wac;
@@ -703,6 +710,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 		postProcessWebApplicationContext(wac);
 		applyInitializers(wac);
+		/* 扫描配置 --> 注册BeanDefinition --> 实例化bean */
 		wac.refresh();
 	}
 
@@ -717,6 +725,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #createWebApplicationContext(ApplicationContext)
 	 */
 	protected WebApplicationContext createWebApplicationContext(@Nullable WebApplicationContext parent) {
+		/* 创建WebApplicationContext容器 */
 		return createWebApplicationContext((ApplicationContext) parent);
 	}
 

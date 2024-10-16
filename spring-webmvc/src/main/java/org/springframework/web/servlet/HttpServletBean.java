@@ -144,9 +144,12 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 	 * @throws ServletException if bean properties are invalid (or required
 	 * properties are missing), or if subclass initialization fails.
 	 */
+	/*                        spring容器                                                         tomcat   */
+	/* DispatcherServlet --> FrameWorkServlet --> HttpServletBean          --> HttpServlet --> GenericServlet -> Servlet    */
+	/* Tomcat反射执行 GenericServlet.init(ServletConfig config) --> HttpServletBean.init()  */
 	@Override
 	public final void init() throws ServletException {
-
+		/* 初始化Servlet */
 		// Set bean properties from init parameters.
 		PropertyValues pvs = new ServletConfigPropertyValues(getServletConfig(), this.requiredProperties);
 		if (!pvs.isEmpty()) {
@@ -166,6 +169,7 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 		}
 
 		// Let subclasses do whatever initialization they like.
+		/* 创建webApplicationContext容器，FrameworkServlet */
 		initServletBean();
 	}
 

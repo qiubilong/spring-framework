@@ -679,7 +679,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
-		/* 模板方法，app(非web)容器仅能操作一次refresh(),见GenericApplicationContext */
+		/* 模板方法，app容器 -- AnnotationConfigApplicationContext -- GenericApplicationContext 仅能执行一次refresh() */
+		/* 模板方法，web容器 -- XmlWebApplicationContext -- AbstractRefreshableApplicationContext  */
 		refreshBeanFactory();
 		return getBeanFactory();
 	}
