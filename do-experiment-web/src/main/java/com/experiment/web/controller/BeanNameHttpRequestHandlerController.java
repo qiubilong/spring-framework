@@ -1,12 +1,11 @@
 package com.experiment.web.controller;
 
+import com.experiment.web.config.MyResponseStatusException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.IOException;
 
@@ -31,5 +30,6 @@ public class BeanNameHttpRequestHandlerController implements HttpRequestHandler 
 		response.setContentType("text/html");
 		//response.setCharacterEncoding("UTF-8");
 		response.getWriter().println("请求处理器Handler -- 实现了HttpRequestHandler接口的bean对象");
+		throw new MyResponseStatusException("@ResponseStatus声明异常");
 	}
 }
