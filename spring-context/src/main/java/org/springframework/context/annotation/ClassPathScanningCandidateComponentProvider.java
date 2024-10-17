@@ -503,7 +503,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				return false;
 			}
 		}
-		/* 匹配（ @Component ） */
+		/* 匹配@Component , 注解过滤器父类 AbstractTypeHierarchyTraversingFilter  */
 		for (TypeFilter tf : this.includeFilters) {
 			if (tf.match(metadataReader, getMetadataReaderFactory())) {
 				return isConditionMatch(metadataReader);
