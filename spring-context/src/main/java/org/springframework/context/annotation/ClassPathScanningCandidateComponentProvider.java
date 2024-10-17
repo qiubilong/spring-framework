@@ -205,7 +205,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 */
 	@SuppressWarnings("unchecked")
 	protected void registerDefaultFilters() {
-		/* 添加 匹配 @Component 过滤器 */
+		/* 添加 BeanDefinition 匹配器 @Component 过滤器 */
 		this.includeFilters.add(new AnnotationTypeFilter(Component.class));
 		ClassLoader cl = ClassPathScanningCandidateComponentProvider.class.getClassLoader();
 		try {
@@ -315,7 +315,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 			return addCandidateComponentsFromIndex(this.componentsIndex, basePackage);
 		}
 		else {
-			/* 扫描 @Component */
+			/* 扫描basePackage --> 匹配 @Component --> BeanDefinition */
 			return scanCandidateComponents(basePackage);
 		}
 	}

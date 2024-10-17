@@ -80,14 +80,18 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 	@Override
 	@Nullable
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
+		/*  解析标签 	<context:component-scan base-package="com.experiment.web"/>  */
 		String basePackage = element.getAttribute(BASE_PACKAGE_ATTRIBUTE);
 		basePackage = parserContext.getReaderContext().getEnvironment().resolvePlaceholders(basePackage);
 		String[] basePackages = StringUtils.tokenizeToStringArray(basePackage,
 				ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
 
 		// Actually scan for bean definitions and register them.
+		/* 创建类扫描器 ClassPathBeanDefinitionScanner*/
 		ClassPathBeanDefinitionScanner scanner = configureScanner(parserContext, element);
+		/* 创建类扫描器 ClassPathBeanDefinitionScanner --> 扫描路径basePackage --> 注册BeanDefinition */
 		Set<BeanDefinitionHolder> beanDefinitions = scanner.doScan(basePackages);
+		/* 注入容器基础组件ConfigurationClassPostProcessor/ AutowiredAnnotationBeanPostProcessor等 */
 		registerComponents(parserContext.getReaderContext(), beanDefinitions, element);
 
 		return null;
@@ -100,6 +104,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		}
 
 		// Delegate bean definition registration to scanner class.
+		/* 创建类路径扫描器 ClassPathBeanDefinitionScanner */
 		ClassPathBeanDefinitionScanner scanner = createScanner(parserContext.getReaderContext(), useDefaultFilters);
 		scanner.setBeanDefinitionDefaults(parserContext.getDelegate().getBeanDefinitionDefaults());
 		scanner.setAutowireCandidatePatterns(parserContext.getDelegate().getAutowireCandidatePatterns());
@@ -149,6 +154,7 @@ public class ComponentScanBeanDefinitionParser implements BeanDefinitionParser {
 		}
 		if (annotationConfig) {
 			Set<BeanDefinitionHolder> processorDefinitions =
+					/* 注入 ConfigurationClassPostProcessor等容器重要基础组件 */
 					AnnotationConfigUtils.registerAnnotationConfigProcessors(readerContext.getRegistry(), source);
 			for (BeanDefinitionHolder processorDefinition : processorDefinitions) {
 				compositeDef.addNestedComponent(new BeanComponentDefinition(processorDefinition));
