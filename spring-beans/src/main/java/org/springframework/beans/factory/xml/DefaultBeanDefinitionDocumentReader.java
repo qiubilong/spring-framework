@@ -178,14 +178,13 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 						parseDefaultElement(ele, delegate);
 					}
 					else {
-						/* 解析其他标签 */
+						/* 解析其他标签，比如 <context:component-scan base-package="com.experiment.web"/>  */
 						delegate.parseCustomElement(ele);
 					}
 				}
 			}
 		}
 		else {
-			/* 解析其他标签 */
 			delegate.parseCustomElement(root);
 		}
 	}

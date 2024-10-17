@@ -14,7 +14,7 @@
 	<context:component-scan base-package="com.experiment.web"/>
 
 
-	<!-- 注解驱动 -->
+	<!-- 等同注入Dispatcher.properties中定义的组件 -->
 	<mvc:annotation-driven/>
 
 	<!--拦截器-->
