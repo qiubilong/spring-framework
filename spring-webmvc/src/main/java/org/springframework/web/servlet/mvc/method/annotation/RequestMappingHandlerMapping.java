@@ -221,7 +221,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 			this.config.setRegisteredSuffixPatternMatch(useRegisteredSuffixPatternMatch());
 			this.config.setPathMatcher(getPathMatcher());
 		}
-
+		/* 寻找@RequestMapping的请求处理器Handler,并保存映射关系 */
 		super.afterPropertiesSet();
 	}
 
@@ -334,11 +334,13 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	 * @see #getCustomTypeCondition(Class)
 	 * @see #getCustomMethodCondition(Method)
 	 */
+	/* 当前 Method/Class 是否存在注解 @RequestMapping  */
 	@Nullable
 	private RequestMappingInfo createRequestMappingInfo(AnnotatedElement element) {
 		RequestMapping requestMapping = AnnotatedElementUtils.findMergedAnnotation(element, RequestMapping.class);
 		RequestCondition<?> condition = (element instanceof Class<?> clazz ?
 				getCustomTypeCondition(clazz) : getCustomMethodCondition((Method) element));
+		/* 创建注解信息对象 RequestMappingInfo */
 		return (requestMapping != null ? createRequestMappingInfo(requestMapping, condition) : null);
 	}
 
@@ -384,12 +386,12 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 			RequestMapping requestMapping, @Nullable RequestCondition<?> customCondition) {
 
 		RequestMappingInfo.Builder builder = RequestMappingInfo
-				.paths(resolveEmbeddedValuesInPatterns(requestMapping.path()))
-				.methods(requestMapping.method())
-				.params(requestMapping.params())
-				.headers(requestMapping.headers())
-				.consumes(requestMapping.consumes())
-				.produces(requestMapping.produces())
+				.paths(resolveEmbeddedValuesInPatterns(requestMapping.path()))/* http请求路径path */
+				.methods(requestMapping.method()) /* http请求方式，get、 post等 */
+				.params(requestMapping.params())  /* 必须包含哪些参数 */
+				.headers(requestMapping.headers()) /* 必须包含哪些头部 */
+				.consumes(requestMapping.consumes()) /* http请求的数据格式，如 consumes = "application/json" */
+				.produces(requestMapping.produces())/* http响应的数据格式，如 produces = { "application/json", "application/xml" } */
 				.mappingName(requestMapping.name());
 		if (customCondition != null) {
 			builder.customCondition(customCondition);

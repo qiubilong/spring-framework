@@ -60,21 +60,25 @@ public final class MethodIntrospector {
 		Set<Class<?>> handlerTypes = new LinkedHashSet<>();
 		Class<?> specificHandlerType = null;
 
+		/* 获取原始对象class */
 		if (!Proxy.isProxyClass(targetType)) {
 			specificHandlerType = ClassUtils.getUserClass(targetType);
 			handlerTypes.add(specificHandlerType);
 		}
+		/* 获取class接口Interfaces */
 		handlerTypes.addAll(ClassUtils.getAllInterfacesForClassAsSet(targetType));
 
 		for (Class<?> currentHandlerType : handlerTypes) {
 			final Class<?> targetClass = (specificHandlerType != null ? specificHandlerType : currentHandlerType);
-
+			/* 遍历所有方法Method */
 			ReflectionUtils.doWithMethods(currentHandlerType, method -> {
 				Method specificMethod = ClassUtils.getMostSpecificMethod(method, targetClass);
 				T result = metadataLookup.inspect(specificMethod);
 				if (result != null) {
+					// 看看有没有桥接方法，泛型实现类jvm会自动生成桥接类，不知道有啥意义
 					Method bridgedMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
 					if (bridgedMethod == specificMethod || metadataLookup.inspect(bridgedMethod) == null) {
+						/*  方法Method <--> RequestMappingInfo  */
 						methodMap.put(specificMethod, result);
 					}
 				}

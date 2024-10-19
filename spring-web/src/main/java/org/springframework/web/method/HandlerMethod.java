@@ -68,7 +68,7 @@ public class HandlerMethod {
 	/** Logger that is available to subclasses. */
 	protected static final Log logger = LogFactory.getLog(HandlerMethod.class);
 
-	private final Object bean;
+	private final Object bean;/* bean实例 或者 beanName */
 
 	@Nullable
 	private final BeanFactory beanFactory;
@@ -176,7 +176,7 @@ public class HandlerMethod {
 		this.method = method;
 		this.bridgedMethod = BridgeMethodResolver.findBridgedMethod(method);
 		ReflectionUtils.makeAccessible(this.bridgedMethod);
-		this.parameters = initMethodParameters();
+		this.parameters = initMethodParameters();/* 方法参数 */
 		evaluateResponseStatus();
 		this.description = initDescription(this.beanType, this.method);
 	}

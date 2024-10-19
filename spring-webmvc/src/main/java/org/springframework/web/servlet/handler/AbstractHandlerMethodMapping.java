@@ -209,6 +209,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 */
 	@Override
 	public void afterPropertiesSet() {
+		/* 寻找@RequestMapping的请求处理器Handler,并保存映射关系 */
 		initHandlerMethods();
 	}
 
@@ -219,8 +220,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @see #handlerMethodsInitialized
 	 */
 	protected void initHandlerMethods() {
-		for (String beanName : getCandidateBeanNames()) {
+		for (String beanName : getCandidateBeanNames()) {/* 遍历所有Bean */
 			if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {
+				/* 寻找@RequestMapping的请求处理器Handler,并保存映射关系 */
 				processCandidateBean(beanName);
 			}
 		}
@@ -261,7 +263,8 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				logger.trace("Could not resolve type for bean '" + beanName + "'", ex);
 			}
 		}
-		if (beanType != null && isHandler(beanType)) {
+		if (beanType != null && isHandler(beanType)) {/* 是否存在 @Controller 注解 */
+			/* 寻找@RequestMapping的请求处理器Handler,并保存映射关系 */
 			detectHandlerMethods(beanName);
 		}
 	}
@@ -277,9 +280,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 		if (handlerType != null) {
 			Class<?> userType = ClassUtils.getUserClass(handlerType);
+			/* 遍历所有方法 */
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
 					(MethodIntrospector.MetadataLookup<T>) method -> {
 						try {
+							/* 寻找添加了 @RequestMapping注解的方法Method */
 							return getMappingForMethod(method, userType);
 						}
 						catch (Throwable ex) {
@@ -295,6 +300,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			}
 			methods.forEach((method, mapping) -> {
 				Method invocableMethod = AopUtils.selectInvocableMethod(method, userType);
+				/* 保存请求处理器映射关系 */
 				registerHandlerMethod(handler, invocableMethod, mapping);
 			});
 		}
@@ -328,6 +334,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * under the same mapping
 	 */
 	protected void registerHandlerMethod(Object handler, Method method, T mapping) {
+		/* 保存请求处理器映射关系 */
 		this.mappingRegistry.register(mapping, handler, method);
 	}
 
@@ -339,6 +346,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 */
 	protected HandlerMethod createHandlerMethod(Object handler, Method method) {
 		if (handler instanceof String beanName) {
+			/* 创建Handler请求处理器 HandlerMethod */
 			return new HandlerMethod(beanName,
 					obtainApplicationContext().getAutowireCapableBeanFactory(),
 					obtainApplicationContext(),
@@ -629,6 +637,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		public void register(T mapping, Object handler, Method method) {
 			this.readWriteLock.writeLock().lock();
 			try {
+				/* 这里 handler == beanName
+				 *
+				 */
 				HandlerMethod handlerMethod = createHandlerMethod(handler, method);
 				validateMethodMapping(handlerMethod, mapping);
 
