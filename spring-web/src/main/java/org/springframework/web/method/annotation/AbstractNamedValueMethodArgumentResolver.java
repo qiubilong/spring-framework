@@ -112,7 +112,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 				arg = resolveEmbeddedValuesAndExpressions(namedValueInfo.defaultValue);
 			}
 			else if (namedValueInfo.required && !nestedParameter.isOptional()) {
-				/* required==true时，抛出方法参数不存在异常 */
+				/* arg == null && required == true 时，抛出方法参数不存在异常 */
 				handleMissingValue(namedValueInfo.name, nestedParameter, webRequest);
 			}
 			arg = handleNullValue(namedValueInfo.name, arg, nestedParameter.getNestedParameterType());
@@ -141,7 +141,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 			}
 		}
 
-		handleResolvedValue(arg, namedValueInfo.name, parameter, mavContainer, webRequest);
+		handleResolvedValue(arg, namedValueInfo.name, parameter, mavContainer, webRequest);/* 子类模板方法 */
 
 		return arg;
 	}

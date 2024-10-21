@@ -176,7 +176,7 @@ public class HandlerMethod {
 		this.method = method;
 		this.bridgedMethod = BridgeMethodResolver.findBridgedMethod(method);
 		ReflectionUtils.makeAccessible(this.bridgedMethod);
-		this.parameters = initMethodParameters();/* 方法参数 */
+		this.parameters = initMethodParameters();/* 方法参数解析 */
 		evaluateResponseStatus();
 		this.description = initDescription(this.beanType, this.method);
 	}

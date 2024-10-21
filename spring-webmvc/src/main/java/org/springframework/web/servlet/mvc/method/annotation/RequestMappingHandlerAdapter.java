@@ -579,7 +579,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		if (getApplicationContext() == null) {
 			return;
 		}
-
+		/* @ControllerAdvice 处理 */
 		List<ControllerAdviceBean> adviceBeans = ControllerAdviceBean.findAnnotatedBeans(getApplicationContext());
 
 		List<Object> requestResponseBodyAdviceBeans = new ArrayList<>();
@@ -634,12 +634,13 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	 * Return the list of argument resolvers to use including built-in resolvers
 	 * and custom resolvers provided via {@link #setCustomArgumentResolvers}.
 	 */
+	/* 参数解析器  */
 	private List<HandlerMethodArgumentResolver> getDefaultArgumentResolvers() {
 		List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>(30);
 
 		// Annotation-based argument resolution
-		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));
-		resolvers.add(new RequestParamMapMethodArgumentResolver());
+		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));/* @RequestMapping - 单个值 */
+		resolvers.add(new RequestParamMapMethodArgumentResolver());/* @RequestMapping - Map */
 		resolvers.add(new PathVariableMethodArgumentResolver());
 		resolvers.add(new PathVariableMapMethodArgumentResolver());
 		resolvers.add(new MatrixVariableMethodArgumentResolver());
@@ -675,7 +676,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 		// Catch-all
 		resolvers.add(new PrincipalMethodArgumentResolver());
-		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));
+		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));/* 普通方法参数默认解析器 */
 		resolvers.add(new ServletModelAttributeMethodProcessor(true));
 
 		return resolvers;
@@ -893,7 +894,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		if (asyncManager.isConcurrentHandlingStarted()) {
 			return null;
 		}
-
+		/* 判断是否需要返回页面视图 */
 		return getModelAndView(mavContainer, modelFactory, webRequest);
 	}
 

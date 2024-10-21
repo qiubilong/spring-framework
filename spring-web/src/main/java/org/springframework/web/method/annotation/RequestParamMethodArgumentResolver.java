@@ -125,13 +125,14 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 	 */
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
+		/* @RequestParam 并且是单个值*/
 		if (parameter.hasParameterAnnotation(RequestParam.class)) {
 			if (Map.class.isAssignableFrom(parameter.nestedIfOptional().getNestedParameterType())) {
 				RequestParam requestParam = parameter.getParameterAnnotation(RequestParam.class);
 				return (requestParam != null && StringUtils.hasText(requestParam.name()));
 			}
 			else {
-				return true; /* @RequestParam */
+				return true;
 			}
 		}
 		else {
@@ -142,8 +143,8 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			if (MultipartResolutionDelegate.isMultipartArgument(parameter)) {
 				return true;
 			}
-			else if (this.useDefaultResolution) {
-				return BeanUtils.isSimpleProperty(parameter.getNestedParameterType());
+			else if (this.useDefaultResolution) {/* 无@RequestParam时，默认参数解析器 */
+				return BeanUtils.isSimpleProperty(parameter.getNestedParameterType());/* 基本数据类型 */
 			}
 			else {
 				return false;
@@ -179,7 +180,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			}
 		}
 		if (arg == null) {
-			/* 取http parameter 参数 */
+			/* 获取 http parameter 参数 */
 			String[] paramValues = request.getParameterValues(name);
 			if (paramValues != null) {
 				arg = (paramValues.length == 1 ? paramValues[0] : paramValues);
@@ -191,7 +192,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 	@Override
 	protected void handleMissingValue(String name, MethodParameter parameter, NativeWebRequest request)
 			throws Exception {
-
+		/* 抛出 Required parameter '" + this.parameterName + "' is not present 异常 */
 		handleMissingValueInternal(name, parameter, request, false);
 	}
 
@@ -216,7 +217,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			}
 		}
 		else {
-			/* 参数不存在异常 */
+			/* 抛出 Required parameter '" + this.parameterName + "' is not present 异常 */
 			throw new MissingServletRequestParameterException(name,
 					parameter.getNestedParameterType().getSimpleName(), missingAfterConversion);
 		}

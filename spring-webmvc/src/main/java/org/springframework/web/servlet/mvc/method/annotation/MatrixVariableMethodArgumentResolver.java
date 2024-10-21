@@ -56,6 +56,7 @@ public class MatrixVariableMethodArgumentResolver extends AbstractNamedValueMeth
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
+		/* 单个矩阵变量 ，例如 http://example.com/users;age=25;gender=male */
 		if (!parameter.hasParameterAnnotation(MatrixVariable.class)) {
 			return false;
 		}
