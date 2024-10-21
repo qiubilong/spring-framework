@@ -709,6 +709,7 @@ public class MethodParameter {
 		if (discoverer != null) {
 			String[] parameterNames = null;
 			if (this.executable instanceof Method method) {
+				/* 解析参数名 */
 				parameterNames = discoverer.getParameterNames(method);
 			}
 			else if (this.executable instanceof Constructor<?> constructor) {

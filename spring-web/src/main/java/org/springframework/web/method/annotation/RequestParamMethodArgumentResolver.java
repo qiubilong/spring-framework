@@ -131,7 +131,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 				return (requestParam != null && StringUtils.hasText(requestParam.name()));
 			}
 			else {
-				return true;
+				return true; /* @RequestParam */
 			}
 		}
 		else {
@@ -153,6 +153,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 
 	@Override
 	protected NamedValueInfo createNamedValueInfo(MethodParameter parameter) {
+		/* 解析 @RequestParam */
 		RequestParam ann = parameter.getParameterAnnotation(RequestParam.class);
 		return (ann != null ? new RequestParamNamedValueInfo(ann) : new RequestParamNamedValueInfo());
 	}
@@ -178,6 +179,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			}
 		}
 		if (arg == null) {
+			/* 取http parameter 参数 */
 			String[] paramValues = request.getParameterValues(name);
 			if (paramValues != null) {
 				arg = (paramValues.length == 1 ? paramValues[0] : paramValues);
@@ -214,6 +216,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			}
 		}
 		else {
+			/* 参数不存在异常 */
 			throw new MissingServletRequestParameterException(name,
 					parameter.getNestedParameterType().getSimpleName(), missingAfterConversion);
 		}

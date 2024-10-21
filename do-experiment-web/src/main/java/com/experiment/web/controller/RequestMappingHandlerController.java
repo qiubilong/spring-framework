@@ -23,8 +23,10 @@ public class RequestMappingHandlerController {
 		return "name";
 	}
 
+
 	@RequestMapping("/requestMappingByNone")
 	public String requestMappingByNone(String name){
 		return "requestMappingByNone";
 	}
+
 }

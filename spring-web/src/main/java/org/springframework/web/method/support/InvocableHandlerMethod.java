@@ -144,11 +144,12 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	@Nullable
 	public Object invokeForRequest(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
-
+		/*  解析方法参数 */
 		Object[] args = getMethodArgumentValues(request, mavContainer, providedArgs);
 		if (logger.isTraceEnabled()) {
 			logger.trace("Arguments: " + Arrays.toString(args));
 		}
+		/* 执行@RequestMapping对应方法Method */
 		return doInvoke(args);
 	}
 
@@ -170,7 +171,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 		for (int i = 0; i < parameters.length; i++) {
 			MethodParameter parameter = parameters[i];
 			parameter.initParameterNameDiscovery(this.parameterNameDiscoverer);
-			args[i] = findProvidedArgument(parameter, providedArgs);
+			args[i] = findProvidedArgument(parameter, providedArgs);/* 这里忽略，providedArgs==null */
 			if (args[i] != null) {
 				continue;
 			}
@@ -178,6 +179,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 				throw new IllegalStateException(formatArgumentError(parameter, "No suitable resolver"));
 			}
 			try {
+				/* 解析方法参数 */
 				args[i] = this.resolvers.resolveArgument(parameter, mavContainer, request, this.dataBinderFactory);
 			}
 			catch (Exception ex) {
@@ -204,6 +206,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 			if (KotlinDetector.isSuspendingFunction(method)) {
 				return invokeSuspendingFunction(method, getBean(), args);
 			}
+			/* 执行@RequestMapping对应Method */
 			return method.invoke(getBean(), args);
 		}
 		catch (IllegalArgumentException ex) {

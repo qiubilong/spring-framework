@@ -66,6 +66,7 @@ public abstract class AbstractHandlerMethodAdapter extends WebContentGenerator i
 	 */
 	@Override
 	public final boolean supports(Object handler) {
+		/* @RequestMapping 对应 HandlerMethod */
 		return (handler instanceof HandlerMethod handlerMethod && supportsInternal(handlerMethod));
 	}
 
@@ -83,7 +84,7 @@ public abstract class AbstractHandlerMethodAdapter extends WebContentGenerator i
 	@Nullable
 	public final ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
+		/* 执行 @RequestMapping 对应处理器 */
 		return handleInternal(request, response, (HandlerMethod) handler);
 	}
 
