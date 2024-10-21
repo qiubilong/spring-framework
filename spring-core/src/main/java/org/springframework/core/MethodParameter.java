@@ -63,7 +63,7 @@ public class MethodParameter {
 	private static final Annotation[] EMPTY_ANNOTATION_ARRAY = new Annotation[0];
 
 
-	private final Executable executable;
+	private final Executable executable;/* 当前方法Method */
 
 	private final int parameterIndex;
 

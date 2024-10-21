@@ -75,7 +75,7 @@ public final class MethodIntrospector {
 				Method specificMethod = ClassUtils.getMostSpecificMethod(method, targetClass);
 				T result = metadataLookup.inspect(specificMethod);
 				if (result != null) {
-					// 看看有没有桥接方法，泛型实现类jvm会自动生成桥接类，不知道有啥意义
+					// 看看有没有桥接方法，泛型实现类jvm会自动生成参数Object的桥接方法，如果是桥接方法，则返回对应原始方法
 					Method bridgedMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
 					if (bridgedMethod == specificMethod || metadataLookup.inspect(bridgedMethod) == null) {
 						/*  方法Method <--> RequestMappingInfo  */
