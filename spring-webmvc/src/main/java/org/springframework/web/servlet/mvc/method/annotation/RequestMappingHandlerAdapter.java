@@ -639,16 +639,16 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>(30);
 
 		// Annotation-based argument resolution
-		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));/* @RequestMapping - 基本类型 */
+		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));/* @RequestMapping - 单个值 */
 		resolvers.add(new RequestParamMapMethodArgumentResolver());  /* @RequestMapping - Map */
-		resolvers.add(new PathVariableMethodArgumentResolver());     /* @PathVariable - 基本类型 */
+		resolvers.add(new PathVariableMethodArgumentResolver());     /* @PathVariable - 单个值 */
 		resolvers.add(new PathVariableMapMethodArgumentResolver());  /* @PathVariable - Map */
-		resolvers.add(new MatrixVariableMethodArgumentResolver());   /* @MatrixVariable - 基本类型 - 矩阵变量。例如 http://example.com/users;age=25;gender=male  */
+		resolvers.add(new MatrixVariableMethodArgumentResolver());   /* @MatrixVariable - 单个值 - 矩阵变量。例如 http://example.com/users;age=25;gender=male  */
 		resolvers.add(new MatrixVariableMapMethodArgumentResolver());/* @MatrixVariable - Map - 矩阵变量  */
 		resolvers.add(new ServletModelAttributeMethodProcessor(false)); /* @ModelAttribute - vo对象 */
 		resolvers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice)); /* @RequestBody - vo对象 */
 		resolvers.add(new RequestPartMethodArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice)); /* @RequestPart - 处理表单或者文件上传 */
-		resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));         /* @RequestHeader - 基本类型 */
+		resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));         /* @RequestHeader - 单个值 */
 		resolvers.add(new RequestHeaderMapMethodArgumentResolver());					  /* @RequestHeader - Map */
 		resolvers.add(new ServletCookieValueMethodArgumentResolver(getBeanFactory()));    /* @CookieValue */
 		resolvers.add(new ExpressionValueMethodArgumentResolver(getBeanFactory()));       /* @Value - 表达式参数名 */

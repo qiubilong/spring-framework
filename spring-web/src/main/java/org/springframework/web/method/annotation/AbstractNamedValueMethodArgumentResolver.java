@@ -125,7 +125,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 			/* 参数类型转换，binderFactory == ServletRequestDataBinderFactory  */
 			WebDataBinder binder = binderFactory.createBinder(webRequest, null, namedValueInfo.name);
 			try {
-				/* binder == ExtendedServletRequestDataBinder */
+				/* 参数类型转换，binder == ExtendedServletRequestDataBinder */
 				arg = binder.convertIfNecessary(arg, parameter.getParameterType(), parameter);
 			}
 			catch (ConversionNotSupportedException ex) {

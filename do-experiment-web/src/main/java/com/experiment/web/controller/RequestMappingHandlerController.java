@@ -3,6 +3,9 @@ package com.experiment.web.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * @author chenxuegui
@@ -15,15 +18,21 @@ import org.springframework.web.bind.annotation.RequestParam;
    2、实现了HttpRequestHandler接口的bean对象，spring早期古老的处理器，返回数据  -- BeanNameUrlHandlerMapping 负责检测保存映射关系 -->  HttpRequestHandlerAdapter 负责转发执行
    3、添加了 @RequestMapping 的方法  --- RequestMappingHandlerMapping 负责检测保存映射关系 -->  RequestMappingHandlerAdapter 负责转发执行
 * */
-@Controller
+@RestController
+@RequestMapping("/args")
 public class RequestMappingHandlerController {
 
+	/* 参数解析器 -- @RequestParam -- RequestParamMethodArgumentResolver */
 	@RequestMapping("/requestMappingByParam")
 	public String requestMappingByParam(@RequestParam(value = "name") String name){
-		return "name";
+		return name;
+	}
+	@RequestMapping("/requestMappingByParamMap")
+	public String requestMappingByParamMap(@RequestParam Map<String,String> data){
+		return data.toString();
 	}
 
-
+	/* 参数解析器 -- 无 -- RequestParamMethodArgumentResolver -- 兜底基本类型参数 */
 	@RequestMapping("/requestMappingByNone")
 	public String requestMappingByNone(String name){
 		return "requestMappingByNone";

@@ -180,10 +180,10 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			}
 		}
 		if (arg == null) {
-			/* 获取 http parameter 参数 */
+			/* 获取 http url 参数 */
 			String[] paramValues = request.getParameterValues(name);
 			if (paramValues != null) {
-				arg = (paramValues.length == 1 ? paramValues[0] : paramValues);
+				arg = (paramValues.length == 1 ? paramValues[0] : paramValues);//支持参数多个值
 			}
 		}
 		return arg;
