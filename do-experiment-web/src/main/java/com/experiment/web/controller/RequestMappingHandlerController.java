@@ -27,6 +27,8 @@ public class RequestMappingHandlerController {
 	public String requestMappingByParam(@RequestParam(value = "name") String name){
 		return name;
 	}
+
+	/* 参数解析器 -- @RequestParam -- RequestParamMapMethodArgumentResolver */
 	@RequestMapping("/requestMappingByParamMap")
 	public String requestMappingByParamMap(@RequestParam Map<String,String> data){
 		return data.toString();
