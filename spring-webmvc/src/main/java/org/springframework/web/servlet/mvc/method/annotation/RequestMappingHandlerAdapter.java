@@ -554,7 +554,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		}
 
 		if (this.initBinderArgumentResolvers == null) {
-			/* 参数Binder绑定解析器 */
+			/* 参数转换器 */
 			List<HandlerMethodArgumentResolver> resolvers = getDefaultInitBinderArgumentResolvers();
 			this.initBinderArgumentResolvers = new HandlerMethodArgumentResolverComposite().addResolvers(resolvers);
 		}
@@ -640,29 +640,29 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 		// Annotation-based argument resolution
 		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));/* @RequestMapping - 基本类型 */
-		resolvers.add(new RequestParamMapMethodArgumentResolver());  /* @RequestMapping - map */
+		resolvers.add(new RequestParamMapMethodArgumentResolver());  /* @RequestMapping - Map */
 		resolvers.add(new PathVariableMethodArgumentResolver());     /* @PathVariable - 基本类型 */
-		resolvers.add(new PathVariableMapMethodArgumentResolver());  /* @PathVariable - map */
+		resolvers.add(new PathVariableMapMethodArgumentResolver());  /* @PathVariable - Map */
 		resolvers.add(new MatrixVariableMethodArgumentResolver());   /* @MatrixVariable - 基本类型 - 矩阵变量。例如 http://example.com/users;age=25;gender=male  */
-		resolvers.add(new MatrixVariableMapMethodArgumentResolver());/* @MatrixVariable - map - 矩阵变量  */
+		resolvers.add(new MatrixVariableMapMethodArgumentResolver());/* @MatrixVariable - Map - 矩阵变量  */
 		resolvers.add(new ServletModelAttributeMethodProcessor(false)); /* @ModelAttribute - vo对象 */
 		resolvers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice)); /* @RequestBody - vo对象 */
 		resolvers.add(new RequestPartMethodArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice)); /* @RequestPart - 处理表单或者文件上传 */
 		resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));         /* @RequestHeader - 基本类型 */
-		resolvers.add(new RequestHeaderMapMethodArgumentResolver());					  /* @RequestHeader - map */
+		resolvers.add(new RequestHeaderMapMethodArgumentResolver());					  /* @RequestHeader - Map */
 		resolvers.add(new ServletCookieValueMethodArgumentResolver(getBeanFactory()));    /* @CookieValue */
 		resolvers.add(new ExpressionValueMethodArgumentResolver(getBeanFactory()));       /* @Value - 表达式参数名 */
 		resolvers.add(new SessionAttributeMethodArgumentResolver());
-		resolvers.add(new RequestAttributeMethodArgumentResolver());                      /* @RequestAttribute */
+		resolvers.add(new RequestAttributeMethodArgumentResolver());                      /* RequestAttribute - 传递值 */
 
 		// Type-based argument resolution
-		resolvers.add(new ServletRequestMethodArgumentResolver());          /* 参数 - ServletRequest等 */
-		resolvers.add(new ServletResponseMethodArgumentResolver());         /* 参数 - ServletResponse等 */
-		resolvers.add(new HttpEntityMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
+		resolvers.add(new ServletRequestMethodArgumentResolver());          /* 参数 - HttpServletRequest 等 */
+		resolvers.add(new ServletResponseMethodArgumentResolver());         /* 参数 - HttpServletResponse 等 */
+		resolvers.add(new HttpEntityMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice)); /* 参数 - RequestEntity - 完整的http请求实体 */
 		resolvers.add(new RedirectAttributesMethodArgumentResolver());
-		resolvers.add(new ModelMethodProcessor());
-		resolvers.add(new MapMethodProcessor());
-		resolvers.add(new ErrorsMethodArgumentResolver());
+		resolvers.add(new ModelMethodProcessor());                           /* 参数 - Model就是一个Map - 视图传递数据 */
+		resolvers.add(new MapMethodProcessor());                             /* 参数 - Map */
+		resolvers.add(new ErrorsMethodArgumentResolver());                   /* 参数 - BindingResult */
 		resolvers.add(new SessionStatusMethodArgumentResolver());
 		resolvers.add(new UriComponentsBuilderMethodArgumentResolver());
 		if (KotlinDetector.isKotlinPresent()) {
@@ -849,7 +849,9 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
 
 		ServletWebRequest webRequest = new ServletWebRequest(request, response);
+		/* @InitBinder -- 控制参数转换java对象 */
 		WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
+		/* @ModelAttribute模型属性 -- 可提前注入属性 */
 		ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);
 
 		/* 构建Servlet请求处理器 ，handlerMethod -->  ServletInvocableHandlerMethod */
@@ -867,19 +869,19 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 		ModelAndViewContainer mavContainer = new ModelAndViewContainer();
 		mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));
-		modelFactory.initModel(webRequest, mavContainer, invocableMethod);
+		modelFactory.initModel(webRequest, mavContainer, invocableMethod);//执行@ModelAttribute属性注入逻辑
 		mavContainer.setIgnoreDefaultModelOnRedirect(this.ignoreDefaultModelOnRedirect);
 
+		/* 异步Web请求相关，当处理器返回参数是异步对象（Callable、WebAsyncTask）时，则需要异步处理 */
 		AsyncWebRequest asyncWebRequest = WebAsyncUtils.createAsyncWebRequest(request, response);
 		asyncWebRequest.setTimeout(this.asyncRequestTimeout);
-
 		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
 		asyncManager.setTaskExecutor(this.taskExecutor);
 		asyncManager.setAsyncWebRequest(asyncWebRequest);
 		asyncManager.registerCallableInterceptors(this.callableInterceptors);
 		asyncManager.registerDeferredResultInterceptors(this.deferredResultInterceptors);
 
-		if (asyncManager.hasConcurrentResult()) {
+		if (asyncManager.hasConcurrentResult()) {/* 异步Web请求后，得到异步对象，再次转发到这里  */
 			Object result = asyncManager.getConcurrentResult();
 			mavContainer = (ModelAndViewContainer) asyncManager.getConcurrentResultContext()[0];
 			asyncManager.clearConcurrentResult();
@@ -887,7 +889,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 				String formatted = LogFormatUtils.formatValue(result, !traceOn);
 				return "Resume with async result [" + formatted + "]";
 			});
-			invocableMethod = invocableMethod.wrapConcurrentResult(result);
+			invocableMethod = invocableMethod.wrapConcurrentResult(result);/* invokeAndHandle时，执行这里的方法Callable.call() */
 		}
 		/* 执行@RequestMapping对应处理Method */
 		invocableMethod.invokeAndHandle(webRequest, mavContainer);
@@ -947,11 +949,12 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		Class<?> handlerType = handlerMethod.getBeanType();
 		Set<Method> methods = this.initBinderCache.get(handlerType);
 		if (methods == null) {
-			methods = MethodIntrospector.selectMethods(handlerType, INIT_BINDER_METHODS);
+			methods = MethodIntrospector.selectMethods(handlerType, INIT_BINDER_METHODS);/* 所有添加了@InitBinder注解的Mehtod */
 			this.initBinderCache.put(handlerType, methods);
 		}
 		List<InvocableHandlerMethod> initBinderMethods = new ArrayList<>();
 		// Global methods first
+		/* ControllerAdvice 中声明的@InitBinder */
 		this.initBinderAdviceCache.forEach((controllerAdviceBean, methodSet) -> {
 			if (controllerAdviceBean.isApplicableToBeanType(handlerType)) {
 				Object bean = controllerAdviceBean.resolveBean();
@@ -970,6 +973,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	private InvocableHandlerMethod createInitBinderMethod(Object bean, Method method) {
 		InvocableHandlerMethod binderMethod = new InvocableHandlerMethod(bean, method);
 		if (this.initBinderArgumentResolvers != null) {
+			/* @InitBinder注解方法Method的参数解析器 */
 			binderMethod.setHandlerMethodArgumentResolvers(this.initBinderArgumentResolvers);
 		}
 		binderMethod.setDataBinderFactory(new DefaultDataBinderFactory(this.webBindingInitializer));

@@ -171,7 +171,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 		for (int i = 0; i < parameters.length; i++) {
 			MethodParameter parameter = parameters[i];
 			parameter.initParameterNameDiscovery(this.parameterNameDiscoverer);
-			args[i] = findProvidedArgument(parameter, providedArgs);/* 这里忽略，providedArgs==null */
+			args[i] = findProvidedArgument(parameter, providedArgs);/* 这里忽略，http请求时providedArgs==null，执行InitBinder时=ExtendedServletRequestDataBinder */
 			if (args[i] != null) {
 				continue;
 			}

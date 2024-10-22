@@ -87,7 +87,7 @@ public class ServletRequestMethodArgumentResolver implements HandlerMethodArgume
 	public boolean supportsParameter(MethodParameter parameter) {
 		Class<?> paramType = parameter.getParameterType();
 		return (WebRequest.class.isAssignableFrom(paramType) ||
-				ServletRequest.class.isAssignableFrom(paramType) ||
+				ServletRequest.class.isAssignableFrom(paramType) || /* HttpServletRequest */
 				MultipartRequest.class.isAssignableFrom(paramType) ||
 				HttpSession.class.isAssignableFrom(paramType) ||
 				(pushBuilder != null && pushBuilder.isAssignableFrom(paramType)) ||

@@ -1079,7 +1079,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 			Exception dispatchException = null;
 
 			try {
-				processedRequest = checkMultipart(request);
+				processedRequest = checkMultipart(request);/*文件上传*/
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request

@@ -109,7 +109,7 @@ public final class ModelFactory {
 
 		Map<String, ?> sessionAttributes = this.sessionAttributesHandler.retrieveAttributes(request);
 		container.mergeAttributes(sessionAttributes);
-		invokeModelAttributeMethods(request, container);
+		invokeModelAttributeMethods(request, container);//执行@ModelAttribute属性注入逻辑
 
 		for (String name : findSessionAttributeArguments(handlerMethod)) {
 			if (!container.containsAttribute(name)) {
@@ -156,6 +156,7 @@ public final class ModelFactory {
 				container.setBindingDisabled(returnValueName);
 			}
 			if (!container.containsAttribute(returnValueName)) {
+				/* 注入@ModelAttribute声明属性 */
 				container.addAttribute(returnValueName, returnValue);
 			}
 		}
