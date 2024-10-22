@@ -577,9 +577,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 */
 	class MappingRegistry {
 
-		private final Map<T, MappingRegistration<T>> registry = new HashMap<>();
+		private final Map<T, MappingRegistration<T>> registry = new HashMap<>();/* @RequestMapping --> HandlerMethod */
 
-		private final MultiValueMap<String, T> pathLookup = new LinkedMultiValueMap<>();
+		private final MultiValueMap<String, T> pathLookup = new LinkedMultiValueMap<>(); /* path --> 多个 @RequestMapping */
 
 		private final Map<String, List<HandlerMethod>> nameLookup = new ConcurrentHashMap<>();
 
@@ -638,13 +638,14 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			this.readWriteLock.writeLock().lock();
 			try {
 				/* 这里 handler == beanName
-				 *
+				 * 创建 @RequestMapping对应的处理器方法 HandlerMethod
 				 */
 				HandlerMethod handlerMethod = createHandlerMethod(handler, method);
-				validateMethodMapping(handlerMethod, mapping);
+				validateMethodMapping(handlerMethod, mapping);/* @RequestMapping相同，Method不同时报错 */
 
 				Set<String> directPaths = AbstractHandlerMethodMapping.this.getDirectPaths(mapping);
 				for (String path : directPaths) {
+					/* 保存路径 path -- @RequestMapping 映射关系   */
 					this.pathLookup.add(path, mapping);
 				}
 
@@ -653,13 +654,13 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 					name = getNamingStrategy().getName(handlerMethod, mapping);
 					addMappingName(name, handlerMethod);
 				}
-
+				/* 跨域处理配置 */
 				CorsConfiguration corsConfig = initCorsConfiguration(handler, method, mapping);
 				if (corsConfig != null) {
 					corsConfig.validateAllowCredentials();
 					this.corsLookup.put(handlerMethod, corsConfig);
 				}
-
+				/* 保存 @RequestMapping -- 请求处理器 HandlerMethod 映射关系 */
 				this.registry.put(mapping,
 						new MappingRegistration<>(mapping, handlerMethod, directPaths, name, corsConfig != null));
 			}

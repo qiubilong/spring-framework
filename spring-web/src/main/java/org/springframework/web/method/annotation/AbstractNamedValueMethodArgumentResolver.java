@@ -95,22 +95,24 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 	@Nullable
 	public final Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
-
+		/* 解析注解（ @RequestMapping ） */
 		NamedValueInfo namedValueInfo = getNamedValueInfo(parameter);
 		MethodParameter nestedParameter = parameter.nestedIfOptional();
 
+		/* 解析参数名字 */
 		Object resolvedName = resolveEmbeddedValuesAndExpressions(namedValueInfo.name);
 		if (resolvedName == null) {
 			throw new IllegalArgumentException(
 					"Specified name must not resolve to null: [" + namedValueInfo.name + "]");
 		}
-
+		/* 解析方法参数值 */
 		Object arg = resolveName(resolvedName.toString(), nestedParameter, webRequest);
 		if (arg == null) {
 			if (namedValueInfo.defaultValue != null) {
 				arg = resolveEmbeddedValuesAndExpressions(namedValueInfo.defaultValue);
 			}
 			else if (namedValueInfo.required && !nestedParameter.isOptional()) {
+				/* arg == null && required == true 时，抛出方法参数不存在异常 */
 				handleMissingValue(namedValueInfo.name, nestedParameter, webRequest);
 			}
 			arg = handleNullValue(namedValueInfo.name, arg, nestedParameter.getNestedParameterType());
@@ -139,7 +141,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 			}
 		}
 
-		handleResolvedValue(arg, namedValueInfo.name, parameter, mavContainer, webRequest);
+		handleResolvedValue(arg, namedValueInfo.name, parameter, mavContainer, webRequest);/* 子类模板方法 */
 
 		return arg;
 	}
@@ -150,7 +152,9 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 	private NamedValueInfo getNamedValueInfo(MethodParameter parameter) {
 		NamedValueInfo namedValueInfo = this.namedValueInfoCache.get(parameter);
 		if (namedValueInfo == null) {
+			/* 解析 @RequestMapping  */
 			namedValueInfo = createNamedValueInfo(parameter);
+			/* 参数名 最后处理 */
 			namedValueInfo = updateNamedValueInfo(parameter, namedValueInfo);
 			this.namedValueInfoCache.put(parameter, namedValueInfo);
 		}
@@ -171,6 +175,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 	private NamedValueInfo updateNamedValueInfo(MethodParameter parameter, NamedValueInfo info) {
 		String name = info.name;
 		if (info.name.isEmpty()) {
+			/* @RequestMapping的参数名字为空，则去参数变量名 */
 			name = parameter.getParameterName();
 			if (name == null) {
 				throw new IllegalArgumentException(
@@ -178,6 +183,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 						"] not specified, and parameter name information not found in class file either.");
 			}
 		}
+		/* 默认值 */
 		String defaultValue = (ValueConstants.DEFAULT_NONE.equals(info.defaultValue) ? null : info.defaultValue);
 		return new NamedValueInfo(name, info.required, defaultValue);
 	}

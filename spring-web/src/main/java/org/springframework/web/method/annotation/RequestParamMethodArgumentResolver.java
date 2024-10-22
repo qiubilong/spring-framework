@@ -125,6 +125,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 	 */
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
+		/* @RequestParam  - 单个值*/
 		if (parameter.hasParameterAnnotation(RequestParam.class)) {
 			if (Map.class.isAssignableFrom(parameter.nestedIfOptional().getNestedParameterType())) {
 				RequestParam requestParam = parameter.getParameterAnnotation(RequestParam.class);
@@ -142,8 +143,8 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			if (MultipartResolutionDelegate.isMultipartArgument(parameter)) {
 				return true;
 			}
-			else if (this.useDefaultResolution) {
-				return BeanUtils.isSimpleProperty(parameter.getNestedParameterType());
+			else if (this.useDefaultResolution) {/* 无@RequestParam时，默认参数解析器 */
+				return BeanUtils.isSimpleProperty(parameter.getNestedParameterType());/* 基本数据类型 */
 			}
 			else {
 				return false;
@@ -153,6 +154,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 
 	@Override
 	protected NamedValueInfo createNamedValueInfo(MethodParameter parameter) {
+		/* 解析 @RequestParam */
 		RequestParam ann = parameter.getParameterAnnotation(RequestParam.class);
 		return (ann != null ? new RequestParamNamedValueInfo(ann) : new RequestParamNamedValueInfo());
 	}
@@ -178,6 +180,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			}
 		}
 		if (arg == null) {
+			/* 获取 http parameter 参数 */
 			String[] paramValues = request.getParameterValues(name);
 			if (paramValues != null) {
 				arg = (paramValues.length == 1 ? paramValues[0] : paramValues);
@@ -189,7 +192,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 	@Override
 	protected void handleMissingValue(String name, MethodParameter parameter, NativeWebRequest request)
 			throws Exception {
-
+		/* 抛出 Required parameter '" + this.parameterName + "' is not present 异常 */
 		handleMissingValueInternal(name, parameter, request, false);
 	}
 
@@ -214,6 +217,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			}
 		}
 		else {
+			/* 抛出 Required parameter '" + this.parameterName + "' is not present 异常 */
 			throw new MissingServletRequestParameterException(name,
 					parameter.getNestedParameterType().getSimpleName(), missingAfterConversion);
 		}
