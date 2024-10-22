@@ -639,25 +639,25 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>(30);
 
 		// Annotation-based argument resolution
-		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));/* @RequestMapping - 单个值 */
-		resolvers.add(new RequestParamMapMethodArgumentResolver());/* @RequestMapping - Map */
-		resolvers.add(new PathVariableMethodArgumentResolver());
-		resolvers.add(new PathVariableMapMethodArgumentResolver());
-		resolvers.add(new MatrixVariableMethodArgumentResolver());
-		resolvers.add(new MatrixVariableMapMethodArgumentResolver());
-		resolvers.add(new ServletModelAttributeMethodProcessor(false));
-		resolvers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
-		resolvers.add(new RequestPartMethodArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice));
-		resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));
-		resolvers.add(new RequestHeaderMapMethodArgumentResolver());
-		resolvers.add(new ServletCookieValueMethodArgumentResolver(getBeanFactory()));
-		resolvers.add(new ExpressionValueMethodArgumentResolver(getBeanFactory()));
+		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));/* @RequestMapping - 基本类型 */
+		resolvers.add(new RequestParamMapMethodArgumentResolver());  /* @RequestMapping - map */
+		resolvers.add(new PathVariableMethodArgumentResolver());     /* @PathVariable - 基本类型 */
+		resolvers.add(new PathVariableMapMethodArgumentResolver());  /* @PathVariable - map */
+		resolvers.add(new MatrixVariableMethodArgumentResolver());   /* @MatrixVariable - 基本类型 - 矩阵变量。例如 http://example.com/users;age=25;gender=male  */
+		resolvers.add(new MatrixVariableMapMethodArgumentResolver());/* @MatrixVariable - map - 矩阵变量  */
+		resolvers.add(new ServletModelAttributeMethodProcessor(false)); /* @ModelAttribute - vo对象 */
+		resolvers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice)); /* @RequestBody - vo对象 */
+		resolvers.add(new RequestPartMethodArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice)); /* @RequestPart - 处理表单或者文件上传 */
+		resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));         /* @RequestHeader - 基本类型 */
+		resolvers.add(new RequestHeaderMapMethodArgumentResolver());					  /* @RequestHeader - map */
+		resolvers.add(new ServletCookieValueMethodArgumentResolver(getBeanFactory()));    /* @CookieValue */
+		resolvers.add(new ExpressionValueMethodArgumentResolver(getBeanFactory()));       /* @Value - 表达式参数名 */
 		resolvers.add(new SessionAttributeMethodArgumentResolver());
-		resolvers.add(new RequestAttributeMethodArgumentResolver());
+		resolvers.add(new RequestAttributeMethodArgumentResolver());                      /* @RequestAttribute */
 
 		// Type-based argument resolution
-		resolvers.add(new ServletRequestMethodArgumentResolver());
-		resolvers.add(new ServletResponseMethodArgumentResolver());
+		resolvers.add(new ServletRequestMethodArgumentResolver());          /* 参数 - ServletRequest等 */
+		resolvers.add(new ServletResponseMethodArgumentResolver());         /* 参数 - ServletResponse等 */
 		resolvers.add(new HttpEntityMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
 		resolvers.add(new RedirectAttributesMethodArgumentResolver());
 		resolvers.add(new ModelMethodProcessor());
@@ -676,8 +676,8 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 		// Catch-all
 		resolvers.add(new PrincipalMethodArgumentResolver());
-		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));/* 普通方法参数默认解析器 */
-		resolvers.add(new ServletModelAttributeMethodProcessor(true));
+		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));/* 无注解时 - 默认解析器 - 基本类型参数 */
+		resolvers.add(new ServletModelAttributeMethodProcessor(true));              /* 无注解时 - 默认解析器 - 非基本类型参数 */
 
 		return resolvers;
 	}
