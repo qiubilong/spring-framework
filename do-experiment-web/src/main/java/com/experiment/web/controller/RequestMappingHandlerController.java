@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -26,6 +27,11 @@ public class RequestMappingHandlerController {
 	@RequestMapping("/requestMappingByParam")
 	public String requestMappingByParam(@RequestParam(value = "name") String name){
 		return name;
+	}
+
+	@RequestMapping("/requestMappingByParamMap1")
+	public String requestMappingByParamMap1(@RequestParam(value = "name") HashMap<String,String> data){
+		return data.toString();
 	}
 
 	/* 参数解析器 -- @RequestParam -- RequestParamMapMethodArgumentResolver */
