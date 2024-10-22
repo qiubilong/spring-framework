@@ -138,6 +138,7 @@ public class FormattingConversionServiceFactoryBean
 
 	@Override
 	public void afterPropertiesSet() {
+		/* 实例化类型转换器 - DefaultFormattingConversionService -  */
 		this.conversionService = new DefaultFormattingConversionService(this.embeddedValueResolver, this.registerDefaultFormatters);
 		ConversionServiceFactory.registerConverters(this.converters, this.conversionService);
 		registerFormatters(this.conversionService);

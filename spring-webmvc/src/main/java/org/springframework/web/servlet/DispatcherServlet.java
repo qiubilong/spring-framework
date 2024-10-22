@@ -601,7 +601,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		this.handlerMappings = null;
 
 		if (this.detectAllHandlerMappings) {
-			/* 如果配置文件xml声明了标签 <mvc:annotation-driven/>，则容器中会注入DispatcherServlet.properties定义的bean，因此这里不需要再加载DispatcherServlet.properties */
+			/* 如果配置文件xml声明了标签 <mvc:annotation-driven/>，则容器中会注入DispatcherServlet.properties包含的bean，因此这里不需要再加载DispatcherServlet.properties */
 			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
 			Map<String, HandlerMapping> matchingBeans =
 					BeanFactoryUtils.beansOfTypeIncludingAncestors(context, HandlerMapping.class, true, false);

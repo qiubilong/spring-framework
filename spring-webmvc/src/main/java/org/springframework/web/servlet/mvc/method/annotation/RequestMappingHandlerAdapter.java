@@ -849,9 +849,9 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
 
 		ServletWebRequest webRequest = new ServletWebRequest(request, response);
-		/* @InitBinder -- 控制参数转换java对象 */
+		/* @InitBinder -- 控制参数转换为Java对象 */
 		WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
-		/* @ModelAttribute模型属性 -- 可提前注入属性 */
+		//@ModelAttribute模型属性 -- 可提前注入属性
 		ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);
 
 		/* 构建Servlet请求处理器 ，handlerMethod -->  ServletInvocableHandlerMethod */
@@ -949,7 +949,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		Class<?> handlerType = handlerMethod.getBeanType();
 		Set<Method> methods = this.initBinderCache.get(handlerType);
 		if (methods == null) {
-			methods = MethodIntrospector.selectMethods(handlerType, INIT_BINDER_METHODS);/* 所有添加了@InitBinder注解的Mehtod */
+			methods = MethodIntrospector.selectMethods(handlerType, INIT_BINDER_METHODS);/* 所有添加了@InitBinder注解的Method */
 			this.initBinderCache.put(handlerType, methods);
 		}
 		List<InvocableHandlerMethod> initBinderMethods = new ArrayList<>();

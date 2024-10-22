@@ -189,6 +189,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 
+	/* 解析标签 - <mvc:annotation-driven/>  */
 	@Override
 	@Nullable
 	public BeanDefinition parse(Element element, ParserContext context) {
@@ -217,7 +218,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 		RuntimeBeanReference corsRef = MvcNamespaceUtils.registerCorsConfigurations(null, context, source);
 		handlerMappingDef.getPropertyValues().add("corsConfigurations", corsRef);
 
-		RuntimeBeanReference conversionService = getConversionService(element, source, context);
+		RuntimeBeanReference conversionService = getConversionService(element, source, context);/* 注入类型转换器 */
 		RuntimeBeanReference validator = getValidator(element, source, context);
 		RuntimeBeanReference messageCodesResolver = getMessageCodesResolver(element);
 
@@ -347,6 +348,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 			conversionServiceRef = new RuntimeBeanReference(element.getAttribute("conversion-service"));
 		}
 		else {
+			/* 注入类型转换器FormattingConversionService */
 			RootBeanDefinition conversionDef = new RootBeanDefinition(FormattingConversionServiceFactoryBean.class);
 			conversionDef.setSource(source);
 			conversionDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);

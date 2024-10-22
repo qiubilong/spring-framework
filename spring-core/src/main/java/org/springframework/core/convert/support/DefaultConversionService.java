@@ -85,8 +85,8 @@ public class DefaultConversionService extends GenericConversionService {
 	 * @throws ClassCastException if the given ConverterRegistry could not be cast to a ConversionService
 	 */
 	public static void addDefaultConverters(ConverterRegistry converterRegistry) {
-		addScalarConverters(converterRegistry);
-		addCollectionConverters(converterRegistry);
+		addScalarConverters(converterRegistry);/* 基本类型转换器 */
+		addCollectionConverters(converterRegistry); /* 集合类型转换器 */
 
 		converterRegistry.addConverter(new ByteBufferConverter((ConversionService) converterRegistry));
 		converterRegistry.addConverter(new StringToTimeZoneConverter());
@@ -116,13 +116,13 @@ public class DefaultConversionService extends GenericConversionService {
 		converterRegistry.addConverter(new CollectionToCollectionConverter(conversionService));
 		converterRegistry.addConverter(new MapToMapConverter(conversionService));
 
-		converterRegistry.addConverter(new ArrayToStringConverter(conversionService));
+		converterRegistry.addConverter(new ArrayToStringConverter(conversionService));/* 数组、字符串转换器 */
 		converterRegistry.addConverter(new StringToArrayConverter(conversionService));
 
 		converterRegistry.addConverter(new ArrayToObjectConverter(conversionService));
 		converterRegistry.addConverter(new ObjectToArrayConverter(conversionService));
 
-		converterRegistry.addConverter(new CollectionToStringConverter(conversionService));
+		converterRegistry.addConverter(new CollectionToStringConverter(conversionService)); /* 集合、字符串转换器 */
 		converterRegistry.addConverter(new StringToCollectionConverter(conversionService));
 
 		converterRegistry.addConverter(new CollectionToObjectConverter(conversionService));
@@ -134,8 +134,8 @@ public class DefaultConversionService extends GenericConversionService {
 	private static void addScalarConverters(ConverterRegistry converterRegistry) {
 		converterRegistry.addConverterFactory(new NumberToNumberConverterFactory());
 
-		converterRegistry.addConverterFactory(new StringToNumberConverterFactory());
-		converterRegistry.addConverter(Number.class, String.class, new ObjectToStringConverter());
+		converterRegistry.addConverterFactory(new StringToNumberConverterFactory());/* 字符串转换数字 */
+		converterRegistry.addConverter(Number.class, String.class, new ObjectToStringConverter());/* 数字转换字符串 */
 
 		converterRegistry.addConverter(new StringToCharacterConverter());
 		converterRegistry.addConverter(Character.class, String.class, new ObjectToStringConverter());
@@ -143,10 +143,10 @@ public class DefaultConversionService extends GenericConversionService {
 		converterRegistry.addConverter(new NumberToCharacterConverter());
 		converterRegistry.addConverterFactory(new CharacterToNumberFactory());
 
-		converterRegistry.addConverter(new StringToBooleanConverter());
+		converterRegistry.addConverter(new StringToBooleanConverter()); /* 字符串转换布尔 */
 		converterRegistry.addConverter(Boolean.class, String.class, new ObjectToStringConverter());
 
-		converterRegistry.addConverterFactory(new StringToEnumConverterFactory());
+		converterRegistry.addConverterFactory(new StringToEnumConverterFactory()); /* 字符串转换枚举 */
 		converterRegistry.addConverter(new EnumToStringConverter((ConversionService) converterRegistry));
 
 		converterRegistry.addConverterFactory(new IntegerToEnumConverterFactory());
