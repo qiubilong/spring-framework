@@ -93,7 +93,7 @@ import org.springframework.util.ClassUtils;
 public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 
 	@Nullable
-	private ConversionService conversionService;
+	private ConversionService conversionService; /* spring默认类型转换器 DefaultFormattingConversionService */
 
 	private boolean defaultEditorsActive = false;
 
@@ -106,7 +106,7 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	private Map<Class<?>, PropertyEditor> overriddenDefaultEditors;
 
 	@Nullable
-	private Map<Class<?>, PropertyEditor> customEditors;
+	private Map<Class<?>, PropertyEditor> customEditors; /* @InitBinder 自定义类型转换器 */
 
 	@Nullable
 	private Map<String, CustomEditorHolder> customEditorsForPath;

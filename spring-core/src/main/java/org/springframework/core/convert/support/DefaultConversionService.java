@@ -64,12 +64,13 @@ public class DefaultConversionService extends GenericConversionService {
 	 * @return the shared {@code ConversionService} instance (never {@code null})
 	 * @since 4.3.5
 	 */
+	/* 懒式单例模式 */
 	public static ConversionService getSharedInstance() {
-		DefaultConversionService cs = sharedInstance;
-		if (cs == null) {
+		DefaultConversionService cs = sharedInstance; /* volatile修饰 */
+		if (cs == null) { /* 双null判断 */
 			synchronized (DefaultConversionService.class) {
 				cs = sharedInstance;
-				if (cs == null) {
+				if (cs == null) {/* 双null判断 */
 					cs = new DefaultConversionService();
 					sharedInstance = cs;
 				}

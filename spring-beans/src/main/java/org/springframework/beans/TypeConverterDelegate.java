@@ -115,7 +115,7 @@ class TypeConverterDelegate {
 	public <T> T convertIfNecessary(@Nullable String propertyName, @Nullable Object oldValue, @Nullable Object newValue,
 			@Nullable Class<T> requiredType, @Nullable TypeDescriptor typeDescriptor) throws IllegalArgumentException {
 
-		// Custom editor for this type?
+		// Custom editor for this type? 自定义类型转换器@InitBinder
 		PropertyEditor editor = this.propertyEditorRegistry.findCustomEditor(requiredType, propertyName);
 
 		ConversionFailedException conversionAttemptEx = null;
@@ -123,10 +123,10 @@ class TypeConverterDelegate {
 		// No custom editor but custom ConversionService specified?
 		ConversionService conversionService = this.propertyEditorRegistry.getConversionService();
 		if (editor == null && conversionService != null && newValue != null && typeDescriptor != null) {
-			TypeDescriptor sourceTypeDesc = TypeDescriptor.forObject(newValue);
-			if (conversionService.canConvert(sourceTypeDesc, typeDescriptor)) {
+			TypeDescriptor sourceTypeDesc = TypeDescriptor.forObject(newValue);/* newValue == 参数值 */
+			if (conversionService.canConvert(sourceTypeDesc, typeDescriptor)) {/* 匹配类型转换器 */
 				try {
-					return (T) conversionService.convert(newValue, sourceTypeDesc, typeDescriptor);
+					return (T) conversionService.convert(newValue, sourceTypeDesc, typeDescriptor);/* 执行类型转换 */
 				}
 				catch (ConversionFailedException ex) {
 					// fallback to default conversion logic below

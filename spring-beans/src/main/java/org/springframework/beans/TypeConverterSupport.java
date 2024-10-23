@@ -49,7 +49,7 @@ public abstract class TypeConverterSupport extends PropertyEditorRegistrySupport
 	@Nullable
 	public <T> T convertIfNecessary(@Nullable Object value, @Nullable Class<T> requiredType,
 			@Nullable MethodParameter methodParam) throws TypeMismatchException {
-
+		/* 执行类型转换 */
 		return convertIfNecessary(value, requiredType,
 				(methodParam != null ? new TypeDescriptor(methodParam) : TypeDescriptor.valueOf(requiredType)));
 	}
@@ -69,7 +69,7 @@ public abstract class TypeConverterSupport extends PropertyEditorRegistrySupport
 			@Nullable TypeDescriptor typeDescriptor) throws TypeMismatchException {
 
 		Assert.state(this.typeConverterDelegate != null, "No TypeConverterDelegate");
-		try {
+		try { /* 执行类型转换 */
 			return this.typeConverterDelegate.convertIfNecessary(null, null, value, requiredType, typeDescriptor);
 		}
 		catch (ConverterNotFoundException | IllegalStateException ex) {

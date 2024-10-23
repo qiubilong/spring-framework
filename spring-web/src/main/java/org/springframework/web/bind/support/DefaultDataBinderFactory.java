@@ -54,9 +54,9 @@ public class DefaultDataBinderFactory implements WebDataBinderFactory {
 
 		WebDataBinder dataBinder = createBinderInstance(target, objectName, webRequest);
 		if (this.initializer != null) {
-			this.initializer.initBinder(dataBinder);
+			this.initializer.initBinder(dataBinder);/* 注入spring默认DefaultFormattingConversionService类型转换器 */
 		}
-		initBinder(dataBinder, webRequest);
+		initBinder(dataBinder, webRequest);/* 注入@InitBinder自定义类型转换器 */
 		return dataBinder;
 	}
 

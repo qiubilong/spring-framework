@@ -154,7 +154,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	private final List<Object> requestResponseBodyAdvice = new ArrayList<>();
 
 	@Nullable
-	private WebBindingInitializer webBindingInitializer;
+	private WebBindingInitializer webBindingInitializer; /* 包含spring内部默认类型转换器 DefaultFormattingConversionService */
 
 	private AsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("MvcAsync");
 
@@ -720,6 +720,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	 * Return the list of return value handlers to use including built-in and
 	 * custom handlers provided via {@link #setReturnValueHandlers}.
 	 */
+	/* 返回值解析器 */
 	private List<HandlerMethodReturnValueHandler> getDefaultReturnValueHandlers() {
 		List<HandlerMethodReturnValueHandler> handlers = new ArrayList<>(20);
 
@@ -849,7 +850,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
 
 		ServletWebRequest webRequest = new ServletWebRequest(request, response);
-		/* @InitBinder -- 控制参数转换为Java对象 */
+		/* spring默认 DefaultFormattingConversionService + 自定义 @InitBinder Java类型转换器 */
 		WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
 		//@ModelAttribute模型属性 -- 可提前注入属性
 		ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);
@@ -865,7 +866,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			invocableMethod.setHandlerMethodReturnValueHandlers(this.returnValueHandlers);
 		}
 		invocableMethod.setDataBinderFactory(binderFactory);
-		invocableMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);
+		invocableMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);//方法参数名解析器
 
 		ModelAndViewContainer mavContainer = new ModelAndViewContainer();
 		mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));

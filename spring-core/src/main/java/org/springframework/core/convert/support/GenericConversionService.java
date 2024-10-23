@@ -109,6 +109,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 	@Override
 	public void addConverterFactory(ConverterFactory<?, ?> factory) {
+		/* 获取泛型具体类 Converter<Object, String> */
 		ResolvableType[] typeInfo = getRequiredTypeInfo(factory.getClass(), ConverterFactory.class);
 		if (typeInfo == null && factory instanceof DecoratingProxy decoratingProxy) {
 			typeInfo = getRequiredTypeInfo(decoratingProxy.getDecoratedClass(), ConverterFactory.class);
@@ -143,7 +144,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 		if (sourceType == null) {
 			return true;
 		}
-		GenericConverter converter = getConverter(sourceType, targetType);
+		GenericConverter converter = getConverter(sourceType, targetType);/* 查找类型转换器 */
 		return (converter != null);
 	}
 
@@ -187,9 +188,9 @@ public class GenericConversionService implements ConfigurableConversionService {
 			throw new IllegalArgumentException("Source to convert from must be an instance of [" +
 					sourceType + "]; instead it was a [" + source.getClass().getName() + "]");
 		}
-		GenericConverter converter = getConverter(sourceType, targetType);
+		GenericConverter converter = getConverter(sourceType, targetType);/* 类型转换器 */
 		if (converter != null) {
-			Object result = ConversionUtils.invokeConverter(converter, source, sourceType, targetType);
+			Object result = ConversionUtils.invokeConverter(converter, source, sourceType, targetType);/* 执行类型转换 */
 			return handleResult(sourceType, targetType, result);
 		}
 		return handleConverterNotFound(source, sourceType, targetType);
@@ -258,7 +259,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 			return (converter != NO_MATCH ? converter : null);
 		}
 
-		converter = this.converters.find(sourceType, targetType);
+		converter = this.converters.find(sourceType, targetType);/* 查找类型转换器 */
 		if (converter == null) {
 			converter = getDefaultConverter(sourceType, targetType);
 		}
@@ -346,7 +347,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 		private final Converter<Object, Object> converter;
 
-		private final ConvertiblePair typeInfo;
+		private final ConvertiblePair typeInfo; /* sourceType -- targetType  */
 
 		private final ResolvableType targetType;
 
@@ -501,6 +502,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 		private final Set<GenericConverter> globalConverters = new CopyOnWriteArraySet<>();
 
+		/* sourceType，sourceType <--> converter , 一对多 */
 		private final Map<ConvertiblePair, ConvertersForPair> converters = new ConcurrentHashMap<>(256);
 
 		public void add(GenericConverter converter) {
@@ -541,6 +543,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 			for (Class<?> sourceCandidate : sourceCandidates) {
 				for (Class<?> targetCandidate : targetCandidates) {
 					ConvertiblePair convertiblePair = new ConvertiblePair(sourceCandidate, targetCandidate);
+					/* 子类父类遍历匹配类型转换器 */
 					GenericConverter converter = getRegisteredConverter(sourceType, targetType, convertiblePair);
 					if (converter != null) {
 						return converter;
@@ -554,7 +557,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 		private GenericConverter getRegisteredConverter(TypeDescriptor sourceType,
 				TypeDescriptor targetType, ConvertiblePair convertiblePair) {
 
-			// Check specifically registered converters
+			// Check specifically registered converters 匹配类型转换器
 			ConvertersForPair convertersForPair = this.converters.get(convertiblePair);
 			if (convertersForPair != null) {
 				GenericConverter converter = convertersForPair.getConverter(sourceType, targetType);
