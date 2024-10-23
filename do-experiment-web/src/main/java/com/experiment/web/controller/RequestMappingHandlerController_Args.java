@@ -1,11 +1,11 @@
 package com.experiment.web.controller;
 
-import org.springframework.stereotype.Controller;
+import com.experiment.web.vo.UserVo;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,29 +21,35 @@ import java.util.Map;
 * */
 @RestController
 @RequestMapping("/args")
-public class RequestMappingHandlerController {
+public class RequestMappingHandlerController_Args {
 
 	/* 参数解析器 -- @RequestParam -- RequestParamMethodArgumentResolver */
-	@RequestMapping("/requestMappingByParam")
-	public String requestMappingByParam(@RequestParam(value = "name") String name){
+	@RequestMapping("/byRequestParam")
+	public String byRequestParam(@RequestParam(value = "name") String name){
 		return name;
 	}
 
-	@RequestMapping("/requestMappingByParamMap1")
-	public String requestMappingByParamMap1(@RequestParam(value = "name") HashMap<String,String> data){
-		return data.toString();
-	}
-
 	/* 参数解析器 -- @RequestParam -- RequestParamMapMethodArgumentResolver */
-	@RequestMapping("/requestMappingByParamMap")
-	public String requestMappingByParamMap(@RequestParam Map<String,String> data){
+	@RequestMapping("/byRequestParamMap")
+	public String byRequestParamMap(@RequestParam Map<String,String> data){
 		return data.toString();
 	}
 
-	/* 参数解析器 -- 无 -- RequestParamMethodArgumentResolver -- 兜底基本类型参数 */
-	@RequestMapping("/requestMappingByNone")
-	public String requestMappingByNone(String name){
-		return "requestMappingByNone";
+	/* 参数解析器 -- 无注解 -- 兜底基本类型参数 -- RequestParamMethodArgumentResolver */
+	@RequestMapping("/byNone")
+	public String byNone(String name){
+		return name;
 	}
 
+
+	/* 参数解析器 -- @RequestParam -- RequestParamMethodArgumentResolver */
+	@RequestMapping("/byRequestBody")
+	public String byRequestBody(@RequestBody UserVo userVo){
+		return userVo.toString();
+	}
+	/* 参数解析器 -- @RequestParam -- RequestParamMethodArgumentResolver -- StringHttpMessageConverter */
+	@RequestMapping("/byRequestBodyString")
+	public String byRequestBodyString(@RequestBody String body){
+		return body;
+	}
 }

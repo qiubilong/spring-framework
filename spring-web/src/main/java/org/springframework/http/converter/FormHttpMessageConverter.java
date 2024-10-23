@@ -166,17 +166,17 @@ public class FormHttpMessageConverter implements HttpMessageConverter<MultiValue
 
 	private List<HttpMessageConverter<?>> partConverters = new ArrayList<>();
 
-	private Charset charset = DEFAULT_CHARSET;
+	private Charset charset = DEFAULT_CHARSET; /* 默认字符集 UTF-8 */
 
 	@Nullable
 	private Charset multipartCharset;
 
-
+	/* 支持Form表单格式 */
 	public FormHttpMessageConverter() {
-		this.supportedMediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED);
-		this.supportedMediaTypes.add(MediaType.MULTIPART_FORM_DATA);
-		this.supportedMediaTypes.add(MediaType.MULTIPART_MIXED);
-		this.supportedMediaTypes.add(MediaType.MULTIPART_RELATED);
+		this.supportedMediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED); /* application/x-www-form-urlencoded   */
+		this.supportedMediaTypes.add(MediaType.MULTIPART_FORM_DATA);         /* multipart/form-data   */
+		this.supportedMediaTypes.add(MediaType.MULTIPART_MIXED);             /* multipart/mixed   */
+		this.supportedMediaTypes.add(MediaType.MULTIPART_RELATED);           /* multipart/related   */
 
 		this.partConverters.add(new ByteArrayHttpMessageConverter());
 		this.partConverters.add(new StringHttpMessageConverter());

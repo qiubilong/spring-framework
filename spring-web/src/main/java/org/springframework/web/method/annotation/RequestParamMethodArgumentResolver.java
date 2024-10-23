@@ -143,7 +143,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			if (MultipartResolutionDelegate.isMultipartArgument(parameter)) {
 				return true;
 			}
-			else if (this.useDefaultResolution) {/* 无@RequestParam时，默认参数解析器 */
+			else if (this.useDefaultResolution) {/* 无参数注解时，最后判断默认参数解析器 */
 				return BeanUtils.isSimpleProperty(parameter.getNestedParameterType());/* 基本数据类型 */
 			}
 			else {

@@ -192,7 +192,7 @@ class TypeConverterDelegate {
 				else if (convertedValue instanceof String text && !requiredType.isInstance(convertedValue)) {
 					if (conversionAttemptEx == null && !requiredType.isInterface() && !requiredType.isEnum()) {
 						try {
-							Constructor<T> strCtor = requiredType.getConstructor(String.class);
+							Constructor<T> strCtor = requiredType.getConstructor(String.class);/* 默认字符串构造函数 */
 							return BeanUtils.instantiateClass(strCtor, convertedValue);
 						}
 						catch (NoSuchMethodException ex) {

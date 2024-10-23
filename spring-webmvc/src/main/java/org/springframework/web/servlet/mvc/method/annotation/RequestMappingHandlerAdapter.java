@@ -676,8 +676,8 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 		// Catch-all
 		resolvers.add(new PrincipalMethodArgumentResolver());
-		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));/* 无注解时 - 默认解析器 - 基本类型参数 */
-		resolvers.add(new ServletModelAttributeMethodProcessor(true));              /* 无注解时 - 默认解析器 - 非基本类型参数 */
+		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));/* 无注解时 - 默认解析器 - 解析基本类型参数 */
+		resolvers.add(new ServletModelAttributeMethodProcessor(true));              /* 无注解时 - 默认解析器 - 解析非基本类型参数 */
 
 		return resolvers;
 	}

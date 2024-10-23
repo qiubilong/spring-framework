@@ -218,11 +218,11 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 		RuntimeBeanReference corsRef = MvcNamespaceUtils.registerCorsConfigurations(null, context, source);
 		handlerMappingDef.getPropertyValues().add("corsConfigurations", corsRef);
 
-		RuntimeBeanReference conversionService = getConversionService(element, source, context);/* 注入类型转换器 */
+		RuntimeBeanReference conversionService = getConversionService(element, source, context);/* 注入类型转换器 FormattingConversionService */
 		RuntimeBeanReference validator = getValidator(element, source, context);
 		RuntimeBeanReference messageCodesResolver = getMessageCodesResolver(element);
 
-		RootBeanDefinition bindingDef = new RootBeanDefinition(ConfigurableWebBindingInitializer.class);
+		RootBeanDefinition bindingDef = new RootBeanDefinition(ConfigurableWebBindingInitializer.class); /* 注入 WebBindingInitializer */
 		bindingDef.setSource(source);
 		bindingDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		bindingDef.getPropertyValues().add("conversionService", conversionService);
@@ -251,16 +251,16 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 			handlerAdapterDef.getPropertyValues().add("ignoreDefaultModelOnRedirect", ignoreDefaultModel);
 		}
 		if (argumentResolvers != null) {
-			handlerAdapterDef.getPropertyValues().add("customArgumentResolvers", argumentResolvers);
+			handlerAdapterDef.getPropertyValues().add("customArgumentResolvers", argumentResolvers); /* 自定义参数解析器 */
 		}
 		if (returnValueHandlers != null) {
-			handlerAdapterDef.getPropertyValues().add("customReturnValueHandlers", returnValueHandlers);
+			handlerAdapterDef.getPropertyValues().add("customReturnValueHandlers", returnValueHandlers); /* 自定义返回值解析器 */
 		}
 		if (asyncTimeout != null) {
 			handlerAdapterDef.getPropertyValues().add("asyncRequestTimeout", asyncTimeout);
 		}
 		if (asyncExecutor != null) {
-			handlerAdapterDef.getPropertyValues().add("taskExecutor", asyncExecutor);
+			handlerAdapterDef.getPropertyValues().add("taskExecutor", asyncExecutor); /* 自定义web异步请求线程池 */
 		}
 
 		handlerAdapterDef.getPropertyValues().add("callableInterceptors", callableInterceptors);
@@ -348,7 +348,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 			conversionServiceRef = new RuntimeBeanReference(element.getAttribute("conversion-service"));
 		}
 		else {
-			/* 注入类型转换器FormattingConversionService */
+			/* 注入类型转换器 FormattingConversionService */
 			RootBeanDefinition conversionDef = new RootBeanDefinition(FormattingConversionServiceFactoryBean.class);
 			conversionDef.setSource(source);
 			conversionDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);

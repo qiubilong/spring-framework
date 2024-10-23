@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/binder")
 public class InitBinderController {
 
-	/* 自定义参数转换器 */
+	/* 自定义参数转换器，当前Controller有效 */
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(UserVo.class, new UserVoEditor());/* 注册参数类型转换器 */

@@ -68,6 +68,7 @@ public class RequestParamMapMethodArgumentResolver implements HandlerMethodArgum
 				!StringUtils.hasText(requestParam.name()));
 	}
 
+	/* @RequestMapping Map<,> 参数解析 */
 	@Override
 	public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
@@ -127,6 +128,7 @@ public class RequestParamMapMethodArgumentResolver implements HandlerMethodArgum
 				return new LinkedHashMap<>(0);
 			}
 			else {
+				/* @RequestMapping Map<,> 参数解析 */
 				Map<String, String[]> parameterMap = webRequest.getParameterMap();
 				Map<String, String> result = CollectionUtils.newLinkedHashMap(parameterMap.size());
 				parameterMap.forEach((key, values) -> {

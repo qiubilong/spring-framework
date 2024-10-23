@@ -164,17 +164,17 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 			contentType = MediaType.APPLICATION_OCTET_STREAM;
 		}
 
-		HttpMethod httpMethod = (inputMessage instanceof HttpRequest httpRequest ? httpRequest.getMethod() : null);
+		HttpMethod httpMethod = (inputMessage instanceof HttpRequest httpRequest ? httpRequest.getMethod() : null); /* GET、POST等 */
 		Object body = NO_VALUE;
 
 		EmptyBodyCheckingHttpInputMessage message = null;
 		try {
 			message = new EmptyBodyCheckingHttpInputMessage(inputMessage);
-
+			/* StringHttpMessageConverter --> contentType == From类型 -- > 参数是MultiValueMap子类 */
+			/* AllEncompassingFormHttpMessageConverter --> contentType == text/plain、ALL -- > 参数是String */
 			for (HttpMessageConverter<?> converter : this.messageConverters) {
 				Class<HttpMessageConverter<?>> converterType = (Class<HttpMessageConverter<?>>) converter.getClass();
-				GenericHttpMessageConverter<?> genericConverter =
-						(converter instanceof GenericHttpMessageConverter ghmc ? ghmc : null);
+				GenericHttpMessageConverter<?> genericConverter = (converter instanceof GenericHttpMessageConverter ghmc ? ghmc : null);
 				if (genericConverter != null ? genericConverter.canRead(targetType, contextClass, contentType) :
 						(targetClass != null && converter.canRead(targetClass, contentType))) {
 					if (message.hasBody()) {

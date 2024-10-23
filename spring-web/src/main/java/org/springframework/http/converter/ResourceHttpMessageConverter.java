@@ -72,7 +72,7 @@ public class ResourceHttpMessageConverter extends AbstractHttpMessageConverter<R
 
 	@Override
 	protected boolean supports(Class<?> clazz) {
-		return Resource.class.isAssignableFrom(clazz);
+		return Resource.class.isAssignableFrom(clazz);/* @RequestBody参数是文件类型 */
 	}
 
 	@Override

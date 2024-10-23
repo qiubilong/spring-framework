@@ -261,7 +261,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 		converter = this.converters.find(sourceType, targetType);/* 查找类型转换器 */
 		if (converter == null) {
-			converter = getDefaultConverter(sourceType, targetType);
+			converter = getDefaultConverter(sourceType, targetType); /* 参数值类型和 参数类型一样时，返回空转换器 NoOpConverter */
 		}
 
 		if (converter != null) {
