@@ -201,7 +201,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 
 		RuntimeBeanReference contentNegotiationManager = getContentNegotiationManager(element, source, context);
 
-		RootBeanDefinition handlerMappingDef = new RootBeanDefinition(RequestMappingHandlerMapping.class);
+		RootBeanDefinition handlerMappingDef = new RootBeanDefinition(RequestMappingHandlerMapping.class); /* 注入@RequestMapping解析器 */
 		handlerMappingDef.setSource(source);
 		handlerMappingDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		handlerMappingDef.getPropertyValues().add("order", 0);
@@ -242,7 +242,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 		handlerAdapterDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		handlerAdapterDef.getPropertyValues().add("contentNegotiationManager", contentNegotiationManager);
 		handlerAdapterDef.getPropertyValues().add("webBindingInitializer", bindingDef);
-		handlerAdapterDef.getPropertyValues().add("messageConverters", messageConverters);
+		handlerAdapterDef.getPropertyValues().add("messageConverters", messageConverters); /* 注入httpMessage转换器 */
 		addRequestBodyAdvice(handlerAdapterDef);
 		addResponseBodyAdvice(handlerAdapterDef);
 
@@ -548,7 +548,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 		Element handlers = DomUtils.getChildElementByTagName(element, "return-value-handlers");
 		return (handlers != null ? extractBeanSubElements(handlers, context) : null);
 	}
-
+	/* 注入 HttpMessage对象转换器 */
 	private ManagedList<?> getMessageConverters(Element element, @Nullable Object source, ParserContext context) {
 		Element convertersElement = DomUtils.getChildElementByTagName(element, "message-converters");
 		ManagedList<Object> messageConverters = new ManagedList<>();
@@ -562,15 +562,15 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 
 		if (convertersElement == null || Boolean.parseBoolean(convertersElement.getAttribute("register-defaults"))) {
 			messageConverters.setSource(source);
-			messageConverters.add(createConverterDefinition(ByteArrayHttpMessageConverter.class, source));
+			messageConverters.add(createConverterDefinition(ByteArrayHttpMessageConverter.class, source));   /* 处理 byte[] */
 
-			RootBeanDefinition stringConverterDef = createConverterDefinition(StringHttpMessageConverter.class, source);
+			RootBeanDefinition stringConverterDef = createConverterDefinition(StringHttpMessageConverter.class, source); /* 处理  String */
 			stringConverterDef.getPropertyValues().add("writeAcceptCharset", false);
 			messageConverters.add(stringConverterDef);
 
-			messageConverters.add(createConverterDefinition(ResourceHttpMessageConverter.class, source));
+			messageConverters.add(createConverterDefinition(ResourceHttpMessageConverter.class, source));           /* 处理文件 Resource */
 			messageConverters.add(createConverterDefinition(ResourceRegionHttpMessageConverter.class, source));
-			messageConverters.add(createConverterDefinition(AllEncompassingFormHttpMessageConverter.class, source));
+			messageConverters.add(createConverterDefinition(AllEncompassingFormHttpMessageConverter.class, source)); /* 处理 MultiValueMap */
 
 			if (romePresent) {
 				messageConverters.add(createConverterDefinition(AtomFeedHttpMessageConverter.class, source));
@@ -589,7 +589,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 				messageConverters.add(createConverterDefinition(Jaxb2RootElementHttpMessageConverter.class, source));
 			}
 
-			if (jackson2Present) {
+			if (jackson2Present) { /* 存在Class - com.fasterxml.jackson.databind.ObjectMapper --> 注入jackson转换器 */
 				Class<?> type = MappingJackson2HttpMessageConverter.class;
 				RootBeanDefinition jacksonConverterDef = createConverterDefinition(type, source);
 				GenericBeanDefinition jacksonFactoryDef = createObjectMapperFactoryDefinition(source);

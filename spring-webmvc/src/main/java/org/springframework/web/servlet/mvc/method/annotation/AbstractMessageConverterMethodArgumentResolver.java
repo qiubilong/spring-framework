@@ -143,8 +143,8 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 	protected <T> Object readWithMessageConverters(HttpInputMessage inputMessage, MethodParameter parameter,
 			Type targetType) throws IOException, HttpMediaTypeNotSupportedException, HttpMessageNotReadableException {
 
-		Class<?> contextClass = parameter.getContainingClass();
-		Class<T> targetClass = (targetType instanceof Class clazz ? clazz : null);
+		Class<?> contextClass = parameter.getContainingClass(); /* 参数所在的 class 类型 */
+		Class<T> targetClass = (targetType instanceof Class clazz ? clazz : null);/* 参数class 类型 */
 		if (targetClass == null) {
 			ResolvableType resolvableType = ResolvableType.forMethodParameter(parameter);
 			targetClass = (Class<T>) resolvableType.resolve();
@@ -153,7 +153,7 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 		MediaType contentType;
 		boolean noContentType = false;
 		try {
-			contentType = inputMessage.getHeaders().getContentType();
+			contentType = inputMessage.getHeaders().getContentType();/* 获得Content-Type */
 		}
 		catch (InvalidMediaTypeException ex) {
 			throw new HttpMediaTypeNotSupportedException(
@@ -170,8 +170,9 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 		EmptyBodyCheckingHttpInputMessage message = null;
 		try {
 			message = new EmptyBodyCheckingHttpInputMessage(inputMessage);
-			/* StringHttpMessageConverter --> contentType == From类型 -- > 参数是MultiValueMap子类 */
-			/* AllEncompassingFormHttpMessageConverter --> contentType == text/plain、ALL -- > 参数是String */
+			/* StringHttpMessageConverter --> Content-Type == From类型 -- > 参数是MultiValueMap */
+			/* AllEncompassingFormHttpMessageConverter --> Content-Type == text/plain、ALL -- > 参数是String */
+			/* MappingJackson2HttpMessageConverter --> Content-Type == application/json -- > 参数是java对象 */
 			for (HttpMessageConverter<?> converter : this.messageConverters) {
 				Class<HttpMessageConverter<?>> converterType = (Class<HttpMessageConverter<?>>) converter.getClass();
 				GenericHttpMessageConverter<?> genericConverter = (converter instanceof GenericHttpMessageConverter ghmc ? ghmc : null);
@@ -180,7 +181,7 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 					if (message.hasBody()) {
 						HttpInputMessage msgToUse =
 								getAdvice().beforeBodyRead(message, parameter, targetType, converterType);
-						body = (genericConverter != null ? genericConverter.read(targetType, contextClass, msgToUse) :
+						body = (genericConverter != null ? genericConverter.read(targetType, contextClass, msgToUse) : /* 类型转换 */
 								((HttpMessageConverter<T>) converter).read(targetClass, msgToUse));
 						body = getAdvice().afterBodyRead(body, msgToUse, parameter, targetType, converterType);
 					}
