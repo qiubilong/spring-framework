@@ -1,6 +1,8 @@
 package com.experiment.web.controller;
 
 import com.experiment.web.vo.UserVo;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +25,7 @@ import java.util.Map;
 @RequestMapping("/args")
 public class RequestMappingHandlerController_Args {
 
+	//////////////////////////@RequestParam//////////////////////
 	/* 参数解析器 -- @RequestParam -- RequestParamMethodArgumentResolver */
 	@RequestMapping("/byRequestParam")
 	public String byRequestParam(@RequestParam(value = "name") String name){
@@ -42,7 +45,8 @@ public class RequestMappingHandlerController_Args {
 	}
 
 
-	/* 参数解析器 -- @RequestParam -- RequestParamMethodArgumentResolver */
+	///////////////////////@RequestBody///////////////////////////////
+	/* 参数解析器 -- @RequestParam -- RequestParamMethodArgumentResolver -- MappingJackson2HttpMessageConverter */
 	@RequestMapping("/byRequestBody")
 	public String byRequestBody(@RequestBody UserVo userVo){
 		return userVo.toString();
@@ -51,5 +55,13 @@ public class RequestMappingHandlerController_Args {
 	@RequestMapping("/byRequestBodyString")
 	public String byRequestBodyString(@RequestBody String body){
 		return body;
+	}
+
+	@RequestMapping("/byRequestBodyValid")
+	public String byRequestBodyValid(@Valid @RequestBody UserVo userVo, BindingResult bindingResult){
+		if(bindingResult.hasErrors()){
+
+		}
+		return userVo.toString();
 	}
 }
