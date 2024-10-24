@@ -1079,7 +1079,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 			Exception dispatchException = null;
 
 			try {
-				processedRequest = checkMultipart(request);/*文件上传*/
+				processedRequest = checkMultipart(request);/*文件上传*///Content-Type: multipart/form-data; boundary=WebAppBoundary
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request
@@ -1241,6 +1241,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 	 * @see MultipartResolver#resolveMultipart
 	 */
 	protected HttpServletRequest checkMultipart(HttpServletRequest request) throws MultipartException {
+		/* Content-Type: multipart/form-data; boundary=WebAppBoundary --> 多种格式数据表单*/
 		if (this.multipartResolver != null && this.multipartResolver.isMultipart(request)) {
 			if (WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class) != null) {
 				if (DispatcherType.REQUEST.equals(request.getDispatcherType())) {

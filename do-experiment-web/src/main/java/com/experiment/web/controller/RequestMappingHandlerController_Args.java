@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -46,12 +47,12 @@ public class RequestMappingHandlerController_Args {
 
 
 	///////////////////////@RequestBody///////////////////////////////
-	/* 参数解析器 -- @RequestParam -- RequestParamMethodArgumentResolver -- MappingJackson2HttpMessageConverter */
+	/* 参数解析器 -- @RequestBody -- RequestParamMethodArgumentResolver -- MappingJackson2HttpMessageConverter */
 	@RequestMapping("/byRequestBody")
 	public String byRequestBody(@RequestBody UserVo userVo){
 		return userVo.toString();
 	}
-	/* 参数解析器 -- @RequestParam -- RequestParamMethodArgumentResolver -- StringHttpMessageConverter */
+	/* 参数解析器 -- @RequestBody -- RequestParamMethodArgumentResolver -- StringHttpMessageConverter */
 	@RequestMapping("/byRequestBodyString")
 	public String byRequestBodyString(@RequestBody String body){
 		return body;
@@ -63,5 +64,11 @@ public class RequestMappingHandlerController_Args {
 
 		}
 		return userVo.toString();
+	}
+
+	/* 参数解析器  -- RequestParamMethodArgumentResolver */
+	@RequestMapping("/byRequestFile")
+	public String byRequestFile(MultipartFile pic){ /* pic是文件名 */
+		return pic.getName();
 	}
 }

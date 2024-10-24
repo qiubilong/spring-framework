@@ -9,8 +9,9 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring-mvc.xml</param-value>
 		</init-param>
-		<load-on-startup>1</load-on-startup>
-		<async-supported>true</async-supported>
+		<load-on-startup>1</load-on-startup> <!--tomcat启动初始化，0=第一次请求初始化-->
+		<async-supported>true</async-supported> <!--支持异步web请求-->
+		<multipart-config></multipart-config>
 	</servlet>
 
 	<servlet-mapping>

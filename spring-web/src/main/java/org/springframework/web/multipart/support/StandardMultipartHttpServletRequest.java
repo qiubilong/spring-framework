@@ -83,10 +83,28 @@ public class StandardMultipartHttpServletRequest extends AbstractMultipartHttpSe
 
 		super(request);
 		if (!lazyParsing) {
-			parseRequest(request);
+			parseRequest(request);/* 解析 多种格式数据表单 <-- Content-Type: multipart/form-data; boundary=WebAppBoundary*/
+
 		}
 	}
+		/*       报文示例
 
+				### Send a form with the text and file fields
+				POST https://httpbin.org/post
+				Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+				--WebAppBoundary
+				Content-Disposition: form-data; name="element-name"
+				Content-Type: text/plain
+
+				Name
+				--WebAppBoundary
+				Content-Disposition: form-data; name="data"; filename="data.json"
+				Content-Type: application/json
+
+				< ./request-form-data.json
+				--WebAppBoundary--
+		* */
 
 	private void parseRequest(HttpServletRequest request) {
 		try {
@@ -97,10 +115,10 @@ public class StandardMultipartHttpServletRequest extends AbstractMultipartHttpSe
 				String headerValue = part.getHeader(HttpHeaders.CONTENT_DISPOSITION);
 				ContentDisposition disposition = ContentDisposition.parse(headerValue);
 				String filename = disposition.getFilename();
-				if (filename != null) {
+				if (filename != null) { /* 文件参数 */
 					files.add(part.getName(), new StandardMultipartFile(part, filename));
 				}
-				else {
+				else {                 /* 文本参数 */
 					this.multipartParameterNames.add(part.getName());
 				}
 			}
