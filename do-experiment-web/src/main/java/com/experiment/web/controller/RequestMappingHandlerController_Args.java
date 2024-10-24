@@ -66,9 +66,10 @@ public class RequestMappingHandlerController_Args {
 		return userVo.toString();
 	}
 
-	/* 参数解析器  -- RequestParamMethodArgumentResolver */
+	/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
+	/* 参数解析器  -- RequestParamMethodArgumentResolver(兜底) -- String email */
 	@RequestMapping("/byRequestFile")
-	public String byRequestFile(MultipartFile pic){ /* pic是文件名 */
-		return pic.getName();
+	public String byRequestFile(MultipartFile pic,String email){ /* pic是文件名 */
+		return pic.getName() + "----" + email;
 	}
 }

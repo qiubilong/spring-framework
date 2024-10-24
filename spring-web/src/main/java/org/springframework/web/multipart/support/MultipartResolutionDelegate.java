@@ -96,9 +96,9 @@ public final class MultipartResolutionDelegate {
 
 		MultipartHttpServletRequest multipartRequest =
 				WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
-		boolean isMultipart = (multipartRequest != null || isMultipartContent(request));
+		boolean isMultipart = (multipartRequest != null || isMultipartContent(request));/* 表单 - multipart */
 
-		if (MultipartFile.class == parameter.getNestedParameterType()) {
+		if (MultipartFile.class == parameter.getNestedParameterType()) { /* MultipartFile - 单个 */
 			if (!isMultipart) {
 				return null;
 			}
@@ -107,7 +107,7 @@ public final class MultipartResolutionDelegate {
 			}
 			return multipartRequest.getFile(name);
 		}
-		else if (isMultipartFileCollection(parameter)) {
+		else if (isMultipartFileCollection(parameter)) {   /* MultipartFile - List */
 			if (!isMultipart) {
 				return null;
 			}
@@ -117,7 +117,7 @@ public final class MultipartResolutionDelegate {
 			List<MultipartFile> files = multipartRequest.getFiles(name);
 			return (!files.isEmpty() ? files : null);
 		}
-		else if (isMultipartFileArray(parameter)) {
+		else if (isMultipartFileArray(parameter)) {   /* MultipartFile - Array */
 			if (!isMultipart) {
 				return null;
 			}

@@ -140,7 +140,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 				return false;
 			}
 			parameter = parameter.nestedIfOptional();
-			if (MultipartResolutionDelegate.isMultipartArgument(parameter)) {
+			if (MultipartResolutionDelegate.isMultipartArgument(parameter)) { /* MultipartFile文件上传 */
 				return true;
 			}
 			else if (this.useDefaultResolution) {/* 无参数注解时，最后判断默认参数解析器 */
@@ -164,7 +164,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 	protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request) throws Exception {
 		HttpServletRequest servletRequest = request.getNativeRequest(HttpServletRequest.class);
 
-		if (servletRequest != null) {
+		if (servletRequest != null) { /* 文件上传 */
 			Object mpArg = MultipartResolutionDelegate.resolveMultipartArgument(name, parameter, servletRequest);
 			if (mpArg != MultipartResolutionDelegate.UNRESOLVABLE) {
 				return mpArg;

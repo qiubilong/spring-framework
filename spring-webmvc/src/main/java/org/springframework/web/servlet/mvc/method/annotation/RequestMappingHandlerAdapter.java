@@ -639,7 +639,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>(30);
 
 		// Annotation-based argument resolution
-		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));/* @RequestMapping - 单个值 */
+		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));/* @RequestMapping - 单个值 --包含文件上传MultipartFile */
 		resolvers.add(new RequestParamMapMethodArgumentResolver());  /* @RequestMapping - Map */
 		resolvers.add(new PathVariableMethodArgumentResolver());     /* @PathVariable - 单个值 */
 		resolvers.add(new PathVariableMapMethodArgumentResolver());  /* @PathVariable - Map */
