@@ -129,7 +129,7 @@ public class RequestPartMethodArgumentResolver extends AbstractMessageConverterM
 		String name = getPartName(parameter, requestPart);
 		parameter = parameter.nestedIfOptional();
 		Object arg = null;
-
+        /* MultipartFile 参数解析 */
 		Object mpArg = MultipartResolutionDelegate.resolveMultipartArgument(name, parameter, servletRequest);
 		if (mpArg != MultipartResolutionDelegate.UNRESOLVABLE) {
 			arg = mpArg;

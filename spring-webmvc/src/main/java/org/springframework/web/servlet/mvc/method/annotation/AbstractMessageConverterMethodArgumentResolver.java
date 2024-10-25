@@ -170,8 +170,8 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 		EmptyBodyCheckingHttpInputMessage message = null;
 		try {
 			message = new EmptyBodyCheckingHttpInputMessage(inputMessage);
-			/* StringHttpMessageConverter --> Content-Type == From类型 -- > 参数是MultiValueMap */
-			/* AllEncompassingFormHttpMessageConverter --> Content-Type == text/plain、ALL -- > 参数是String */
+			/* StringHttpMessageConverter --> Content-Type == From类型 -- > 参数是String*/
+			/* AllEncompassingFormHttpMessageConverter --> Content-Type == text/plain、ALL -- > 参数是MultiValueMap */
 			/* MappingJackson2HttpMessageConverter --> Content-Type == application/json -- > 参数是java对象 */
 			for (HttpMessageConverter<?> converter : this.messageConverters) {
 				Class<HttpMessageConverter<?>> converterType = (Class<HttpMessageConverter<?>>) converter.getClass();

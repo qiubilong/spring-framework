@@ -87,7 +87,7 @@ public class StringHttpMessageConverter extends AbstractHttpMessageConverter<Str
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return String.class == clazz;/* @RequestBody参数类型是String */
+		return String.class == clazz;/* 参数类型是String */
 	}
 
 	@Override

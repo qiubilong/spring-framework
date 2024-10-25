@@ -3,10 +3,7 @@ package com.experiment.web.controller;
 import com.experiment.web.vo.UserVo;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
@@ -27,23 +24,39 @@ import java.util.Map;
 public class RequestMappingHandlerController_Args {
 
 	//////////////////////////@RequestParam//////////////////////
-	/* 参数解析器 -- @RequestParam -- RequestParamMethodArgumentResolver */
+	/* 参数解析器  -- RequestParamMethodArgumentResolver -- @RequestParam  */
 	@RequestMapping("/byRequestParam")
 	public String byRequestParam(@RequestParam(value = "name") String name){
 		return name;
 	}
 
-	/* 参数解析器 -- @RequestParam -- RequestParamMapMethodArgumentResolver */
+	/* 参数解析器  -- RequestParamMapMethodArgumentResolver -- @RequestParam*/
 	@RequestMapping("/byRequestParamMap")
 	public String byRequestParamMap(@RequestParam Map<String,String> data){
 		return data.toString();
 	}
 
-	/* 参数解析器 -- 无注解 -- 兜底基本类型参数 -- RequestParamMethodArgumentResolver */
+	/* 参数解析器  -- RequestParamMethodArgumentResolver -- 无注解 -- 兜底基本类型参数 */
 	@RequestMapping("/byNone")
 	public String byNone(String name){
 		return name;
 	}
+
+
+	/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
+	/* 参数解析器  -- RequestParamMethodArgumentResolver(兜底) -- String email */
+	@RequestMapping("/byRequestFile")
+	public String byRequestFile(MultipartFile pic,String email){ /* pic是文件名 */
+		return pic.getOriginalFilename() + "----" + email;
+	}
+
+    // 表单提交 Content-Type: multipart/form-data; boundary=--分隔符
+	/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
+	@RequestMapping("/byRequestPart")
+	public String byRequestPart(@RequestPart MultipartFile pic, @RequestPart String email){ /* pic是文件名 */
+		return pic.getOriginalFilename() + "----" + email;
+	}
+
 
 
 	///////////////////////@RequestBody///////////////////////////////
@@ -66,10 +79,5 @@ public class RequestMappingHandlerController_Args {
 		return userVo.toString();
 	}
 
-	/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
-	/* 参数解析器  -- RequestParamMethodArgumentResolver(兜底) -- String email */
-	@RequestMapping("/byRequestFile")
-	public String byRequestFile(MultipartFile pic,String email){ /* pic是文件名 */
-		return pic.getName() + "----" + email;
-	}
+
 }
