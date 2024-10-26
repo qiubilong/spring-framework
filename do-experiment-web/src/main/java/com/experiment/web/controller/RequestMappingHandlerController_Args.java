@@ -26,11 +26,11 @@ public class RequestMappingHandlerController_Args {
 	//////////////////////////@RequestParam//////////////////////
 	/* 参数解析器  -- RequestParamMethodArgumentResolver -- @RequestParam  */
 	@RequestMapping("/byRequestParam")
-	public String byRequestParam(@RequestParam(value = "name") String name){
+	public String byRequestParam(@RequestParam(value = "name") String name){/*参数来源--request.getParameter() -- url参数、multipart/form-data、x-www-form-urlencoded  */
 		return name;
 	}
 
-	/* 参数解析器  -- RequestParamMapMethodArgumentResolver -- @RequestParam*/
+	/* 参数解析器  -- RequestParamMapMethodArgumentResolver -- @RequestParam */
 	@RequestMapping("/byRequestParamMap")
 	public String byRequestParamMap(@RequestParam Map<String,String> data){
 		return data.toString();
@@ -40,6 +40,13 @@ public class RequestMappingHandlerController_Args {
 	@RequestMapping("/byNone")
 	public String byNone(String name){
 		return name;
+	}
+
+
+	/* 参数解析器  -- ServletModelAttributeMethodProcessor --无注解兜底 -- 对象vo */
+	@RequestMapping("/byVoNone")
+	public String byVoNone(UserVo userVo){/* 参数来源-- url查询参数、www-form-urlencoded、表单multipart/form-data（part类型属性） */
+		return userVo.toString();
 	}
 
 
@@ -60,12 +67,12 @@ public class RequestMappingHandlerController_Args {
 
 
 	///////////////////////@RequestBody///////////////////////////////
-	/* 参数解析器 -- @RequestBody -- RequestParamMethodArgumentResolver -- MappingJackson2HttpMessageConverter */
+	/* 参数解析器 -- @RequestBody -- RequestResponseBodyMethodProcessor -- MappingJackson2HttpMessageConverter */
 	@RequestMapping("/byRequestBody")
-	public String byRequestBody(@RequestBody UserVo userVo){
+	public String byRequestBody(@RequestBody UserVo userVo){ //Content-type ==  application/json
 		return userVo.toString();
 	}
-	/* 参数解析器 -- @RequestBody -- RequestParamMethodArgumentResolver -- StringHttpMessageConverter */
+	/* 参数解析器 -- @RequestBody -- RequestResponseBodyMethodProcessor -- StringHttpMessageConverter */
 	@RequestMapping("/byRequestBodyString")
 	public String byRequestBodyString(@RequestBody String body){
 		return body;
@@ -81,3 +88,9 @@ public class RequestMappingHandlerController_Args {
 
 
 }
+
+/*
+*  request.getParameter() --> url查询参数、表单multipart/form-data（GET/POST）、 表单www-form-urlencoded（GET）
+*
+*
+*    */

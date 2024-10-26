@@ -81,7 +81,7 @@ public class ServletModelAttributeMethodProcessor extends ModelAttributeMethodPr
 				return attribute;
 			}
 		}
-
+		/* 实例化参数 */
 		return super.createAttribute(attributeName, parameter, binderFactory, request);
 	}
 
@@ -96,12 +96,12 @@ public class ServletModelAttributeMethodProcessor extends ModelAttributeMethodPr
 	 */
 	@Nullable
 	protected String getRequestValueForAttribute(String attributeName, NativeWebRequest request) {
-		Map<String, String> variables = getUriTemplateVariables(request);
+		Map<String, String> variables = getUriTemplateVariables(request);/* 从path获取参数 */
 		String variableValue = variables.get(attributeName);
 		if (StringUtils.hasText(variableValue)) {
 			return variableValue;
 		}
-		String parameterValue = request.getParameter(attributeName);
+		String parameterValue = request.getParameter(attributeName);/* 从url获取参数 */
 		if (StringUtils.hasText(parameterValue)) {
 			return parameterValue;
 		}
@@ -155,7 +155,7 @@ public class ServletModelAttributeMethodProcessor extends ModelAttributeMethodPr
 		ServletRequest servletRequest = request.getNativeRequest(ServletRequest.class);
 		Assert.state(servletRequest != null, "No ServletRequest");
 		ServletRequestDataBinder servletBinder = (ServletRequestDataBinder) binder;
-		servletBinder.bind(servletRequest);
+		servletBinder.bind(servletRequest);/* 参数对象属性赋值 */
 	}
 
 	@Override

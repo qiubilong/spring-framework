@@ -689,7 +689,7 @@ public abstract class WebUtils {
 	 */
 	public static Map<String, Object> getParametersStartingWith(ServletRequest request, @Nullable String prefix) {
 		Assert.notNull(request, "Request must not be null");
-		Enumeration<String> paramNames = request.getParameterNames();
+		Enumeration<String> paramNames = request.getParameterNames();/* url查询参数或者表单www-form-urlencoded */
 		Map<String, Object> params = new TreeMap<>();
 		if (prefix == null) {
 			prefix = "";

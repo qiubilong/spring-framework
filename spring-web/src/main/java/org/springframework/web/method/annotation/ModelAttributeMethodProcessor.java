@@ -110,7 +110,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 	 */
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return (parameter.hasParameterAnnotation(ModelAttribute.class) ||
+		return (parameter.hasParameterAnnotation(ModelAttribute.class) || /* 非基本类型对象 */
 				(this.annotationNotRequired && !BeanUtils.isSimpleProperty(parameter.getParameterType())));
 	}
 
@@ -146,6 +146,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 		else {
 			// Create attribute instance
 			try {
+				/* 实例化对象参数 */
 				attribute = createAttribute(name, parameter, binderFactory, webRequest);
 			}
 			catch (MethodArgumentNotValidException ex) {
@@ -170,11 +171,11 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 			WebDataBinder binder = binderFactory.createBinder(webRequest, attribute, name);
 			if (binder.getTarget() != null) {
 				if (!mavContainer.isBindingDisabled(name)) {
-					bindRequestParameters(binder, webRequest);
+					bindRequestParameters(binder, webRequest);/* 参数对象属性赋值 */
 				}
-				validateIfApplicable(binder, parameter);
+				validateIfApplicable(binder, parameter);/* @Valid参数校验  */
 				if (binder.getBindingResult().hasErrors() && isBindExceptionRequired(binder, parameter)) {
-					throw new BindException(binder.getBindingResult());
+					throw new BindException(binder.getBindingResult());/* 无BindingResult时直接抛出异常 */
 				}
 			}
 			// Value type adaptation, also covering java.util.Optional
@@ -218,7 +219,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 		MethodParameter nestedParameter = parameter.nestedIfOptional();
 		Class<?> clazz = nestedParameter.getNestedParameterType();
 
-		Constructor<?> ctor = BeanUtils.getResolvableConstructor(clazz);
+		Constructor<?> ctor = BeanUtils.getResolvableConstructor(clazz);/* 实例化参数 */
 		Object attribute = constructAttribute(ctor, attributeName, parameter, binderFactory, webRequest);
 		if (parameter != nestedParameter) {
 			attribute = Optional.of(attribute);

@@ -133,13 +133,14 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
 		parameter = parameter.nestedIfOptional();
-		Object arg = readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType());/* 读取RequestBody内容 --> 转换参数  */
+		/* 读取RequestBody内容 --> 转换参数  */
+		Object arg = readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType());
 		String name = Conventions.getVariableNameForParameter(parameter);
 
 		if (binderFactory != null) {
 			WebDataBinder binder = binderFactory.createBinder(webRequest, arg, name);
 			if (arg != null) {
-				validateIfApplicable(binder, parameter);
+				validateIfApplicable(binder, parameter);/* @Valid校验 */
 				if (binder.getBindingResult().hasErrors() && isBindExceptionRequired(binder, parameter)) {
 					throw new MethodArgumentNotValidException(parameter, binder.getBindingResult());
 				}

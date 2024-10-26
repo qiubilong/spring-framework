@@ -119,6 +119,7 @@ public class ServletRequestDataBinder extends WebDataBinder {
 		if (multipartRequest != null) {
 			bindMultipart(multipartRequest.getMultiFileMap(), mpvs);
 		}
+		/* 表单上传 - multipart/form-data，覆盖request.getParameter()解析到的String值参数 */
 		else if (StringUtils.startsWithIgnoreCase(request.getContentType(), MediaType.MULTIPART_FORM_DATA_VALUE)) {
 			HttpServletRequest httpServletRequest = WebUtils.getNativeRequest(request, HttpServletRequest.class);
 			if (httpServletRequest != null && HttpMethod.POST.matches(httpServletRequest.getMethod())) {
@@ -126,7 +127,7 @@ public class ServletRequestDataBinder extends WebDataBinder {
 			}
 		}
 		addBindValues(mpvs, request);
-		doBind(mpvs);
+		doBind(mpvs);/* 参数vo属性赋值  */
 	}
 
 	/**
