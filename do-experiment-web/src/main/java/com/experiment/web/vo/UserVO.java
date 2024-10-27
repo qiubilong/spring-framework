@@ -1,7 +1,6 @@
 package com.experiment.web.vo;
 
 import jakarta.validation.constraints.NotEmpty;
-import org.springframework.lang.NonNull;
 
 import java.util.List;
 
@@ -9,7 +8,7 @@ import java.util.List;
  * @author chenxuegui
  * @since 2024/10/22
  */
-public class UserVo {
+public class UserVO {
 
 	private String name;
 

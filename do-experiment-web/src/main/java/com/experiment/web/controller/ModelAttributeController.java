@@ -1,6 +1,6 @@
 package com.experiment.web.controller;
 
-import com.experiment.web.vo.UserVo;
+import com.experiment.web.vo.UserVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@ public class ModelAttributeController {
 	}
 
 	@RequestMapping("/requestMappingByParam")
-	public String requestMappingByParam(@ModelAttribute UserVo userVo){//将字符串转换成MyType对象
+	public String requestMappingByParam(@ModelAttribute UserVO userVo){//将字符串转换成MyType对象
 		// "commonData" 会自动添加到模型中
 		return "common";
 	}

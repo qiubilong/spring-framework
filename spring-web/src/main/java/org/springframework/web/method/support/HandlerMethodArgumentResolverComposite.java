@@ -121,6 +121,7 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 		}
 		/*解析参数，@RequestParam --> RequestParamMethodArgumentResolver --> AbstractNamedValueMethodArgumentResolver  */
 		/*解析参数，@RequestBody  --> RequestResponseBodyMethodProcessor */
+		/*解析参数，@ModelAttribute(无注解vo)  --> ServletModelAttributeMethodProcessor */
 		return resolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
 	}
 

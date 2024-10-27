@@ -1,6 +1,6 @@
 package com.experiment.web.controller;
 
-import com.experiment.web.vo.UserVo;
+import com.experiment.web.vo.UserVO;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -43,12 +43,24 @@ public class RequestMappingHandlerController_Args {
 		return name;
 	}
 
+	@RequestMapping("/byRequestParamVo")
+	public String byRequestParamVo(@RequestParam(value = "userVo") UserVO userVo){/*参数来源--request.getParameter() -- url参数、multipart/form-data、x-www-form-urlencoded  */
+		return userVo.toString();
+	}
+
 
 	/* 参数解析器  -- ServletModelAttributeMethodProcessor --无注解兜底 -- 对象vo */
 	@RequestMapping("/byVoNone")
-	public String byVoNone(UserVo userVo){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
+	public String byVoNone(UserVO userVo){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
 		return userVo.toString();
 	}
+
+	/* 参数解析器  -- ServletModelAttributeMethodProcessor --ModelAttribute -- 对象vo */
+	@RequestMapping("/byModelAttribute")
+	public String byModelAttribute(@ModelAttribute UserVO userVo){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
+		return userVo.toString();
+	}
+
 
 
 	/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
@@ -70,7 +82,7 @@ public class RequestMappingHandlerController_Args {
 	///////////////////////@RequestBody///////////////////////////////
 	/* 参数解析器 -- @RequestBody -- RequestResponseBodyMethodProcessor -- MappingJackson2HttpMessageConverter */
 	@RequestMapping("/byRequestBody")
-	public String byRequestBody(@RequestBody UserVo userVo){ //Content-type ==  application/json
+	public String byRequestBody(@RequestBody UserVO userVo){ //Content-type ==  application/json
 		return userVo.toString();
 	}
 	/* 参数解析器 -- @RequestBody -- RequestResponseBodyMethodProcessor -- StringHttpMessageConverter */
@@ -80,7 +92,7 @@ public class RequestMappingHandlerController_Args {
 	}
 
 	@RequestMapping("/byRequestBodyValid")
-	public String byRequestBodyValid(@Valid @RequestBody UserVo userVo, BindingResult bindingResult){
+	public String byRequestBodyValid(@Valid @RequestBody UserVO userVo, BindingResult bindingResult){
 		if(bindingResult.hasErrors()){
 
 		}

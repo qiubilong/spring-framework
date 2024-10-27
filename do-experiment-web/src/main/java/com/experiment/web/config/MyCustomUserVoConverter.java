@@ -1,14 +1,14 @@
 package com.experiment.web.config;
 
-import com.experiment.web.vo.UserVo;
+import com.experiment.web.vo.UserVO;
 import org.springframework.core.convert.converter.Converter;
 
 /* 自定义类型转换器 */
-public class MyCustomUserVoConverter implements Converter<String, UserVo> {
+public class MyCustomUserVoConverter implements Converter<String, UserVO> {
        @Override
-       public UserVo convert(String source) {
+       public UserVO convert(String source) {
            // 实现转换逻辑
-		   UserVo userVo = new UserVo();
+		   UserVO userVo = new UserVO();
 		   userVo.setName(source);
            return userVo;
        }
