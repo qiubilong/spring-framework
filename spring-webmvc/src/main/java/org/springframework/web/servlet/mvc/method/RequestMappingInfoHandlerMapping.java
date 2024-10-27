@@ -142,7 +142,7 @@ public abstract class RequestMappingInfoHandlerMapping extends AbstractHandlerMe
 
 		RequestCondition<?> condition = info.getActivePatternsCondition();
 		if (condition instanceof PathPatternsRequestCondition pprc) {
-			extractMatchDetails(pprc, lookupPath, request);
+			extractMatchDetails(pprc, lookupPath, request);/* 解析路径参数 */
 		}
 		else {
 			extractMatchDetails((PatternsRequestCondition) condition, lookupPath, request);
@@ -169,7 +169,7 @@ public abstract class RequestMappingInfoHandlerMapping extends AbstractHandlerMe
 		else {
 			PathContainer path = ServletRequestPathUtils.getParsedRequestPath(request).pathWithinApplication();
 			bestPattern = condition.getFirstPattern();
-			PathPattern.PathMatchInfo result = bestPattern.matchAndExtract(path);
+			PathPattern.PathMatchInfo result = bestPattern.matchAndExtract(path);/* 解析路径参数 */
 			Assert.notNull(result, () ->
 					"Expected bestPattern: " + bestPattern + " to match lookupPath " + path);
 			uriVariables = result.getUriVariables();
@@ -178,7 +178,7 @@ public abstract class RequestMappingInfoHandlerMapping extends AbstractHandlerMe
 		request.setAttribute(BEST_MATCHING_PATTERN_ATTRIBUTE, bestPattern.getPatternString());
 		ServerHttpObservationFilter.findObservationContext(request)
 				.ifPresent(context -> context.setPathPattern(bestPattern.getPatternString()));
-		request.setAttribute(URI_TEMPLATE_VARIABLES_ATTRIBUTE, uriVariables);
+		request.setAttribute(URI_TEMPLATE_VARIABLES_ATTRIBUTE, uriVariables);/* 解析路径参数 */
 	}
 
 	private void extractMatchDetails(

@@ -499,11 +499,12 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	 * @return the corresponding handler instance, or the default handler
 	 * @see #getHandlerInternal
 	 */
+
+	/* 返回Handler处理执行器， HandlerExecutionChain = Handler + interceptorList */
 	@Override
 	@Nullable
 	public final HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
-		/* 返回Handler处理执行器， HandlerExecutionChain = Handler + interceptorList */
-		Object handler = getHandlerInternal(request);
+		Object handler = getHandlerInternal(request);/* 查找匹配的处理方法 HandlerMethod */
 		if (handler == null) {
 			handler = getDefaultHandler();
 		}
@@ -519,8 +520,8 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 		if (!ServletRequestPathUtils.hasCachedPath(request)) {
 			initLookupPath(request);
 		}
-
-		HandlerExecutionChain executionChain = getHandlerExecutionChain(handler, request);//如果handler不是HandlerExecutionChain，
+		/* 返回Handler处理执行器， HandlerExecutionChain = Handler + interceptorList */
+		HandlerExecutionChain executionChain = getHandlerExecutionChain(handler, request);
 
 		if (logger.isTraceEnabled()) {
 			logger.trace("Mapped to " + handler);

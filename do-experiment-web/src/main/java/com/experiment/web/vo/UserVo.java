@@ -3,6 +3,8 @@ package com.experiment.web.vo;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.lang.NonNull;
 
+import java.util.List;
+
 /**
  * @author chenxuegui
  * @since 2024/10/22
@@ -15,6 +17,16 @@ public class UserVo {
 
 	@NotEmpty(message = "email cannot empty")
 	private String email;
+
+	private List<Long> ids;
+
+	public List<Long> getIds() {
+		return ids;
+	}
+
+	public void setIds(List<Long> ids) {
+		this.ids = ids;
+	}
 
 	private Long sysTime = System.currentTimeMillis();
 

@@ -387,7 +387,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		String lookupPath = initLookupPath(request);
 		this.mappingRegistry.acquireReadLock();
 		try {
-			HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);
+			HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);/* 查找匹配处理方法 */
 			return (handlerMethod != null ? handlerMethod.createWithResolvedBean() : null);
 		}
 		finally {
@@ -407,12 +407,12 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	@Nullable
 	protected HandlerMethod lookupHandlerMethod(String lookupPath, HttpServletRequest request) throws Exception {
 		List<Match> matches = new ArrayList<>();
-		List<T> directPathMatches = this.mappingRegistry.getMappingsByDirectPath(lookupPath);
+		List<T> directPathMatches = this.mappingRegistry.getMappingsByDirectPath(lookupPath);/* 直接完全匹配 */
 		if (directPathMatches != null) {
 			addMatchingMappings(directPathMatches, matches, request);
 		}
 		if (matches.isEmpty()) {
-			addMatchingMappings(this.mappingRegistry.getRegistrations().keySet(), matches, request);
+			addMatchingMappings(this.mappingRegistry.getRegistrations().keySet(), matches, request);/* 规则匹配，比如 /byPath/{id} */
 		}
 		if (!matches.isEmpty()) {
 			Match bestMatch = matches.get(0);
@@ -442,7 +442,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				}
 			}
 			request.setAttribute(BEST_MATCHING_HANDLER_ATTRIBUTE, bestMatch.getHandlerMethod());
-			handleMatch(bestMatch.mapping, lookupPath, request);
+			handleMatch(bestMatch.mapping, lookupPath, request);/* 解析路径参数 */
 			return bestMatch.getHandlerMethod();
 		}
 		else {

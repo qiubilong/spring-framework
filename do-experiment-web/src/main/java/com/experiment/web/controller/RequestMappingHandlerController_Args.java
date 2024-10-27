@@ -32,9 +32,10 @@ public class RequestMappingHandlerController_Args {
 
 	/* 参数解析器  -- RequestParamMapMethodArgumentResolver -- @RequestParam */
 	@RequestMapping("/byRequestParamMap")
-	public String byRequestParamMap(@RequestParam Map<String,String> data){
+	public String byRequestParamMap(@RequestParam Map<String,String> data){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
 		return data.toString();
 	}
+
 
 	/* 参数解析器  -- RequestParamMethodArgumentResolver -- 无注解 -- 兜底基本类型参数 */
 	@RequestMapping("/byNone")
@@ -45,7 +46,7 @@ public class RequestMappingHandlerController_Args {
 
 	/* 参数解析器  -- ServletModelAttributeMethodProcessor --无注解兜底 -- 对象vo */
 	@RequestMapping("/byVoNone")
-	public String byVoNone(UserVo userVo){/* 参数来源-- url查询参数、www-form-urlencoded、表单multipart/form-data（part类型属性） */
+	public String byVoNone(UserVo userVo){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
 		return userVo.toString();
 	}
 
@@ -87,10 +88,15 @@ public class RequestMappingHandlerController_Args {
 	}
 
 
+	@RequestMapping("/byPath/{id}")
+	public String byPath(@PathVariable String id){
+		return id;
+	}
+
 }
 
 /*
-*  request.getParameter() --> url查询参数、表单multipart/form-data（GET/POST）、 表单www-form-urlencoded（GET）
+*  request.getParameter() --> url查询参数、表单multipart/form-data（GET/POST-part属性）、 表单www-form-urlencoded（POST）
 *
 *
 *    */
