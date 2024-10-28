@@ -204,7 +204,7 @@ public class ConfigurableWebBindingInitializer implements WebBindingInitializer 
 			binder.setBindingErrorProcessor(this.bindingErrorProcessor);
 		}
 		if (this.validator != null && binder.getTarget() != null &&
-				this.validator.supports(binder.getTarget().getClass())) {
+				this.validator.supports(binder.getTarget().getClass())) { /* 参数校验器 */
 			binder.setValidator(this.validator);
 		}
 		/* 设置默认类型转换器 ， DefaultFormattingConversionService */

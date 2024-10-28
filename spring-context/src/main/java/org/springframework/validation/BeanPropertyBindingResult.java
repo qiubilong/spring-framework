@@ -94,7 +94,7 @@ public class BeanPropertyBindingResult extends AbstractPropertyBindingResult imp
 	@Override
 	public final ConfigurablePropertyAccessor getPropertyAccessor() {
 		if (this.beanWrapper == null) {
-			this.beanWrapper = createBeanWrapper();
+			this.beanWrapper = createBeanWrapper();/* 创建参数对象包装器 */
 			this.beanWrapper.setExtractOldValueForEditor(true);
 			this.beanWrapper.setAutoGrowNestedPaths(this.autoGrowNestedPaths);
 			this.beanWrapper.setAutoGrowCollectionLimit(this.autoGrowCollectionLimit);

@@ -264,7 +264,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 			if (nestedPa == this) {
 				pv.getOriginalPropertyValue().resolvedTokens = tokens;
 			}
-			nestedPa.setPropertyValue(tokens, pv);
+			nestedPa.setPropertyValue(tokens, pv);//属性赋值
 		}
 		else {
 			setPropertyValue(tokens, pv);
@@ -276,7 +276,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 			processKeyedProperty(tokens, pv);
 		}
 		else {
-			processLocalProperty(tokens, pv);
+			processLocalProperty(tokens, pv);//设置属性
 		}
 	}
 
@@ -811,8 +811,8 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		int pos = PropertyAccessorUtils.getFirstNestedPropertySeparatorIndex(propertyPath);
 		// Handle nested properties recursively.
 		if (pos > -1) {
-			String nestedProperty = propertyPath.substring(0, pos);
-			String nestedPath = propertyPath.substring(pos + 1);
+			String nestedProperty = propertyPath.substring(0, pos);/* address.city --> address  */
+			String nestedPath = propertyPath.substring(pos + 1);/* address.city --> city */
 			AbstractNestablePropertyAccessor nestedPa = getNestedPropertyAccessor(nestedProperty);
 			return nestedPa.getPropertyAccessorForPropertyPath(nestedPath);
 		}

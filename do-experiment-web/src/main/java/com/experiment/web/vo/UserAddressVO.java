@@ -1,6 +1,6 @@
 package com.experiment.web.vo;
 
-public class UserAddressWrapper {
+public class UserAddressVO {
     private UserVO user;
     private AddressVO address;
 
@@ -22,7 +22,7 @@ public class UserAddressWrapper {
 
 	@Override
 	public String toString() {
-		return "UserAddressWrapper{" +
+		return "UserAddressVO{" +
 				"user=" + user +
 				", address=" + address +
 				'}';

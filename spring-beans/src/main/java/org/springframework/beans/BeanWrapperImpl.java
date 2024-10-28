@@ -269,7 +269,7 @@ public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements
 		public void setValue(@Nullable Object value) throws Exception {
 			Method writeMethod = (this.pd instanceof GenericTypeAwarePropertyDescriptor typeAwarePd ?
 					typeAwarePd.getWriteMethodForActualAccess() : this.pd.getWriteMethod());
-			ReflectionUtils.makeAccessible(writeMethod);
+			ReflectionUtils.makeAccessible(writeMethod);/* 通过writeMethod反射赋值 */
 			writeMethod.invoke(getWrappedInstance(), value);
 		}
 	}

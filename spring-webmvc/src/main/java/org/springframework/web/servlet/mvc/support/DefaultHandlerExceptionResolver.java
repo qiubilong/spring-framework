@@ -220,7 +220,7 @@ public class DefaultHandlerExceptionResolver extends AbstractHandlerExceptionRes
 			else if (ex instanceof HttpMessageNotWritableException theEx) {
 				return handleHttpMessageNotWritable(theEx, request, response, handler);
 			}
-			else if (ex instanceof BindException theEx) {
+			else if (ex instanceof BindException theEx) { /* @Valid参数校验失败异常*/
 				return handleBindException(theEx, request, response, handler);
 			}
 		}

@@ -1,6 +1,6 @@
 package com.experiment.web.controller;
 
-import com.experiment.web.vo.UserAddressWrapper;
+import com.experiment.web.vo.UserAddressVO;
 import com.experiment.web.vo.UserVO;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
@@ -58,18 +58,21 @@ public class RequestMappingHandlerController_Args {
 
 	/* 参数解析器  -- ServletModelAttributeMethodProcessor --ModelAttribute -- 对象vo */
 	@RequestMapping("/byModelAttribute")
-	public String byModelAttribute(@ModelAttribute UserVO userVo){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
+	public String byModelAttribute(@Valid @ModelAttribute UserVO userVo, BindingResult bindingResult){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
+		if(bindingResult.hasErrors()){
+			return bindingResult.getAllErrors().get(0).getDefaultMessage();
+		}
 		return userVo.toString();
 	}
 
 	@RequestMapping("/byModelAttributeVo")
-	public String byModelAttributeVo(@ModelAttribute UserAddressWrapper wrapper){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
-		return wrapper.toString();
+	public String byModelAttributeVo(@ModelAttribute UserAddressVO userAddressVO){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
+		return userAddressVO.toString();
 	}
 
 
 
-		/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
+	/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
 	/* 参数解析器  -- RequestParamMethodArgumentResolver(兜底) -- String email */
 	@RequestMapping("/byRequestFile")
 	public String byRequestFile(MultipartFile pic,String email){ /* pic是文件名 */

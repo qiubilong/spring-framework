@@ -95,7 +95,7 @@ public abstract class PropertyAccessorUtils {
 				case PropertyAccessor.PROPERTY_KEY_SUFFIX_CHAR:
 					inKey = !inKey;
 					break;
-				case PropertyAccessor.NESTED_PROPERTY_SEPARATOR_CHAR:
+				case PropertyAccessor.NESTED_PROPERTY_SEPARATOR_CHAR:/* 属性分隔address.city */
 					if (!inKey) {
 						return i;
 					}

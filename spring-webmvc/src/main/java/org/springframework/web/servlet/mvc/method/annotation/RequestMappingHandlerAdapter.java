@@ -850,7 +850,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
 
 		ServletWebRequest webRequest = new ServletWebRequest(request, response);
-		/* spring默认 DefaultFormattingConversionService + 自定义 @InitBinder Java类型转换器 */
+		/* 创建数据绑定器ServletRequestDataBinderFactory =  spring默认 DefaultFormattingConversionService + 自定义 @InitBinder Java类型转换器 */
 		WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
 		//@ModelAttribute模型属性 -- 可提前注入属性
 		ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);
@@ -993,7 +993,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	protected InitBinderDataBinderFactory createDataBinderFactory(List<InvocableHandlerMethod> binderMethods)
 			throws Exception {
 
-		return new ServletRequestDataBinderFactory(binderMethods, getWebBindingInitializer());
+		return new ServletRequestDataBinderFactory(binderMethods, getWebBindingInitializer());//webBindingInitializer包括ConversionService
 	}
 
 	@Nullable

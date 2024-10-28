@@ -59,7 +59,7 @@ public class ErrorsMethodArgumentResolver implements HandlerMethodArgumentResolv
 
 		ModelMap model = mavContainer.getModel();
 		String lastKey = CollectionUtils.lastElement(model.keySet());
-		if (lastKey != null && lastKey.startsWith(BindingResult.MODEL_KEY_PREFIX)) {
+		if (lastKey != null && lastKey.startsWith(BindingResult.MODEL_KEY_PREFIX)) {/* 最后添加的对象 */
 			return model.get(lastKey);
 		}
 

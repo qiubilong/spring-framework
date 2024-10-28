@@ -219,7 +219,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 		handlerMappingDef.getPropertyValues().add("corsConfigurations", corsRef);
 
 		RuntimeBeanReference conversionService = getConversionService(element, source, context);/* 注入类型转换器 FormattingConversionService */
-		RuntimeBeanReference validator = getValidator(element, source, context);
+		RuntimeBeanReference validator = getValidator(element, source, context);/* 解析参数校验器Validator */
 		RuntimeBeanReference messageCodesResolver = getMessageCodesResolver(element);
 
 		RootBeanDefinition bindingDef = new RootBeanDefinition(ConfigurableWebBindingInitializer.class); /* 注入 WebBindingInitializer */

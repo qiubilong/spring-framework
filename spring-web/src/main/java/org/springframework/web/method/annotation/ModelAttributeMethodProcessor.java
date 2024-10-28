@@ -168,7 +168,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 		if (bindingResult == null) {
 			// Bean property binding and validation;
 			// skipped in case of binding failure on construction.
-			WebDataBinder binder = binderFactory.createBinder(webRequest, attribute, name);
+			WebDataBinder binder = binderFactory.createBinder(webRequest, attribute, name);/* 创建数据绑定器 */
 			if (binder.getTarget() != null) {
 				if (!mavContainer.isBindingDisabled(name)) {
 					bindRequestParameters(binder, webRequest);/* 参数对象属性赋值 */
@@ -188,7 +188,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 		// Add resolved attribute and BindingResult at the end of the model
 		Map<String, Object> bindingResultModel = bindingResult.getModel();
 		mavContainer.removeAttributes(bindingResultModel);
-		mavContainer.addAllAttributes(bindingResultModel);
+		mavContainer.addAllAttributes(bindingResultModel);/* 添加bindingResult到ModelMap中，接着ErrorsMethodArgumentResolver取出 */
 
 		return attribute;
 	}
@@ -394,7 +394,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 	 */
 	protected void validateIfApplicable(WebDataBinder binder, MethodParameter parameter) {
 		for (Annotation ann : parameter.getParameterAnnotations()) {
-			Object[] validationHints = ValidationAnnotationUtils.determineValidationHints(ann);
+			Object[] validationHints = ValidationAnnotationUtils.determineValidationHints(ann);/* @Valid校验  */
 			if (validationHints != null) {
 				binder.validate(validationHints);
 				break;

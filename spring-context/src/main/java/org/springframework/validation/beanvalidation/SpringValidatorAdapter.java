@@ -146,7 +146,7 @@ public class SpringValidatorAdapter implements SmartValidator, jakarta.validatio
 	 */
 	@SuppressWarnings("serial")
 	protected void processConstraintViolations(Set<ConstraintViolation<Object>> violations, Errors errors) {
-		for (ConstraintViolation<Object> violation : violations) {
+		for (ConstraintViolation<Object> violation : violations) {/* 遍历校验失败字段 */
 			String field = determineField(violation);
 			FieldError fieldError = errors.getFieldError(field);
 			if (fieldError == null || !fieldError.isBindingFailure()) {
@@ -169,7 +169,7 @@ public class SpringValidatorAdapter implements SmartValidator, jakarta.validatio
 							String[] errorCodes = bindingResult.resolveMessageCodes(errorCode, field);
 							FieldError error = new ViolationFieldError(errors.getObjectName(), nestedField,
 									rejectedValue, errorCodes, errorArgs, violation, this);
-							bindingResult.addError(error);
+							bindingResult.addError(error);/* 添加校验失败字段到BindingResult */
 						}
 					}
 					else {

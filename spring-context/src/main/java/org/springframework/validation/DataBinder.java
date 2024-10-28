@@ -262,6 +262,7 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 	 * JavaBean property access.
 	 * @since 4.2.1
 	 */
+	/* 创建BindingResult对象 - BeanPropertyBindingResult  */
 	protected AbstractPropertyBindingResult createBeanPropertyBindingResult() {
 		BeanPropertyBindingResult result = new BeanPropertyBindingResult(getTarget(),
 				getObjectName(), isAutoGrowNestedPaths(), getAutoGrowCollectionLimit());
@@ -323,7 +324,7 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 	 * Return the underlying PropertyAccessor of this binder's BindingResult.
 	 */
 	protected ConfigurablePropertyAccessor getPropertyAccessor() {
-		return getInternalBindingResult().getPropertyAccessor();
+		return getInternalBindingResult().getPropertyAccessor();/* BeanPropertyBindingResult.BeanWrapperImpl  */
 	}
 
 	/**
@@ -885,6 +886,7 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 	protected void applyPropertyValues(MutablePropertyValues mpvs) {
 		try {
 			// Bind request parameters onto target object.
+			/* BeanPropertyBindingResult.BeanWrapperImpl */
 			getPropertyAccessor().setPropertyValues(mpvs, isIgnoreUnknownFields(), isIgnoreInvalidFields());
 		}
 		catch (PropertyBatchUpdateException ex) {
@@ -920,16 +922,16 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 	 * @see SmartValidator#validate(Object, Errors, Object...)
 	 */
 	public void validate(Object... validationHints) {
-		Object target = getTarget();
+		Object target = getTarget(); /* 参数对象 */
 		Assert.state(target != null, "No target to validate");
-		BindingResult bindingResult = getBindingResult();
+		BindingResult bindingResult = getBindingResult();/* 校验结果 */
 		// Call each validator with the same binding result
 		for (Validator validator : getValidators()) {
 			if (!ObjectUtils.isEmpty(validationHints) && validator instanceof SmartValidator smartValidator) {
 				smartValidator.validate(target, bindingResult, validationHints);
 			}
 			else if (validator != null) {
-				validator.validate(target, bindingResult);
+				validator.validate(target, bindingResult);/* SpringValidatorAdapter */
 			}
 		}
 	}
