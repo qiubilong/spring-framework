@@ -23,7 +23,7 @@ dependencies {
     implementation 'jakarta.annotation:jakarta.annotation-api:2.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8' /*自动注入 MappingJackson2HttpMessageConverter */
 
-    implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
+    implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final") /* SPI机制注入validator */
     implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 
     api(project(":spring-webmvc"))
