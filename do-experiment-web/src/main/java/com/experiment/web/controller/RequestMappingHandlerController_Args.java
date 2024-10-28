@@ -1,5 +1,6 @@
 package com.experiment.web.controller;
 
+import com.experiment.web.vo.UserAddressWrapper;
 import com.experiment.web.vo.UserVO;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
@@ -61,9 +62,14 @@ public class RequestMappingHandlerController_Args {
 		return userVo.toString();
 	}
 
+	@RequestMapping("/byModelAttributeVo")
+	public String byModelAttributeVo(@ModelAttribute UserAddressWrapper wrapper){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
+		return wrapper.toString();
+	}
 
 
-	/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
+
+		/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
 	/* 参数解析器  -- RequestParamMethodArgumentResolver(兜底) -- String email */
 	@RequestMapping("/byRequestFile")
 	public String byRequestFile(MultipartFile pic,String email){ /* pic是文件名 */
