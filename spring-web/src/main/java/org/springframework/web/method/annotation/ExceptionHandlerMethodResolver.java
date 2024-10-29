@@ -73,9 +73,9 @@ public class ExceptionHandlerMethodResolver {
 	 * @param handlerType the type to introspect
 	 */
 	public ExceptionHandlerMethodResolver(Class<?> handlerType) {
-		for (Method method : MethodIntrospector.selectMethods(handlerType, EXCEPTION_HANDLER_METHODS)) {
+		for (Method method : MethodIntrospector.selectMethods(handlerType, EXCEPTION_HANDLER_METHODS)) {/* 添加了@ExceptionHandler注解的方法 */
 			for (Class<? extends Throwable> exceptionType : detectExceptionMappings(method)) {
-				addExceptionMapping(exceptionType, method);
+				addExceptionMapping(exceptionType, method);/* 保存异常Exception - Method映射关系 */
 			}
 		}
 	}
@@ -88,10 +88,10 @@ public class ExceptionHandlerMethodResolver {
 	@SuppressWarnings("unchecked")
 	private List<Class<? extends Throwable>> detectExceptionMappings(Method method) {
 		List<Class<? extends Throwable>> result = new ArrayList<>();
-		detectAnnotationExceptionMappings(method, result);
+		detectAnnotationExceptionMappings(method, result);/* 解析 @ExceptionHandler 声明的异常 */
 		if (result.isEmpty()) {
 			for (Class<?> paramType : method.getParameterTypes()) {
-				if (Throwable.class.isAssignableFrom(paramType)) {
+				if (Throwable.class.isAssignableFrom(paramType)) { /* 方法Throwable参数也可以 */
 					result.add((Class<? extends Throwable>) paramType);
 				}
 			}
@@ -164,7 +164,7 @@ public class ExceptionHandlerMethodResolver {
 	public Method resolveMethodByExceptionType(Class<? extends Throwable> exceptionType) {
 		Method method = this.exceptionLookupCache.get(exceptionType);
 		if (method == null) {
-			method = getMappedMethod(exceptionType);
+			method = getMappedMethod(exceptionType);/* 从mappedMethods中取出匹配的 ExceptionHandler方法*/
 			this.exceptionLookupCache.put(exceptionType, method);
 		}
 		return (method != NO_MATCHING_EXCEPTION_HANDLER_METHOD ? method : null);

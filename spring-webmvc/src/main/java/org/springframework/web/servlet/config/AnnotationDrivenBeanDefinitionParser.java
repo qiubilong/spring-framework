@@ -218,7 +218,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 		RuntimeBeanReference corsRef = MvcNamespaceUtils.registerCorsConfigurations(null, context, source);
 		handlerMappingDef.getPropertyValues().add("corsConfigurations", corsRef);
 
-		RuntimeBeanReference conversionService = getConversionService(element, source, context);/* 注入类型转换器 FormattingConversionService */
+		RuntimeBeanReference conversionService = getConversionService(element, source, context);/* 注入对象类型转换器 FormattingConversionService */
 		RuntimeBeanReference validator = getValidator(element, source, context);/* 解析参数校验器Validator */
 		RuntimeBeanReference messageCodesResolver = getMessageCodesResolver(element);
 
@@ -285,7 +285,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 		mappedInterceptorDef.getConstructorArgumentValues().addIndexedArgumentValue(1, csInterceptorDef);
 		String mappedInterceptorName = readerContext.registerWithGeneratedName(mappedInterceptorDef);
 
-		RootBeanDefinition methodExceptionResolver = new RootBeanDefinition(ExceptionHandlerExceptionResolver.class);
+		RootBeanDefinition methodExceptionResolver = new RootBeanDefinition(ExceptionHandlerExceptionResolver.class);/* 注入全局异常处理器 - 解析@ExceptionHandler */
 		methodExceptionResolver.setSource(source);
 		methodExceptionResolver.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		methodExceptionResolver.getPropertyValues().add("contentNegotiationManager", contentNegotiationManager);

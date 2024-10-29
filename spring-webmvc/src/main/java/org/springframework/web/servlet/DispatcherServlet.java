@@ -1184,7 +1184,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 			}
 			else {
 				Object handler = (mappedHandler != null ? mappedHandler.getHandler() : null);
-				/* Handler Exception 解析 */
+				/* @ExceptionHandler - 全局异常处理 */
 				mv = processHandlerException(request, response, handler, exception);
 				errorView = (mv != null);
 			}
@@ -1384,8 +1384,8 @@ org.springframework.web.servlet.HandlerAdapter=
 		// Check registered HandlerExceptionResolvers...
 		ModelAndView exMv = null;
 		if (this.handlerExceptionResolvers != null) {
-			/* 解析Handler Exception
-			 *  ExceptionHandlerExceptionResolver -->  requestMapping Handler
+			/*  异常处理
+			 *  ExceptionHandlerExceptionResolver -->  全局异常处理 @ExceptionHandler <-- AbstractHandlerExceptionResolver
 			 *  ResponseStatusExceptionResolver   -->  @ResponseStatus注解的Exception
 			 *  DefaultHandlerExceptionResolver   -->  http 默认异常
 			 */

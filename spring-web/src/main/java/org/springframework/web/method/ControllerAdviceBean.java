@@ -294,9 +294,9 @@ public class ControllerAdviceBean implements Ordered {
 			beanFactory = cac.getBeanFactory();
 		}
 		List<ControllerAdviceBean> adviceBeans = new ArrayList<>();
-		for (String name : BeanFactoryUtils.beanNamesForTypeIncludingAncestors(beanFactory, Object.class)) {
+		for (String name : BeanFactoryUtils.beanNamesForTypeIncludingAncestors(beanFactory, Object.class)) {/* 遍历所有的bean */
 			if (!ScopedProxyUtils.isScopedTarget(name)) {
-				ControllerAdvice controllerAdvice = beanFactory.findAnnotationOnBean(name, ControllerAdvice.class);
+				ControllerAdvice controllerAdvice = beanFactory.findAnnotationOnBean(name, ControllerAdvice.class); /* 存在注解 ControllerAdvice */
 				if (controllerAdvice != null) {
 					// Use the @ControllerAdvice annotation found by findAnnotationOnBean()
 					// in order to avoid a subsequent lookup of the same annotation.

@@ -101,10 +101,7 @@ public class RequestMappingHandlerController_Args {
 	}
 
 	@RequestMapping("/byRequestBodyValid")
-	public String byRequestBodyValid(@Valid @RequestBody UserVO userVo, BindingResult bindingResult){
-		if(bindingResult.hasErrors()){
-
-		}
+	public String byRequestBodyValid(@Valid @RequestBody UserVO userVo){
 		return userVo.toString();
 	}
 
