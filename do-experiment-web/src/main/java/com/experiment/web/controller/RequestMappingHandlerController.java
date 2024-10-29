@@ -1,5 +1,6 @@
 package com.experiment.web.controller;
 
+import com.experiment.web.vo.ServiceResult;
 import com.experiment.web.vo.UserAddressVO;
 import com.experiment.web.vo.UserVO;
 import jakarta.validation.Valid;
@@ -22,7 +23,7 @@ import java.util.Map;
 * */
 @RestController
 @RequestMapping("/args")
-public class RequestMappingHandlerController_Args {
+public class RequestMappingHandlerController {
 
 	//////////////////////////@RequestParam//////////////////////
 	/* 参数解析器  -- RequestParamMethodArgumentResolver -- @RequestParam  */
@@ -91,8 +92,8 @@ public class RequestMappingHandlerController_Args {
 	///////////////////////@RequestBody///////////////////////////////
 	/* 参数解析器 -- @RequestBody -- RequestResponseBodyMethodProcessor -- MappingJackson2HttpMessageConverter */
 	@RequestMapping("/byRequestBody")
-	public UserVO byRequestBody(@RequestBody UserVO userVo){ //Content-type ==  application/json
-		return userVo;
+	public ServiceResult<UserVO> byRequestBody(@RequestBody UserVO userVo){ //Content-type ==  application/json
+		return ServiceResult.success(userVo);
 	}
 	/* 参数解析器 -- @RequestBody -- RequestResponseBodyMethodProcessor -- StringHttpMessageConverter */
 	@RequestMapping("/byRequestBodyString")

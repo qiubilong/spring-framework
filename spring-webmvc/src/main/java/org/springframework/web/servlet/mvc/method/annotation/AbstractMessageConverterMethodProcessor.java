@@ -186,7 +186,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 		else {
 			body = value;
 			valueType = getReturnValueType(body, returnType);
-			targetType = GenericTypeResolver.resolveType(getGenericType(returnType), returnType.getContainingClass());
+			targetType = GenericTypeResolver.resolveType(getGenericType(returnType), returnType.getContainingClass());/* 解析泛型，例如 ServiceResult<T> */
 		}
 
 		if (isResourceType(value, returnType)) {/* 文件资源 */
@@ -294,11 +294,11 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 								"Writing [" + LogFormatUtils.formatValue(theBody, !traceOn) + "]");
 						addContentDispositionHeader(inputMessage, outputMessage);
 						if (genericConverter != null) {
+							/* text/plain -- > StringHttpMessageConverter */
+							/* application/json -- > MappingJackson2HttpMessageConverter */
 							genericConverter.write(body, targetType, selectedMediaType, outputMessage);
 						}
 						else {
-							/* text/plain -- > StringHttpMessageConverter */
-							/* application/json -- > MappingJackson2HttpMessageConverter */
 							((HttpMessageConverter) converter).write(body, selectedMediaType, outputMessage);/* 输出数据 */
 						}
 					}
