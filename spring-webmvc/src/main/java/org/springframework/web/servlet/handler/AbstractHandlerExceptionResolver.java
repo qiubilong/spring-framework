@@ -138,7 +138,7 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 
 		if (shouldApplyTo(request, handler)) {
 			prepareResponse(ex, response);
-			ModelAndView result = doResolveException(request, response, handler, ex);/* 异常处理 */
+			ModelAndView result = doResolveException(request, response, handler, ex);/* @HandlerException 异常处理 */
 			if (result != null) {
 				// Print debug message when warn logger is not enabled.
 				if (logger.isDebugEnabled() && (this.warnLogger == null || !this.warnLogger.isWarnEnabled())) {

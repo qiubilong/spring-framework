@@ -178,7 +178,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 		Class<?> valueType;
 		Type targetType;
 
-		if (value instanceof CharSequence) {
+		if (value instanceof CharSequence) {/* 返回值是String */
 			body = value.toString();
 			valueType = String.class;
 			targetType = String.class;
@@ -189,7 +189,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 			targetType = GenericTypeResolver.resolveType(getGenericType(returnType), returnType.getContainingClass());
 		}
 
-		if (isResourceType(value, returnType)) {
+		if (isResourceType(value, returnType)) {/* 文件资源 */
 			outputMessage.getHeaders().set(HttpHeaders.ACCEPT_RANGES, "bytes");
 			if (value != null && inputMessage.getHeaders().getFirst(HttpHeaders.RANGE) != null &&
 					outputMessage.getServletResponse().getStatus() == 200) {
@@ -221,7 +221,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 			HttpServletRequest request = inputMessage.getServletRequest();
 			List<MediaType> acceptableTypes;
 			try {
-				acceptableTypes = getAcceptableMediaTypes(request);
+				acceptableTypes = getAcceptableMediaTypes(request);/* 客户端期望的响应格式 */
 			}
 			catch (HttpMediaTypeNotAcceptableException ex) {
 				int series = outputMessage.getServletResponse().getStatus() / 100;
@@ -234,14 +234,14 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 				throw ex;
 			}
 
-			List<MediaType> producibleTypes = getProducibleMediaTypes(request, valueType, targetType);
+			List<MediaType> producibleTypes = getProducibleMediaTypes(request, valueType, targetType);/* 消息转换器能生产的数据格式 */
 			if (body != null && producibleTypes.isEmpty()) {
 				throw new HttpMessageNotWritableException(
 						"No converter found for return value of type: " + valueType);
 			}
 
 			List<MediaType> compatibleMediaTypes = new ArrayList<>();
-			determineCompatibleMediaTypes(acceptableTypes, producibleTypes, compatibleMediaTypes);
+			determineCompatibleMediaTypes(acceptableTypes, producibleTypes, compatibleMediaTypes);/* 匹配最优的数据响应格式 */
 
 			// For ProblemDetail, fall back on RFC 7807 format
 			if (compatibleMediaTypes.isEmpty() && ProblemDetail.class.isAssignableFrom(valueType)) {
@@ -257,11 +257,11 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 				}
 				return;
 			}
-
+			/* 数据响应格式优先级排序，text/plain -> application/json -> application/*+json -> ALL  */
 			MimeTypeUtils.sortBySpecificity(compatibleMediaTypes);
 
 			for (MediaType mediaType : compatibleMediaTypes) {
-				if (mediaType.isConcrete()) {
+				if (mediaType.isConcrete()) {// mediaType非 */*
 					selectedMediaType = mediaType;
 					break;
 				}
@@ -297,7 +297,9 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 							genericConverter.write(body, targetType, selectedMediaType, outputMessage);
 						}
 						else {
-							((HttpMessageConverter) converter).write(body, selectedMediaType, outputMessage);
+							/* text/plain -- > StringHttpMessageConverter */
+							/* application/json -- > MappingJackson2HttpMessageConverter */
+							((HttpMessageConverter) converter).write(body, selectedMediaType, outputMessage);/* 输出数据 */
 						}
 					}
 					else {

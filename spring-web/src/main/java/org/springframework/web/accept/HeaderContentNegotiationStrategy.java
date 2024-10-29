@@ -44,7 +44,7 @@ public class HeaderContentNegotiationStrategy implements ContentNegotiationStrat
 	public List<MediaType> resolveMediaTypes(NativeWebRequest request)
 			throws HttpMediaTypeNotAcceptableException {
 
-		String[] headerValueArray = request.getHeaderValues(HttpHeaders.ACCEPT);
+		String[] headerValueArray = request.getHeaderValues(HttpHeaders.ACCEPT);/* 客户端期望的响应格式 */
 		if (headerValueArray == null) {
 			return MEDIA_TYPE_ALL_LIST;
 		}

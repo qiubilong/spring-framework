@@ -91,8 +91,8 @@ public class RequestMappingHandlerController_Args {
 	///////////////////////@RequestBody///////////////////////////////
 	/* 参数解析器 -- @RequestBody -- RequestResponseBodyMethodProcessor -- MappingJackson2HttpMessageConverter */
 	@RequestMapping("/byRequestBody")
-	public String byRequestBody(@RequestBody UserVO userVo){ //Content-type ==  application/json
-		return userVo.toString();
+	public UserVO byRequestBody(@RequestBody UserVO userVo){ //Content-type ==  application/json
+		return userVo;
 	}
 	/* 参数解析器 -- @RequestBody -- RequestResponseBodyMethodProcessor -- StringHttpMessageConverter */
 	@RequestMapping("/byRequestBodyString")

@@ -252,13 +252,13 @@ public abstract class AbstractHttpMessageConverter<T> implements HttpMessageConv
 						contentTypeToUse = new MediaType(contentTypeToUse, defaultCharset);
 					}
 				}
-				headers.setContentType(contentTypeToUse);
+				headers.setContentType(contentTypeToUse);/* 设置响应格式响应头格式 Content-Type  */
 			}
 		}
 		if (headers.getContentLength() < 0 && !headers.containsKey(HttpHeaders.TRANSFER_ENCODING)) {
 			Long contentLength = getContentLength(t, headers.getContentType());
 			if (contentLength != null) {
-				headers.setContentLength(contentLength);
+				headers.setContentLength(contentLength);/* 数据长度 */
 			}
 		}
 	}
