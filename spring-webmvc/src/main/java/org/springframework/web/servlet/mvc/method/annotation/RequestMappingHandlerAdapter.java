@@ -736,11 +736,11 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		handlers.add(new HttpHeadersReturnValueHandler());
 		handlers.add(new CallableMethodReturnValueHandler());
 		handlers.add(new DeferredResultMethodReturnValueHandler());
-		handlers.add(new AsyncTaskMethodReturnValueHandler(this.beanFactory));
+		handlers.add(new AsyncTaskMethodReturnValueHandler(this.beanFactory)); /* 返回参数处理 - 异步web请求 */
 
 		// Annotation-based return value types
 		handlers.add(new ServletModelAttributeMethodProcessor(false));
-		handlers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(),
+		handlers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), /* 返回参数处理 - @ResponseBody */
 				this.contentNegotiationManager, this.requestResponseBodyAdvice));
 
 		// Multi-purpose return value types
