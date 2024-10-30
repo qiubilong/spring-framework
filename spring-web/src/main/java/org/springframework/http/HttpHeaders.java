@@ -149,7 +149,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 	 * The CORS {@code Access-Control-Request-Method} request header field name.
 	 * @see <a href="https://www.w3.org/TR/cors/">CORS W3C recommendation</a>
 	 */
-	public static final String ACCESS_CONTROL_REQUEST_METHOD = "Access-Control-Request-Method";
+	public static final String ACCESS_CONTROL_REQUEST_METHOD = "Access-Control-Request-Method"; /* 跨域时 - 客户端请求的实际方法类型 */
 	/**
 	 * The HTTP {@code Age} header field name.
 	 * @see <a href="https://tools.ietf.org/html/rfc7234#section-5.1">Section 5.1 of RFC 7234</a>

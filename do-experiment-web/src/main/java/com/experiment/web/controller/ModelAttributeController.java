@@ -22,7 +22,7 @@ public class ModelAttributeController {
 	}
 
 	@RequestMapping("/requestMappingByParam")
-	public String requestMappingByParam(@ModelAttribute UserVO userVo){//将字符串转换成MyType对象
+	public String requestMappingByParam(@ModelAttribute UserVO userVo){
 		// "commonData" 会自动添加到模型中
 		return "common";
 	}

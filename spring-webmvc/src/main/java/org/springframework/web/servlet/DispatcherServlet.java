@@ -1104,8 +1104,8 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 						return;
 					}
 				}
-
-				if (!mappedHandler.applyPreHandle(processedRequest, response)) {//拦截器 - 处理器handler执行前
+				/* 拦截器 - 处理器handler执行前 - 例如跨域处理 CorsInterceptor */
+				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
 					return;
 				}
 
@@ -1350,7 +1350,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 org.springframework.web.servlet.HandlerAdapter=
     org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter,\
 	org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter,  ----负责执行实现了Controller接口的Handler
-	org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter,\
+	org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter, ---- 负责执行@RequestMapping注解的方法
 	org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 		*/
 		if (this.handlerAdapters != null) {

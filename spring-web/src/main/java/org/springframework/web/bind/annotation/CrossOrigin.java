@@ -67,7 +67,7 @@ public @interface CrossOrigin {
 	 * also set in which case {@code originPatterns} is used instead.
 	 */
 	@AliasFor("value")
-	String[] origins() default {};
+	String[] origins() default {};        /* 请求源直接匹配 */
 
 	/**
 	 * Alternative to {@link #origins} that supports more flexible origin
@@ -76,7 +76,7 @@ public @interface CrossOrigin {
 	 * <p>By default this is not set.
 	 * @since 5.3
 	 */
-	String[] originPatterns() default {};
+	String[] originPatterns() default {}; /* 请求源正则匹配 */
 
 	/**
 	 * The list of request headers that are permitted in actual requests,

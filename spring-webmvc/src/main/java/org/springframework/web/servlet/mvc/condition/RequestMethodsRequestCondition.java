@@ -126,7 +126,7 @@ public final class RequestMethodsRequestCondition extends AbstractRequestConditi
 	@Nullable
 	public RequestMethodsRequestCondition getMatchingCondition(HttpServletRequest request) {
 		if (CorsUtils.isPreFlightRequest(request)) {
-			return matchPreFlight(request);
+			return matchPreFlight(request);/* 处理OPTIONS */
 		}
 
 		if (getMethods().isEmpty()) {
@@ -151,7 +151,7 @@ public final class RequestMethodsRequestCondition extends AbstractRequestConditi
 		if (getMethods().isEmpty()) {
 			return this;
 		}
-		String expectedMethod = request.getHeader(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD);
+		String expectedMethod = request.getHeader(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD);/* 跨域时 - 客户端请求的实际方法类型 */
 		return matchRequestMethod(expectedMethod);
 	}
 

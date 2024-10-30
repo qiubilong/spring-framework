@@ -21,6 +21,7 @@ import java.util.Map;
    2、实现了HttpRequestHandler接口的bean对象，spring早期古老的处理器，返回数据  -- BeanNameUrlHandlerMapping 负责检测保存映射关系 -->  HttpRequestHandlerAdapter 负责转发执行
    3、添加了 @RequestMapping 的方法  --- RequestMappingHandlerMapping 负责检测保存映射关系 -->  RequestMappingHandlerAdapter 负责转发执行
 * */
+@CrossOrigin(originPatterns = "*.my.com",methods = {RequestMethod.POST}) /* 跨域处理 */
 @RestController
 @RequestMapping("/args")
 public class RequestMappingHandlerController {

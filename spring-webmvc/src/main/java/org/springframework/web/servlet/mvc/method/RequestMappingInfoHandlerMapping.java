@@ -257,7 +257,7 @@ public abstract class RequestMappingInfoHandlerMapping extends AbstractHandlerMe
 
 		if (helper.hasMethodsMismatch()) {
 			Set<String> methods = helper.getAllowedMethods();
-			if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+			if (HttpMethod.OPTIONS.matches(request.getMethod())) {/* Options处理 */
 				Set<MediaType> mediaTypes = helper.getConsumablePatchMediaTypes();
 				HttpOptionsHandler handler = new HttpOptionsHandler(methods, mediaTypes);
 				return new HandlerMethod(handler, HTTP_OPTIONS_HANDLE_METHOD);
@@ -502,7 +502,7 @@ public abstract class RequestMappingInfoHandlerMapping extends AbstractHandlerMe
 	/**
 	 * Default handler for HTTP OPTIONS.
 	 */
-	private static class HttpOptionsHandler {
+	private static class HttpOptionsHandler { /* Option处理器 */
 
 		private final HttpHeaders headers = new HttpHeaders();
 

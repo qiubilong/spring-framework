@@ -407,9 +407,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	@Nullable
 	protected HandlerMethod lookupHandlerMethod(String lookupPath, HttpServletRequest request) throws Exception {
 		List<Match> matches = new ArrayList<>();
-		List<T> directPathMatches = this.mappingRegistry.getMappingsByDirectPath(lookupPath);/* 直接完全匹配 */
+		List<T> directPathMatches = this.mappingRegistry.getMappingsByDirectPath(lookupPath);/* 直接路径完全匹配 */
 		if (directPathMatches != null) {
-			addMatchingMappings(directPathMatches, matches, request);
+			addMatchingMappings(directPathMatches, matches, request);/* 检查额外匹配条件 */
 		}
 		if (matches.isEmpty()) {
 			addMatchingMappings(this.mappingRegistry.getRegistrations().keySet(), matches, request);/* 规则匹配，比如 /byPath/{id} */
@@ -498,7 +498,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				return AbstractHandlerMethodMapping.ALLOW_CORS_CONFIG;
 			}
 			else {
-				CorsConfiguration corsConfigFromMethod = this.mappingRegistry.getCorsConfiguration(handlerMethod);
+				CorsConfiguration corsConfigFromMethod = this.mappingRegistry.getCorsConfiguration(handlerMethod);/* 方法对应的跨域配置 */
 				corsConfig = (corsConfig != null ? corsConfig.combine(corsConfigFromMethod) : corsConfigFromMethod);
 			}
 		}

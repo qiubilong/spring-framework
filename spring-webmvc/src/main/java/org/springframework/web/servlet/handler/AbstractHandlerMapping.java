@@ -529,17 +529,17 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 		else if (logger.isDebugEnabled() && !DispatcherType.ASYNC.equals(request.getDispatcherType())) {
 			logger.debug("Mapped to " + executionChain.getHandler());
 		}
-
+        /* 跨域处理 */
 		if (hasCorsConfigurationSource(handler) || CorsUtils.isPreFlightRequest(request)) {
-			CorsConfiguration config = getCorsConfiguration(handler, request);
+			CorsConfiguration config = getCorsConfiguration(handler, request);/* 某处理器跨域配置 */
 			if (getCorsConfigurationSource() != null) {
-				CorsConfiguration globalConfig = getCorsConfigurationSource().getCorsConfiguration(request);
+				CorsConfiguration globalConfig = getCorsConfigurationSource().getCorsConfiguration(request);/* 全局跨域配置 */
 				config = (globalConfig != null ? globalConfig.combine(config) : config);
 			}
 			if (config != null) {
 				config.validateAllowCredentials();
 			}
-			executionChain = getCorsHandlerExecutionChain(request, executionChain, config);
+			executionChain = getCorsHandlerExecutionChain(request, executionChain, config);/* 跨域请求处理 */
 		}
 
 		return executionChain;
@@ -678,12 +678,12 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	protected HandlerExecutionChain getCorsHandlerExecutionChain(HttpServletRequest request,
 			HandlerExecutionChain chain, @Nullable CorsConfiguration config) {
 
-		if (CorsUtils.isPreFlightRequest(request)) {
+		if (CorsUtils.isPreFlightRequest(request)) {/* OPTIONS请求拦截器*/
 			HandlerInterceptor[] interceptors = chain.getInterceptors();
 			return new HandlerExecutionChain(new PreFlightHandler(config), interceptors);
 		}
 		else {
-			chain.addInterceptor(0, new CorsInterceptor(config));
+			chain.addInterceptor(0, new CorsInterceptor(config));/* 跨域拦截器 */
 			return chain;
 		}
 	}
@@ -697,7 +697,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 		public PreFlightHandler(@Nullable CorsConfiguration config) {
 			this.config = config;
 		}
-
+		/* OPTIONS跨域请求处理 */
 		@Override
 		public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			corsProcessor.processRequest(this.config, request, response);
@@ -729,7 +729,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 			if (asyncManager.hasConcurrentResult()) {
 				return true;
 			}
-
+			/* 跨域请求处理- DefaultCorsProcessor */
 			return corsProcessor.processRequest(this.config, request, response);
 		}
 
