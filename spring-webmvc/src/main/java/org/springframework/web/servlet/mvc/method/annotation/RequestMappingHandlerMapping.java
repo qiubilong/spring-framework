@@ -299,9 +299,9 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	@Override
 	@Nullable
 	protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
-		RequestMappingInfo info = createRequestMappingInfo(method);
+		RequestMappingInfo info = createRequestMappingInfo(method);/* 解析method注解@RequestMapping - 包括重写的父类和接口 */
 		if (info != null) {
-			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType);
+			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType); /* 解析class注解@RequestMapping - - 包括重写的父类和接口 */
 			if (typeInfo != null) {
 				info = typeInfo.combine(info);
 			}
@@ -334,7 +334,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	 * @see #getCustomTypeCondition(Class)
 	 * @see #getCustomMethodCondition(Method)
 	 */
-	/* 当前 Method/Class 是否存在注解 @RequestMapping  */
+	/* 搜索当前 Method/Class（包括重写的接口和父类） 是否存在注解 @RequestMapping  */
 	@Nullable
 	private RequestMappingInfo createRequestMappingInfo(AnnotatedElement element) {
 		RequestMapping requestMapping = AnnotatedElementUtils.findMergedAnnotation(element, RequestMapping.class);

@@ -284,7 +284,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
 					(MethodIntrospector.MetadataLookup<T>) method -> {
 						try {
-							/* 寻找添加了 @RequestMapping注解的方法Method */
+							/* 寻找添加了 @RequestMapping注解的方法Method - 包括重写的父类和接口 */
 							return getMappingForMethod(method, userType);
 						}
 						catch (Throwable ex) {

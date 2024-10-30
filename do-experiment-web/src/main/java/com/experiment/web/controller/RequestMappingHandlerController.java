@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,7 +25,7 @@ import java.util.Map;
 @CrossOrigin(originPatterns = "*.my.com",methods = {RequestMethod.POST,RequestMethod.GET}) /* 跨域处理 */
 @RestController
 @RequestMapping("/args")
-public class RequestMappingHandlerController {
+public class RequestMappingHandlerController implements FeignController{
 
 	//////////////////////////@RequestParam//////////////////////
 	/* 参数解析器  -- RequestParamMethodArgumentResolver -- @RequestParam  */
@@ -108,6 +109,14 @@ public class RequestMappingHandlerController {
 		return id;
 	}
 
+	/* 继承接口的注解 -@GetMapping("/getUser") */
+	@Override
+	public UserVO getUser(Long id) {
+		UserVO vo = new UserVO();
+		vo.setName("getUser");
+		vo.setIds(List.of(id));
+		return vo;
+	}
 }
 
 /*
