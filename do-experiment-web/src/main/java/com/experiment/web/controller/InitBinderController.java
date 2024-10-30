@@ -22,7 +22,7 @@ public class InitBinderController {
 
 	@RequestMapping("/requestMappingByParam")
 	@ResponseBody
-	public String requestMappingByParam(@RequestParam("user") UserVO userVo){//将字符串转换成UserVo对象
+	public String requestMappingByParam(@RequestParam("user") UserVO userVo){//将user字符串转换成UserVo对象
 		return userVo.toString();
 	}
 }

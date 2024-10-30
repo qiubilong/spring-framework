@@ -21,7 +21,7 @@ import java.util.Map;
    2、实现了HttpRequestHandler接口的bean对象，spring早期古老的处理器，返回数据  -- BeanNameUrlHandlerMapping 负责检测保存映射关系 -->  HttpRequestHandlerAdapter 负责转发执行
    3、添加了 @RequestMapping 的方法  --- RequestMappingHandlerMapping 负责检测保存映射关系 -->  RequestMappingHandlerAdapter 负责转发执行
 * */
-@CrossOrigin(originPatterns = "*.my.com",methods = {RequestMethod.POST}) /* 跨域处理 */
+@CrossOrigin(originPatterns = "*.my.com",methods = {RequestMethod.POST,RequestMethod.GET}) /* 跨域处理 */
 @RestController
 @RequestMapping("/args")
 public class RequestMappingHandlerController {
@@ -46,16 +46,11 @@ public class RequestMappingHandlerController {
 		return name;
 	}
 
-	@RequestMapping("/byRequestParamVo")
-	public String byRequestParamVo(@RequestParam(value = "userVo") UserVO userVo){/*参数来源--request.getParameter() -- url参数、multipart/form-data、x-www-form-urlencoded  */
-		return userVo.toString();
-	}
-
 
 	/* 参数解析器  -- ServletModelAttributeMethodProcessor --无注解兜底 -- 对象vo */
 	@RequestMapping("/byVoNone")
-	public String byVoNone(UserVO userVo){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
-		return userVo.toString();
+	public UserVO byVoNone(UserVO userVo){/* 参数来源-- url查询参数、表单www-form-urlencoded（POST）、表单multipart/form-data（post请求类型解析为part类型属性） */
+		return userVo;
 	}
 
 	/* 参数解析器  -- ServletModelAttributeMethodProcessor --ModelAttribute -- 对象vo */

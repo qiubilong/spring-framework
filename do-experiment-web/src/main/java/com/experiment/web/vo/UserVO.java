@@ -57,13 +57,4 @@ public class UserVO {
 		this.email = email;
 	}
 
-	@Override
-	public String toString() {
-		return "UserVo{" +
-				"name='" + name + '\'' +
-				", age=" + age +
-				", email='" + email + '\'' +
-				", sysTime=" + sysTime +
-				'}';
-	}
 }
