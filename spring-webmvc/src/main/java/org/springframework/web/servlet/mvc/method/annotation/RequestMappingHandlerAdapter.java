@@ -545,7 +545,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	public void afterPropertiesSet() {
 		// Do this first, it may add ResponseBody advice beans
 		initControllerAdviceCache();/* @ControllerAdvice 处理 */
-		initMessageConverters(); /* 初始化Http消息转换器 - HttpMessageConverter */
+		initMessageConverters(); /* 初始化Http数据类型转换器 - HttpMessageConverter */
 
 		if (this.argumentResolvers == null) {
 			/* 参数解析器 */
@@ -554,7 +554,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		}
 
 		if (this.initBinderArgumentResolvers == null) {
-			/* 参数转换器 */
+			/* InitBinder参数解析器 */
 			List<HandlerMethodArgumentResolver> resolvers = getDefaultInitBinderArgumentResolvers();
 			this.initBinderArgumentResolvers = new HandlerMethodArgumentResolverComposite().addResolvers(resolvers);
 		}
@@ -564,7 +564,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			this.returnValueHandlers = new HandlerMethodReturnValueHandlerComposite().addHandlers(handlers);
 		}
 	}
-	/* 初始化Http消息转换器 - HttpMessageConverter */
+	/* 初始化Http数据类型转换器 - HttpMessageConverter */
 	private void initMessageConverters() {
 		if (!this.messageConverters.isEmpty()) {/* 通过<mvc:annotation-driven/>初始化时，这里已经不空 */
 			return;

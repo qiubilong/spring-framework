@@ -265,7 +265,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 					selectedMediaType = mediaType;
 					break;
 				}
-				else if (mediaType.isPresentIn(ALL_APPLICATION_MEDIA_TYPES)) {
+				else if (mediaType.isPresentIn(ALL_APPLICATION_MEDIA_TYPES)) {//返回值未找到转换器时，默认流类型
 					selectedMediaType = MediaType.APPLICATION_OCTET_STREAM;
 					break;
 				}
