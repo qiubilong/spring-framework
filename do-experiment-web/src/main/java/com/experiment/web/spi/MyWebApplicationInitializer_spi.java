@@ -24,10 +24,15 @@ public class MyWebApplicationInitializer_spi implements WebApplicationInitialize
 		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 		context.register(AppConfig.class);
 
-		DispatcherServlet dispatcherServlet = new DispatcherServlet(context);
+
+		DispatcherServlet dispatcherServlet = new DispatcherServlet(context); /* 不开启@EnableWebMvc的话加载DispatcherServlet.properties配置文件 */
 		ServletRegistration.Dynamic servletRegistration = servletContext.addServlet("spiApp", dispatcherServlet);
 		servletRegistration.setLoadOnStartup(1);// 1=容器启动加载;0=第一次请求加载
 		servletRegistration.addMapping("/spiApp/*"); //匹配路径
+
+
+		//不开启@EnableWebMvc的话，实例化RequestMappingHandlerAdapter --> 没有ConfigurableWebBindingInitializer对象
+		// -->没有DefaultFormattingConversionService --> 无法处理复杂对象类型转换
 
 		//Tomcat初始化servlet --> DispatcherServlet.init() --> AnnotationConfigWebApplicationContext.refresh()
 	}

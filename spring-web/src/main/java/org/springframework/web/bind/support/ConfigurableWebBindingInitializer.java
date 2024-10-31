@@ -51,10 +51,10 @@ public class ConfigurableWebBindingInitializer implements WebBindingInitializer 
 	private BindingErrorProcessor bindingErrorProcessor;
 
 	@Nullable
-	private Validator validator;
+	private Validator validator; /* @Valid 参数校验器 */
 
 	@Nullable
-	private ConversionService conversionService;
+	private ConversionService conversionService; /* 默认数据类型转换器 DefaultFormattingConversionService */
 
 	@Nullable
 	private PropertyEditorRegistrar[] propertyEditorRegistrars;

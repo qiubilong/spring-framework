@@ -254,7 +254,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 			String propertyName = pv.getName();
 			AbstractNestablePropertyAccessor nestedPa;
 			try {
-				nestedPa = getPropertyAccessorForPropertyPath(propertyName);
+				nestedPa = getPropertyAccessorForPropertyPath(propertyName);/* 属性访问器 */
 			}
 			catch (NotReadablePropertyException ex) {
 				throw new NotWritablePropertyException(getRootClass(), this.nestedPath + propertyName,
@@ -264,7 +264,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 			if (nestedPa == this) {
 				pv.getOriginalPropertyValue().resolvedTokens = tokens;
 			}
-			nestedPa.setPropertyValue(tokens, pv);//属性赋值
+			nestedPa.setPropertyValue(tokens, pv);/*属性赋值 */
 		}
 		else {
 			setPropertyValue(tokens, pv);
@@ -454,12 +454,12 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 							}
 						}
 					}
-					valueToApply = convertForProperty(
+					valueToApply = convertForProperty( /* 数据类型转换 */
 							tokens.canonicalName, oldValue, originalValue, ph.toTypeDescriptor());
 				}
 				pv.getOriginalPropertyValue().conversionNecessary = (valueToApply != originalValue);
 			}
-			ph.setValue(valueToApply);
+			ph.setValue(valueToApply);/* 属性赋值 */
 		}
 		catch (TypeMismatchException ex) {
 			throw ex;
@@ -585,7 +585,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 			throws TypeMismatchException {
 
 		Assert.state(this.typeConverterDelegate != null, "No TypeConverterDelegate");
-		try {
+		try { /* 数据类型转换 */
 			return this.typeConverterDelegate.convertIfNecessary(propertyName, oldValue, newValue, requiredType, td);
 		}
 		catch (ConverterNotFoundException | IllegalStateException ex) {
@@ -604,7 +604,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	protected Object convertForProperty(
 			String propertyName, @Nullable Object oldValue, @Nullable Object newValue, TypeDescriptor td)
 			throws TypeMismatchException {
-
+        /* 数据类型转换 */
 		return convertIfNecessary(propertyName, oldValue, newValue, td.getType(), td);
 	}
 

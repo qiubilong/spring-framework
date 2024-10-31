@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GlobalExceptionHandler {
 
    @ExceptionHandler(BindException.class)/* 处理该异常 */
-   @ResponseStatus(HttpStatus.NOT_FOUND)
+   @ResponseBody
    public String handleBindException(BindException ex) {
 	   return ex.getMessage();
    }

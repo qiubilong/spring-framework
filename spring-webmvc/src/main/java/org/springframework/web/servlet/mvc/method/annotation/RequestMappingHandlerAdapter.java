@@ -154,7 +154,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	private final List<Object> requestResponseBodyAdvice = new ArrayList<>();
 
 	@Nullable
-	private WebBindingInitializer webBindingInitializer; /* 包含spring内部默认类型转换器 DefaultFormattingConversionService */
+	private WebBindingInitializer webBindingInitializer; /* 默认 ConfigurableWebBindingInitializer -->包含数据类型转换器 DefaultFormattingConversionService */
 
 	private AsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("MvcAsync");
 
@@ -992,8 +992,8 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	 */
 	protected InitBinderDataBinderFactory createDataBinderFactory(List<InvocableHandlerMethod> binderMethods)
 			throws Exception {
-
-		return new ServletRequestDataBinderFactory(binderMethods, getWebBindingInitializer());//webBindingInitializer包括ConversionService
+         /* webBindingInitializer包括数据转换器ConversionService */
+		return new ServletRequestDataBinderFactory(binderMethods, getWebBindingInitializer());
 	}
 
 	@Nullable
