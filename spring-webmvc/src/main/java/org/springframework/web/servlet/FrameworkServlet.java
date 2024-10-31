@@ -534,7 +534,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		long startTime = System.currentTimeMillis();
 
 		try {
-			/* 创建WebApplicationContext容器 */
+			/* 创建初始化WebApplicationContext容器 */
 			this.webApplicationContext = initWebApplicationContext();
 			initFrameworkServlet();
 		}
@@ -582,7 +582,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 					// the root application context (if any; may be null) as the parent
 					cwac.setParent(rootContext);
 				}
-				configureAndRefreshWebApplicationContext(cwac);
+				configureAndRefreshWebApplicationContext(cwac);/* 直接初始化手动赋值的容器对象 */
 			}
 		}
 		if (wac == null) {
@@ -698,7 +698,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		wac.setServletContext(getServletContext());
 		wac.setServletConfig(getServletConfig());
 		wac.setNamespace(getNamespace());
-		wac.addApplicationListener(new SourceFilteringListener(wac, new ContextRefreshListener()));
+		wac.addApplicationListener(new SourceFilteringListener(wac, new ContextRefreshListener()));/* 容器初始化完成监听器 - 加载DispatcherServlet.properties文件中bean */
 
 		// The wac environment's #initPropertySources will be called in any case when the context
 		// is refreshed; do it eagerly here to ensure servlet property sources are in place for
@@ -852,7 +852,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		this.refreshEventReceived = true;
 		synchronized (this.onRefreshMonitor) {
-			onRefresh(event.getApplicationContext());
+			onRefresh(event.getApplicationContext());/* 容器初始化完成监听器 - 加载DispatcherServlet.properties文件中bean */
 		}
 	}
 
@@ -1205,7 +1205,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 		@Override
 		public void onApplicationEvent(ContextRefreshedEvent event) {
-			FrameworkServlet.this.onApplicationEvent(event);
+			FrameworkServlet.this.onApplicationEvent(event);/* 容器初始化完成监听器 - 加载DispatcherServlet.properties文件中bean */
 		}
 	}
 

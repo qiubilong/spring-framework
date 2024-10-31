@@ -219,27 +219,27 @@ class ConfigurationClassBeanDefinitionReader {
 		ConfigurationClassBeanDefinition beanDef = new ConfigurationClassBeanDefinition(configClass, metadata, beanName);
 		beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
 
-		if (metadata.isStatic()) {
+		if (metadata.isStatic()) {  /* 静态方法@Bean */
 			// static @Bean method
 			if (configClass.getMetadata() instanceof StandardAnnotationMetadata sam) {
-				beanDef.setBeanClass(sam.getIntrospectedClass());
+				beanDef.setBeanClass(sam.getIntrospectedClass());//具体实现类
 			}
 			else {
 				beanDef.setBeanClassName(configClass.getMetadata().getClassName());
 			}
-			beanDef.setUniqueFactoryMethodName(methodName);
+			beanDef.setUniqueFactoryMethodName(methodName);/* @Bean对应的方法 --> factoryMethodName -->实例化Bean */
 		}
-		else {
+		else {                     /* 非静态方法@Bean，beanClass为空 */
 			// instance @Bean method
-			beanDef.setFactoryBeanName(configClass.getBeanName());
-			beanDef.setUniqueFactoryMethodName(methodName);
+			beanDef.setFactoryBeanName(configClass.getBeanName());/* 方法对应的beanName --> 实时获取Bean对象（猜测方便实现代理增强类逻辑） */
+			beanDef.setUniqueFactoryMethodName(methodName);/* @Bean对应的方法 --> factoryMethodName --> 实例化Bean*/
 		}
 
 		if (metadata instanceof StandardMethodMetadata sam) {
-			beanDef.setResolvedFactoryMethod(sam.getIntrospectedMethod());
+			beanDef.setResolvedFactoryMethod(sam.getIntrospectedMethod()); /* @Bean对应方法 --factoryMethodToIntrospect  */
 		}
 
-		beanDef.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
+		beanDef.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);/* 使用构造函数注入依赖关系 */
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(beanDef, metadata);
 
 		boolean autowireCandidate = bean.getBoolean("autowireCandidate");

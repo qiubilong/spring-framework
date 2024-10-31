@@ -415,7 +415,7 @@ class ConstructorResolver {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"factory-bean reference points back to the same bean definition");
 			}
-			factoryBean = this.beanFactory.getBean(factoryBeanName);
+			factoryBean = this.beanFactory.getBean(factoryBeanName);/* 非静态@Bean方法所在的Bean */
 			if (mbd.isSingleton() && this.beanFactory.containsSingleton(beanName)) {
 				throw new ImplicitlyAppearedSingletonException();
 			}
@@ -466,13 +466,13 @@ class ConstructorResolver {
 			List<Method> candidates = null;
 			if (mbd.isFactoryMethodUnique) {
 				if (factoryMethodToUse == null) {
-					factoryMethodToUse = mbd.getResolvedFactoryMethod();
+					factoryMethodToUse = mbd.getResolvedFactoryMethod();/* @Bean对应方法 */
 				}
 				if (factoryMethodToUse != null) {
 					candidates = Collections.singletonList(factoryMethodToUse);
 				}
 			}
-			/* 寻找Bean的创建方法factoryMethod */
+
 			if (candidates == null) {
 				candidates = new ArrayList<>();
 				Method[] rawCandidates = getCandidateMethods(factoryClass, mbd);

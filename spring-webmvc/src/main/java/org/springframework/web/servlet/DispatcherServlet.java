@@ -494,7 +494,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	@Override
 	protected void onRefresh(ApplicationContext context) {
-		initStrategies(context);
+		initStrategies(context);/* 容器初始化完成监听器 - 加载DispatcherServlet.properties文件中bean */
 	}
 
 	/**
@@ -506,12 +506,13 @@ public class DispatcherServlet extends FrameworkServlet {
 		initLocaleResolver(context);//国际化
 		initThemeResolver(context);//主题
 
-		/* 寻找Handler，并保存处理路径 path 和 Handler 的映射关系 */
+		/* 寻找请求处理器Handler，并保存处理路径 path 和 Handler 的映射关系 */
 		initHandlerMappings(context);
 		/* 初始化HandlerAdapter，用于封装不同Handler的执行细节 */
 		initHandlerAdapters(context);
-
+		/* 初始化@HandlerException异常处理器 */
 		initHandlerExceptionResolvers(context);
+
 		initRequestToViewNameTranslator(context);
 		initViewResolvers(context);
 		initFlashMapManager(context);

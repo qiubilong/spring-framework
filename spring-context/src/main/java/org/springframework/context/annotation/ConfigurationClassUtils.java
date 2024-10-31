@@ -111,7 +111,7 @@ public abstract class ConfigurationClassUtils {
 			// Check already loaded Class if present...
 			// since we possibly can't even load the class file for this Class.
 			Class<?> beanClass = abstractBd.getBeanClass();
-			if (BeanFactoryPostProcessor.class.isAssignableFrom(beanClass) ||
+			if (BeanFactoryPostProcessor.class.isAssignableFrom(beanClass) ||//排除一些内部Bean
 					BeanPostProcessor.class.isAssignableFrom(beanClass) ||
 					AopInfrastructureBean.class.isAssignableFrom(beanClass) ||
 					EventListenerFactory.class.isAssignableFrom(beanClass)) {
@@ -181,7 +181,7 @@ public abstract class ConfigurationClassUtils {
 		}
 
 		// Finally, let's look for @Bean methods...
-		/* 存在@Bean方法,通过@Import导进来存在这种情况 */
+		/* class上没有注解配置，检查是否存在@Bean方法，通过@Import导入的Bean存在这种情况 */
 		return hasBeanMethods(metadata);
 	}
 

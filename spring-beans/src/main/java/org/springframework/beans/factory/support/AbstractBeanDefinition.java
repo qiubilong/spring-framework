@@ -173,7 +173,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	private String factoryBeanName;
 
 	@Nullable
-	private String factoryMethodName;
+	private String factoryMethodName; /* @Bean对应的方法*/
 
 	@Nullable
 	private ConstructorArgumentValues constructorArgumentValues;

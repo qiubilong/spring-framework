@@ -251,11 +251,11 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 */
 	public int scan(String... basePackages) {
 		int beanCountAtScanStart = this.registry.getBeanDefinitionCount();
-
+        /* 扫描注册BeanDefinition */
 		doScan(basePackages);
 
 		// Register annotation config processors, if necessary.
-		if (this.includeAnnotationConfig) {
+		if (this.includeAnnotationConfig) { /* 加入解析注解的内部bean，如ConfigurationClassPostProcessor、AutowiredAnnotationBeanPostProcessor */
 			AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
 		}
 

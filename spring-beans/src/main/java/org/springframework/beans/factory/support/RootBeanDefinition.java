@@ -86,7 +86,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	/** Package-visible field for caching a unique factory method candidate for introspection. */
 	@Nullable
-	volatile Method factoryMethodToIntrospect;
+	volatile Method factoryMethodToIntrospect; /* @Bean对应方法 */
 
 	/** Package-visible field for caching a resolved destroy method name (also for inferred). */
 	@Nullable

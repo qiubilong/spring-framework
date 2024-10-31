@@ -209,8 +209,8 @@ public class AnnotationConfigWebApplicationContext extends AbstractRefreshableWe
 	 */
 	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
-		AnnotatedBeanDefinitionReader reader = getAnnotatedBeanDefinitionReader(beanFactory);
-		ClassPathBeanDefinitionScanner scanner = getClassPathBeanDefinitionScanner(beanFactory);
+		AnnotatedBeanDefinitionReader reader = getAnnotatedBeanDefinitionReader(beanFactory);/* 创建Annotation解析器 -->注入解析注解的Bean、例如 ConfigurationClassPostProcessor */
+		ClassPathBeanDefinitionScanner scanner = getClassPathBeanDefinitionScanner(beanFactory);/* 类路径扫描器 */
 
 		BeanNameGenerator beanNameGenerator = getBeanNameGenerator();
 		if (beanNameGenerator != null) {
@@ -230,7 +230,7 @@ public class AnnotationConfigWebApplicationContext extends AbstractRefreshableWe
 				logger.debug("Registering component classes: [" +
 						StringUtils.collectionToCommaDelimitedString(this.componentClasses) + "]");
 			}
-			reader.register(ClassUtils.toClassArray(this.componentClasses));
+			reader.register(ClassUtils.toClassArray(this.componentClasses));/* 解析配置类 */
 		}
 
 		if (!this.basePackages.isEmpty()) {
