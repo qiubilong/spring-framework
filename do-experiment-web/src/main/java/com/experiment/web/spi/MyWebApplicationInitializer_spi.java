@@ -15,7 +15,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 * tomcat启动的时候会通过spi机制找到文件spring-web/src/main/resources/META-INF/services/jakarta.servlet.ServletContainerInitializer
 * 定义的实现类 - SpringServletContainerInitializer  --> 实例化所有 WebApplicationInitializer 子类 --> WebApplicationInitializer.onStartup()
 * */
-public class MySpringContainerInitializer_spi implements WebApplicationInitializer {
+public class MyWebApplicationInitializer_spi implements WebApplicationInitializer {
 
 	/* 使用SPI机制创建SpringMVC容器 */
 	@Override
