@@ -453,7 +453,7 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 		if (suppressGetenvAccess()) {
 			return Collections.emptyMap();
 		}
-		return (Map) System.getenv();
+		return (Map) System.getenv();/* 系统环境变量 */
 	}
 
 	/**

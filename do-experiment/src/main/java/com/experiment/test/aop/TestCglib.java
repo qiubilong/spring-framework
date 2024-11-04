@@ -10,7 +10,7 @@ public class TestCglib {
 
 	public static void main(String[] args) {
 
-		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\myGit\\spring-framework\\jdk\\proxy1"); //该设置用于输出cglib动态代理产生的类
+		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, System.getProperty("user.dir")+"/jdk/proxy1"); //该设置用于输出cglib动态代理产生的类
 
 		UserServiceAopImpl target = new UserServiceAopImpl();
 
@@ -30,7 +30,7 @@ public class TestCglib {
 		enhancer.setCallbackFilter(new CallbackFilter() {
 			@Override
 			public int accept(Method method) {
-				if(method.getName().equals("ping")){
+				if(method.getName().equals("ping") || method.getName().equals("test")){
 					return 0;
 				}
 				return 1;
@@ -39,6 +39,8 @@ public class TestCglib {
 
 		UserServiceAopImpl userService = (UserServiceAopImpl)enhancer.create();
 		userService.ping();
+
+		System.out.println(userService.toString());
 
 	}
 }

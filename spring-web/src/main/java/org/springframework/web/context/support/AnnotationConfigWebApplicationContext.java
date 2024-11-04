@@ -230,7 +230,7 @@ public class AnnotationConfigWebApplicationContext extends AbstractRefreshableWe
 				logger.debug("Registering component classes: [" +
 						StringUtils.collectionToCommaDelimitedString(this.componentClasses) + "]");
 			}
-			reader.register(ClassUtils.toClassArray(this.componentClasses));/* 解析配置类 */
+			reader.register(ClassUtils.toClassArray(this.componentClasses));/* 解析配置类 --> BeanDefinition  */
 		}
 
 		if (!this.basePackages.isEmpty()) {

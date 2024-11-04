@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserServiceAopImpl implements UserServiceAopApi {
 	@Override
-	public void ping() {
+	public int ping() {
 		System.out.println("UserServiceAop ping");
+		return 1;
 	}
 
 	@Override

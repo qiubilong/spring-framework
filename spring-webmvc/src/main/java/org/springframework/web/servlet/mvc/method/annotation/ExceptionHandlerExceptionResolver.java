@@ -238,7 +238,7 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 
 
 	@Override
-	public void afterPropertiesSet() {/* bean属性赋值后 --执行回调 */
+	public void afterPropertiesSet() {/* bean属性赋值后 --执行方法回调阶段 */
 		// Do this first, it may add ResponseBodyAdvice beans
 		initExceptionHandlerAdviceCache();/* 寻找Controller增强器 @ControllerAdvice */
 		initMessageConverters();

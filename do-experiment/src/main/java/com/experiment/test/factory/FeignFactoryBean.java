@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 
 /* 手动实例化Bean对象
 *  跳过spring bean对象实例化生命周期
+*
+*  beanName = feignFactoryBean
+*  applicationContext.getBean("feignFactoryBean")得到的对象是OrderFeignService类型对象
 *  */
 @Component
 public class FeignFactoryBean implements FactoryBean<OrderFeignService> {
