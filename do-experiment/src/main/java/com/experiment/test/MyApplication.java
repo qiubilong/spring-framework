@@ -78,10 +78,6 @@ public class MyApplication {
 		applicationContext.getBean(MyBatisExchangeService.class).test();
 		System.out.println();
 
-		//aop
-		System.setProperty("jdk.proxy.ProxyGenerator.saveGeneratedFiles", "true");//保存jdk生成的代理类class文件
-		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, System.getProperty("user.dir")+"/jdk/proxy1"); //保存cglib生成的动态代理类class文件
-
 	/*	UserServiceAopApi userServiceAopByFactoryBean = (UserServiceAopApi) applicationContext.getBean("userServiceAopByFactoryBean");
 		userServiceAopByFactoryBean.ping();*/
 		UserServiceAopImpl userServiceAopImpl = (UserServiceAopImpl)applicationContext.getBean("userServiceAopImpl");
