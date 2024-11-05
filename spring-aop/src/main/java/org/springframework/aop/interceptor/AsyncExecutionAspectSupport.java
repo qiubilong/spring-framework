@@ -169,7 +169,7 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 		AsyncTaskExecutor executor = this.executors.get(method);
 		if (executor == null) {
 			Executor targetExecutor;
-			String qualifier = getExecutorQualifier(method);
+			String qualifier = getExecutorQualifier(method);/* @Async("xxxExecutor") 自定义线程池xxxExecutor */
 			if (this.embeddedValueResolver != null && StringUtils.hasLength(qualifier)) {
 				qualifier = this.embeddedValueResolver.resolveStringValue(qualifier);
 			}

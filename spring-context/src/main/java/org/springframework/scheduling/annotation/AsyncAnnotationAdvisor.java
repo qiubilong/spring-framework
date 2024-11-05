@@ -113,8 +113,8 @@ public class AsyncAnnotationAdvisor extends AbstractPointcutAdvisor implements B
 			// If Jakarta Concurrent API not present, simply ignore.
 		}
 
-		this.advice = buildAdvice(executor, exceptionHandler);
-		this.pointcut = buildPointcut(asyncAnnotationTypes);
+		this.advice = buildAdvice(executor, exceptionHandler); /* 异步代理拦截器 - AnnotationAsyncExecutionInterceptor  */
+		this.pointcut = buildPointcut(asyncAnnotationTypes);/* AOP异步代理 - 匹配器 */
 	}
 
 
@@ -158,7 +158,7 @@ public class AsyncAnnotationAdvisor extends AbstractPointcutAdvisor implements B
 
 	protected Advice buildAdvice(
 			@Nullable Supplier<Executor> executor, @Nullable Supplier<AsyncUncaughtExceptionHandler> exceptionHandler) {
-
+		/* 异步代理拦截器  */
 		AnnotationAsyncExecutionInterceptor interceptor = new AnnotationAsyncExecutionInterceptor(null);
 		interceptor.configure(executor, exceptionHandler);
 		return interceptor;
@@ -171,9 +171,9 @@ public class AsyncAnnotationAdvisor extends AbstractPointcutAdvisor implements B
 	 */
 	protected Pointcut buildPointcut(Set<Class<? extends Annotation>> asyncAnnotationTypes) {
 		ComposablePointcut result = null;
-		for (Class<? extends Annotation> asyncAnnotationType : asyncAnnotationTypes) {
-			Pointcut cpc = new AnnotationMatchingPointcut(asyncAnnotationType, true);
-			Pointcut mpc = new AnnotationMatchingPointcut(null, asyncAnnotationType, true);
+		for (Class<? extends Annotation> asyncAnnotationType : asyncAnnotationTypes) { /* asyncAnnotationTypes == @Async */
+			Pointcut cpc = new AnnotationMatchingPointcut(asyncAnnotationType, true); /* class类上@Async注解匹配 */
+			Pointcut mpc = new AnnotationMatchingPointcut(null, asyncAnnotationType, true);/* method方法上@Async注解匹配 */
 			if (result == null) {
 				result = new ComposablePointcut(cpc);
 			}

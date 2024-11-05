@@ -262,10 +262,10 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		return null;
 	}
 
-	@Override
+	@Override /* 出现循环依赖时，提前生成AOP代理对象 */
 	public Object getEarlyBeanReference(Object bean, String beanName) {
 		Object cacheKey = getCacheKey(bean.getClass(), beanName);
-		this.earlyProxyReferences.put(cacheKey, bean);
+		this.earlyProxyReferences.put(cacheKey, bean); /* 标记 - 已经生成代理对象 */
 		return wrapIfNecessary(bean, beanName, cacheKey);
 	}
 

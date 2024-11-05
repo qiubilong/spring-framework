@@ -72,7 +72,7 @@ public class ScheduledTaskRegistrar implements ScheduledTaskHolder, Initializing
 
 
 	@Nullable
-	private TaskScheduler taskScheduler;
+	private TaskScheduler taskScheduler; /*  Executors.newSingleThreadScheduledExecutor();  */
 
 	@Nullable
 	private ScheduledExecutorService localExecutor;

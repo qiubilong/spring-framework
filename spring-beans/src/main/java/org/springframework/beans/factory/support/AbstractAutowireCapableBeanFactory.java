@@ -594,7 +594,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-			/* 提前曝光原始对象，用于解决循环依赖 */
+			/* 用于解决循环依赖 --> 提前曝光原始对象or代理对象 --> 三级缓存singletonFactory早期对象单例工厂
+			*  二级缓存earlySingletonObjects，缓存singletonFactory结果。
+			*  为什么需要二级缓存，假设C是需要代理对象，那么当A、B都依赖到C时，二级缓存能保证拿到同一个C代理对象
+			*  */
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 
@@ -961,7 +964,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object exposedObject = bean;
 		if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 			for (SmartInstantiationAwareBeanPostProcessor bp : getBeanPostProcessorCache().smartInstantiationAware) {
-				exposedObject = bp.getEarlyBeanReference(exposedObject, beanName);
+				exposedObject = bp.getEarlyBeanReference(exposedObject, beanName);/* 提前生成AOP代理对象  */
 			}
 		}
 		return exposedObject;

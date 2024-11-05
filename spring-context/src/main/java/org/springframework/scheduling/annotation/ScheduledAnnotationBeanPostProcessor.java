@@ -358,7 +358,7 @@ public class ScheduledAnnotationBeanPostProcessor
 
 		Class<?> targetClass = AopProxyUtils.ultimateTargetClass(bean);
 		if (!this.nonAnnotatedClasses.contains(targetClass) &&
-				AnnotationUtils.isCandidateClass(targetClass, List.of(Scheduled.class, Schedules.class))) {
+				AnnotationUtils.isCandidateClass(targetClass, List.of(Scheduled.class, Schedules.class))) { /* 查找@Scheduled方法 */
 			Map<Method, Set<Scheduled>> annotatedMethods = MethodIntrospector.selectMethods(targetClass,
 					(MethodIntrospector.MetadataLookup<Set<Scheduled>>) method -> {
 						Set<Scheduled> scheduledAnnotations = AnnotatedElementUtils.getMergedRepeatableAnnotations(
@@ -374,7 +374,7 @@ public class ScheduledAnnotationBeanPostProcessor
 			else {
 				// Non-empty set of methods
 				annotatedMethods.forEach((method, scheduledAnnotations) ->
-						scheduledAnnotations.forEach(scheduled -> processScheduled(scheduled, method, bean)));
+						scheduledAnnotations.forEach(scheduled -> processScheduled(scheduled, method, bean)));/* 处理@Scheduled方法 */
 				if (logger.isTraceEnabled()) {
 					logger.trace(annotatedMethods.size() + " @Scheduled methods processed on bean '" + beanName +
 							"': " + annotatedMethods);
@@ -393,7 +393,7 @@ public class ScheduledAnnotationBeanPostProcessor
 	 */
 	protected void processScheduled(Scheduled scheduled, Method method, Object bean) {
 		try {
-			Runnable runnable = createRunnable(bean, method);
+			Runnable runnable = createRunnable(bean, method);/* 创建一个执行任务 */
 			boolean processedSchedule = false;
 			String errorMessage =
 					"Exactly one of the 'cron', 'fixedDelay(String)', or 'fixedRate(String)' attributes is required";
@@ -438,6 +438,7 @@ public class ScheduledAnnotationBeanPostProcessor
 						else {
 							timeZone = TimeZone.getDefault();
 						}
+						/* cron表达式任务 */
 						tasks.add(this.registrar.scheduleCronTask(new CronTask(runnable, new CronTrigger(cron, timeZone))));
 					}
 				}
@@ -453,6 +454,7 @@ public class ScheduledAnnotationBeanPostProcessor
 			if (!fixedDelay.isNegative()) {
 				Assert.isTrue(!processedSchedule, errorMessage);
 				processedSchedule = true;
+				/* 固定间隔任务 */
 				tasks.add(this.registrar.scheduleFixedDelayTask(new FixedDelayTask(runnable, fixedDelay, initialDelay)));
 			}
 
@@ -471,6 +473,7 @@ public class ScheduledAnnotationBeanPostProcessor
 						throw new IllegalArgumentException(
 								"Invalid fixedDelayString value \"" + fixedDelayString + "\" - cannot parse into long");
 					}
+					/* 固定间隔任务 */
 					tasks.add(this.registrar.scheduleFixedDelayTask(new FixedDelayTask(runnable, fixedDelay, initialDelay)));
 				}
 			}
@@ -480,6 +483,7 @@ public class ScheduledAnnotationBeanPostProcessor
 			if (!fixedRate.isNegative()) {
 				Assert.isTrue(!processedSchedule, errorMessage);
 				processedSchedule = true;
+				/* 固定频率任务 */
 				tasks.add(this.registrar.scheduleFixedRateTask(new FixedRateTask(runnable, fixedRate, initialDelay)));
 			}
 			String fixedRateString = scheduled.fixedRateString();
@@ -497,6 +501,7 @@ public class ScheduledAnnotationBeanPostProcessor
 						throw new IllegalArgumentException(
 								"Invalid fixedRateString value \"" + fixedRateString + "\" - cannot parse into long");
 					}
+					/* 固定频率任务 */
 					tasks.add(this.registrar.scheduleFixedRateTask(new FixedRateTask(runnable, fixedRate, initialDelay)));
 				}
 			}
