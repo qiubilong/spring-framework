@@ -243,7 +243,7 @@ class ConstructorResolver {
 								}
 							}
 						}
-						/* 解析BeanDefinition中指定的构造参数 */
+						/* 解析构造参数 */
 						argsHolder = createArgumentArray(beanName, mbd, resolvedValues, bw, paramTypes, paramNames,
 								getUserDeclaredConstructor(candidate), autowiring, candidates.length == 1);
 					}
@@ -312,7 +312,7 @@ class ConstructorResolver {
 		}
 
 		Assert.state(argsToUse != null, "Unresolved constructor arguments");
-		bw.setBeanInstance(instantiate(beanName, mbd, constructorToUse, argsToUse));
+		bw.setBeanInstance(instantiate(beanName, mbd, constructorToUse, argsToUse));/* 实例化 */
 		return bw;
 	}
 
@@ -792,7 +792,7 @@ class ConstructorResolver {
 							"] - did you specify the correct bean references as arguments?");
 				}
 				try {
-					Object autowiredArgument = resolveAutowiredArgument(
+					Object autowiredArgument = resolveAutowiredArgument( /* 解析构造函数参数 */
 							methodParam, beanName, autowiredBeanNames, converter, fallback);
 					args.rawArguments[paramIndex] = autowiredArgument;
 					args.arguments[paramIndex] = autowiredArgument;
@@ -888,7 +888,7 @@ class ConstructorResolver {
 			return injectionPoint;
 		}
 		try {
-			return this.beanFactory.resolveDependency(
+			return this.beanFactory.resolveDependency( /* 解析构造函数参数 */
 					new DependencyDescriptor(param, true), beanName, autowiredBeanNames, typeConverter);
 		}
 		catch (NoUniqueBeanDefinitionException ex) {

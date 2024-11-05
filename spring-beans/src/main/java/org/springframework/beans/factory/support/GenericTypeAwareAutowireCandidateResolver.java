@@ -152,7 +152,7 @@ public class GenericTypeAwareAutowireCandidateResolver extends SimpleAutowireCan
 			return true;
 		}
 		// Full check for complex generic type match...
-		return dependencyType.isAssignableFrom(targetType);
+		return dependencyType.isAssignableFrom(targetType);/* Class类型兼容 */
 	}
 
 	@Nullable

@@ -882,8 +882,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				this.mergedBeanDefinitionHolders.computeIfAbsent(beanName,
 						key -> new BeanDefinitionHolder(mbd, beanName, getAliases(bdName))) :
 				new BeanDefinitionHolder(mbd, beanName, getAliases(bdName)));
-		/* 检查 @Bean.autowireCandidate -> 泛型匹配(isAssignableFrom) -> @Qualifier */
-		return resolver.isAutowireCandidate(holder, descriptor);
+		/* 检查 @Bean.autowireCandidate(默认true) -> 泛型匹配(isAssignableFrom) -> @Qualifier */
+		return resolver.isAutowireCandidate(holder, descriptor);//QualifierAnnotationAutowireCandidateResolver
 	}
 
 	@Override
@@ -973,7 +973,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}
 				}
 				else {
-					getBean(beanName);
+					getBean(beanName);/* 实例化Bean */
 				}
 			}
 		}
@@ -1335,7 +1335,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			return new Jsr330Factory().createDependencyProvider(descriptor, requestingBeanName);
 		}
 		else {
-			/* @Autowired @Lazy 时生成代理类*/
+			/* @Autowired @Lazy 时生成代理Bean*/
 			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(
 					descriptor, requestingBeanName);
 			if (result == null) {

@@ -359,16 +359,16 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 					List<Constructor<?>> candidates = new ArrayList<>(rawCandidates.length);
 					Constructor<?> requiredConstructor = null;
 					Constructor<?> defaultConstructor = null;
-					Constructor<?> primaryConstructor = BeanUtils.findPrimaryConstructor(beanClass);
+					Constructor<?> primaryConstructor = BeanUtils.findPrimaryConstructor(beanClass);//忽略Kotlin
 					int nonSyntheticConstructors = 0;
 					for (Constructor<?> candidate : rawCandidates) {
 						if (!candidate.isSynthetic()) {
 							nonSyntheticConstructors++;
 						}
-						else if (primaryConstructor != null) {
+						else if (primaryConstructor != null) {//忽略Kotlin
 							continue;
 						}
-						MergedAnnotation<?> ann = findAutowiredAnnotation(candidate);
+						MergedAnnotation<?> ann = findAutowiredAnnotation(candidate); /* @Autowired注解 */
 						if (ann == null) {
 							Class<?> userClass = ClassUtils.getUserClass(beanClass);
 							if (userClass != beanClass) {
@@ -400,12 +400,12 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 											". Found constructor with 'required' Autowired annotation: " +
 											candidate);
 								}
-								requiredConstructor = candidate;
+								requiredConstructor = candidate;/* 选中@Autowired注解的构造函数 */
 							}
 							candidates.add(candidate);
 						}
 						else if (candidate.getParameterCount() == 0) {
-							defaultConstructor = candidate;
+							defaultConstructor = candidate;/* 无参构造函数 */
 						}
 					}
 					if (!candidates.isEmpty()) {
@@ -421,16 +421,16 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 										"default constructor to fall back to: " + candidates.get(0));
 							}
 						}
-						candidateConstructors = candidates.toArray(new Constructor<?>[0]);
+						candidateConstructors = candidates.toArray(new Constructor<?>[0]); /* 一个@Autowired构造函数 */
 					}
 					else if (rawCandidates.length == 1 && rawCandidates[0].getParameterCount() > 0) {
-						candidateConstructors = new Constructor<?>[] {rawCandidates[0]};
+						candidateConstructors = new Constructor<?>[] {rawCandidates[0]};  /* 一个有参构造函数 */
 					}
-					else if (nonSyntheticConstructors == 2 && primaryConstructor != null &&
+					else if (nonSyntheticConstructors == 2 && primaryConstructor != null && //忽略Kotlin
 							defaultConstructor != null && !primaryConstructor.equals(defaultConstructor)) {
 						candidateConstructors = new Constructor<?>[] {primaryConstructor, defaultConstructor};
 					}
-					else if (nonSyntheticConstructors == 1 && primaryConstructor != null) {
+					else if (nonSyntheticConstructors == 1 && primaryConstructor != null) {//忽略Kotlin
 						candidateConstructors = new Constructor<?>[] {primaryConstructor};
 					}
 					else {

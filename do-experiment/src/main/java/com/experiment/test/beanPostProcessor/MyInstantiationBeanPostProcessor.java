@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
  * bean实例化时，拓展点
  */
 @Component
-public class MyInstantiationBeanPostProcessor implements InstantiationAwareBeanPostProcessor {
+public class MyInstantiationBeanPostProcessor implements InstantiationAwareBeanPostProcessor { /* 自定义Bean实例化Bean处理器 */
 	@Override
-	public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+	public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {//自定义实例化Bean
 		System.out.println("----------------------------------------------------------------------------------------------------------");
 		System.out.println("Bean生命周期-Instant-Before---beanName="+beanName+",beanClass="+beanClass);
 		return InstantiationAwareBeanPostProcessor.super.postProcessBeforeInstantiation(beanClass, beanName);
