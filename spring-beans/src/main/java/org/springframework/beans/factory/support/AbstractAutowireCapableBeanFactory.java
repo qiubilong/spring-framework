@@ -1433,11 +1433,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			pvs = newPvs;
 		}
 
-		/* 解析依赖注入注解 @Resource、@Value、@Autowired（@Qualifier） */
+		/* 执行注解依赖注入 @Resource、@Value、@Autowired（@Qualifier） */
 		if (hasInstantiationAwareBeanPostProcessors()) {
 			if (pvs == null) {
 				pvs = mbd.getPropertyValues();
 			}
+			/* CommonAnnotationBeanPostProcessor --> 解析注解 @Resource
+			*  AutowiredAnnotationBeanPostProcessor -->  解析注解 @Value、@Autowired（@Qualifier）
+			* */
 			for (InstantiationAwareBeanPostProcessor bp : getBeanPostProcessorCache().instantiationAware) {
 				PropertyValues pvsToUse = bp.postProcessProperties(pvs, bw.getWrappedInstance(), beanName);
 				if (pvsToUse == null) {
@@ -1452,7 +1455,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			PropertyDescriptor[] filteredPds = filterPropertyDescriptorsForDependencyCheck(bw, mbd.allowCaching);
 			checkDependencies(beanName, mbd, filteredPds, pvs);
 		}
-		/* 最后的自定义属性赋值，可能会覆盖前面的@Autowired等注入 */
+		/* 最后的BeanDefinition自定义属性赋值，可能会覆盖前面的@Autowired等注入 */
 		if (pvs != null) {
 			applyPropertyValues(beanName, mbd, bw, pvs);
 		}
@@ -1799,7 +1802,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					(mbd != null ? mbd.getResourceDescription() : null), beanName, ex.getMessage(), ex);
 		}
 		if (mbd == null || !mbd.isSynthetic()) {
-			/* bean实例化和初始化后，最后的BeanPostProcessor拓展点，实现动态代理AOP */
+			/* bean实例化和初始化后，最后的BeanPostProcessor拓展点，实现动态代理AOP
+			*
+			*  */
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
 
