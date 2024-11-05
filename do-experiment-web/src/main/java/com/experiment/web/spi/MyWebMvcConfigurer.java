@@ -13,7 +13,9 @@ import java.util.List;
  * @since 2024/10/31
  */
 @Component
-@EnableWebMvc /* 自定义mvc --> 导入 DelegatingWebMvcConfiguration --> 使用@Bean实例化mvc相关Bean（DispatcherServlet.properties类似） */
+@EnableWebMvc /* 自定义mvc --> 导入 DelegatingWebMvcConfiguration --> 使用@Bean实例化mvc相关Bean（DispatcherServlet.properties类似）
+   作用相当于<mvc:annotation-driven>
+ */
 public class MyWebMvcConfigurer implements WebMvcConfigurer {
 
 	/* 自定义数据类型转换器*/

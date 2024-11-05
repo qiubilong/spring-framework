@@ -1786,7 +1786,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	protected Object getObjectForBeanInstance(
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
-		//name=&开头，获取工厂FactoryBean
+		/* name=&开头，获取工厂FactoryBean */
 		// Don't let calling code try to dereference the factory if the bean isn't a factory.
 		if (BeanFactoryUtils.isFactoryDereference(name)) {
 			if (beanInstance instanceof NullBean) {
@@ -1804,10 +1804,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
 		// If it's a FactoryBean, we use it to create a bean instance, unless the
 		// caller actually wants a reference to the factory.
-		//这个Bean是普通(非工厂)的bean，直接返回
+		/* 1、这个Bean是普通的Bean（(非工厂Bean），直接返回 */
 		if (!(beanInstance instanceof FactoryBean<?> factoryBean)) {
 			return beanInstance;
 		}
+
 		//为什么有这段逻辑，因为spring想要实现的效果是，BeanFactory的beanName代表的是它创建对象的beanName
 
 		Object object = null;

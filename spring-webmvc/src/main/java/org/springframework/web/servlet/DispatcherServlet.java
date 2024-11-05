@@ -1386,7 +1386,7 @@ org.springframework.web.servlet.HandlerAdapter=
 		ModelAndView exMv = null;
 		if (this.handlerExceptionResolvers != null) {
 			/*  异常处理
-			 *  ExceptionHandlerExceptionResolver -->  全局异常处理 @ExceptionHandler <-- AbstractHandlerExceptionResolver
+			 *  ExceptionHandlerExceptionResolver -->  全局异常处理 @HandlerException <-- AbstractHandlerExceptionResolver
 			 *  ResponseStatusExceptionResolver   -->  @ResponseStatus注解的Exception
 			 *  DefaultHandlerExceptionResolver   -->  http 默认异常
 			 */
