@@ -31,7 +31,7 @@ public class MyAppConfig {
 		return conf;
 	}
 
-	@Bean /* <Bean>类似，factoryBeanName=myAppConfig， factoryMethodName=prizeConf */
+	@Bean /* <Bean>类似，factoryBeanName=myAppConfig， factoryMethodName=prizeConf(User prizeUser) */
 	PrizeConf prizeConf(User prizeUser){
 		PrizeConf conf = new PrizeConf(222L, "一等奖");
 		conf.setPrizeUser(prizeUser);

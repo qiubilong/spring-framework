@@ -441,7 +441,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		while (!candidates.isEmpty());
 
 		// Register the ImportRegistry as a bean in order to support ImportAware @Configuration classes
-		if (sbr != null && !sbr.containsSingleton(IMPORT_REGISTRY_BEAN_NAME)) {
+		if (sbr != null && !sbr.containsSingleton(IMPORT_REGISTRY_BEAN_NAME)) { /* 配置类映射关系 */
 			sbr.registerSingleton(IMPORT_REGISTRY_BEAN_NAME, parser.getImportRegistry());
 		}
 
@@ -555,7 +555,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				ImportRegistry ir = this.beanFactory.getBean(IMPORT_REGISTRY_BEAN_NAME, ImportRegistry.class);
 				AnnotationMetadata importingClass = ir.getImportingClassFor(ClassUtils.getUserClass(bean).getName());
 				if (importingClass != null) {
-					importAware.setImportMetadata(importingClass);
+					importAware.setImportMetadata(importingClass);/* 导入Bean的配置类，如MyAppConfig */
 				}
 			}
 			return bean;
