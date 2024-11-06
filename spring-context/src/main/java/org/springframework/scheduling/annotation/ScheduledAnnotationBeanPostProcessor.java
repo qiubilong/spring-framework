@@ -348,7 +348,7 @@ public class ScheduledAnnotationBeanPostProcessor
 		return bean;
 	}
 
-	@Override
+	@Override  /* Bean实例化最后阶段 - 拓展点 */
 	public Object postProcessAfterInitialization(Object bean, String beanName) {
 		if (bean instanceof AopInfrastructureBean || bean instanceof TaskScheduler ||
 				bean instanceof ScheduledExecutorService) {

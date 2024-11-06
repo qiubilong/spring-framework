@@ -428,8 +428,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	@Override
 	public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
 			throws BeansException {
-		/* 动态代理Aop --> AnnotationAwareAspectJAutoProxyCreator --> AbstractAutoProxyCreator
-		*
+		/* 最后阶段 - AfterInitialization
+		*  AnnotationAwareAspectJAutoProxyCreator --> AbstractAutoProxyCreator --> 动态代理 --> 切面、事务
+		*  AsyncAnnotationBeanPostProcessor   --> 异步
+		*  ScheduledAnnotationBeanPostProcessor --> 定时器
 		* */
 		Object result = existingBean;
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
@@ -596,7 +598,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 			/* 用于解决循环依赖 --> 提前曝光原始对象or代理对象 --> 三级缓存singletonFactory早期对象单例工厂
 			*  二级缓存earlySingletonObjects，缓存singletonFactory结果。
-			*  为什么需要二级缓存，假设C是需要代理对象，那么当A、B都依赖到C时，二级缓存能保证拿到同一个C代理对象
+			*  1、为什么需要二级缓存，假设C是需要代理对象，那么当A、B都依赖到C时，二级缓存能保证拿到同一个C代理对象
+			*  2、为什么不提前生成代理对象，因为大多数情况不会出现循环依赖，减少没必要性能消耗，执行正常Bean生命周期保证正确性
 			*  */
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
@@ -1441,9 +1444,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			if (pvs == null) {
 				pvs = mbd.getPropertyValues();
 			}
-			/* CommonAnnotationBeanPostProcessor --> 解析注解 @Resource
-			*  AutowiredAnnotationBeanPostProcessor -->  解析注解 @Value、@Autowired（@Qualifier）
-			* */
+			/* 属性注入阶段 - ProcessProperties
+			   CommonAnnotationBeanPostProcessor --> 解析注解 @Resource
+			   AutowiredAnnotationBeanPostProcessor -->  解析注解 @Value、@Autowired（@Qualifier）
+			  */
 			for (InstantiationAwareBeanPostProcessor bp : getBeanPostProcessorCache().instantiationAware) {
 				PropertyValues pvsToUse = bp.postProcessProperties(pvs, bw.getWrappedInstance(), beanName);
 				if (pvsToUse == null) {
@@ -1805,9 +1809,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					(mbd != null ? mbd.getResourceDescription() : null), beanName, ex.getMessage(), ex);
 		}
 		if (mbd == null || !mbd.isSynthetic()) {
-			/* bean实例化和初始化后，最后的BeanPostProcessor拓展点，实现动态代理AOP
-			*
-			*  */
+			/*  bean实例化和初始化后 - 最后阶段 - AfterInitialization
+			 *  AnnotationAwareAspectJAutoProxyCreator --> AbstractAutoProxyCreator --> 动态代理 --> 切面、事务
+			 *  AsyncAnnotationBeanPostProcessor   --> 异步
+			 *  ScheduledAnnotationBeanPostProcessor --> 定时器
+			 * */
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
 

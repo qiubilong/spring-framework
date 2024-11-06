@@ -1809,8 +1809,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			return beanInstance;
 		}
 
-		//为什么有这段逻辑，因为spring想要实现的效果是，BeanFactory的beanName代表的是它创建对象的beanName
-
+		/* 为什么有这段逻辑，因为spring想要实现的效果是，FactoryBean的beanName代表的是它创建对象的beanName */
 		Object object = null;
 		if (mbd != null) {
 			mbd.isFactoryBean = true;
@@ -1826,7 +1825,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				mbd = getMergedLocalBeanDefinition(beanName);
 			}
 			boolean synthetic = (mbd != null && mbd.isSynthetic());
-			//这个Bean是工厂Bean，而且不是想要获取工厂Bean，则调用BeanFactory.getObject()返回工厂的创建的Bean
+			/* 2、这个Bean是工厂Bean，而且不是想要获取工厂Bean，则调用BeanFactory.getObject()返回的创建的Bean */
 			object = getObjectFromFactoryBean(factoryBean, beanName, !synthetic);
 		}
 		return object;

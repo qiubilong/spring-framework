@@ -19,8 +19,8 @@ import java.util.Random;
 @Configuration(enforceUniqueMethods=false)/* 加不加@Configuration可以实例化@Bean，加@Configuration会生成代理配置类，保证内部多次方法调用只会生成一个bean  */
 @Conditional(MyConditional.class)
 
-@EnableAsync      /* 开启异步功能 -->导入配置类 AsyncConfigurationSelector -->注入  AsyncAnnotationBeanPostProcessor */
-@EnableScheduling /* 开启定时功能 -->导入配置类 SchedulingConfiguration    -->注入 ScheduledAnnotationBeanPostProcessor -->解析@Schedule   */
+@EnableAsync      /* 开启异步功能 -->导入配置类 AsyncConfigurationSelector -->注入 AsyncAnnotationBeanPostProcessor --> AsyncAnnotationAdvisor --> 解析 @Async --> AnnotationAsyncExecutionInterceptor */
+@EnableScheduling /* 开启定时功能 -->导入配置类 SchedulingConfiguration    -->注入 ScheduledAnnotationBeanPostProcessor -->解析 @Schedule   */
 
 public class MyAppConfig {
 

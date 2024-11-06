@@ -142,7 +142,7 @@ public class AsyncAnnotationBeanPostProcessor extends AbstractBeanFactoryAwareAd
 	}
 
 
-	@Override
+	@Override  /* BeanFactoryAware回调  */
 	public void setBeanFactory(BeanFactory beanFactory) {
 		super.setBeanFactory(beanFactory);
         /* 异步代理增强器Advisor = Advice代理拦截器（AnnotationAsyncExecutionInterceptor） + PointCut（ @Async匹配）  */
