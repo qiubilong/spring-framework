@@ -416,6 +416,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		Object result = existingBean;
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
+			/*
+			* ImportAwareBeanPostProcessor            --> 注入注解所在配置类setImportMetadata(importingClass)
+			* InitDestroyAnnotationBeanPostProcessor  --> 解析@PostConstruct
+			 * */
 			Object current = processor.postProcessBeforeInitialization(result, beanName);
 			if (current == null) {
 				return result;
@@ -599,7 +603,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			/* 用于解决循环依赖 --> 提前曝光原始对象or代理对象 --> 三级缓存singletonFactory早期对象单例工厂
 			*  二级缓存earlySingletonObjects，缓存singletonFactory结果。
 			*  1、为什么需要二级缓存，假设C是需要代理对象，那么当A、B都依赖到C时，二级缓存能保证拿到同一个C代理对象
-			*  2、为什么不提前生成代理对象，因为大多数情况不会出现循环依赖，减少没必要性能消耗，执行正常Bean生命周期保证正确性
+			*  2、为什么不提前生成代理对象，因为大多数情况不会出现循环依赖，减少没必要性能消耗，也保证Bean初始化的正确性（例如多次动态代理）
 			*  */
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
@@ -625,7 +629,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			Object earlySingletonReference = getSingleton(beanName, false);
 			/* earlySingletonReference != null --> 发生了循环依赖，提前生成了动态代理对象  */
 			if (earlySingletonReference != null) {
-				/* exposedObject == bean --> 仍然是原始对象 --> 返回提前生成的动态代理对象*/
+				/* exposedObject == bean --> 仍然是原始对象(说明执行initializeBean时没发生代理（AOP代理缓存存在则跳过）) --> 返回提前生成的动态代理对象*/
 				if (exposedObject == bean) {
 					exposedObject = earlySingletonReference;
 				}

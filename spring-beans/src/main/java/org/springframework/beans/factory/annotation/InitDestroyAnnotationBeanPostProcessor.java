@@ -185,11 +185,11 @@ public class InitDestroyAnnotationBeanPostProcessor implements DestructionAwareB
 		return mergedNames.distinct().toArray(String[]::new);
 	}
 
-	@Override
+	@Override  /* 执行InitializingBean.afterPropertiesSet前 -- */
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
+		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());/* 解析注解@PostConstruct */
 		try {
-			metadata.invokeInitMethods(bean, beanName);
+			metadata.invokeInitMethods(bean, beanName); /* 执行@PostConstruct方法Method */
 		}
 		catch (InvocationTargetException ex) {
 			throw new BeanCreationException(beanName, "Invocation of init method failed", ex.getTargetException());
@@ -242,7 +242,7 @@ public class InitDestroyAnnotationBeanPostProcessor implements DestructionAwareB
 			synchronized (this.lifecycleMetadataCache) {
 				metadata = this.lifecycleMetadataCache.get(clazz);
 				if (metadata == null) {
-					metadata = buildLifecycleMetadata(clazz);
+					metadata = buildLifecycleMetadata(clazz); /* 解析注解@PostContruct */
 					this.lifecycleMetadataCache.put(clazz, metadata);
 				}
 				return metadata;

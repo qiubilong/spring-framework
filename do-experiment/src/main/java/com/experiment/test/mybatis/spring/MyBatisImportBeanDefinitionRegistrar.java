@@ -21,7 +21,7 @@ public class MyBatisImportBeanDefinitionRegistrar implements ImportBeanDefinitio
 		ImportBeanDefinitionRegistrar.super.registerBeanDefinitions(importingClassMetadata, registry, importBeanNameGenerator);
 	}
 
-	@Override
+	@Override /* importingClassMetadata == 注解所在类，如MyBatisConfig  */
 	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
 
 		Map<String, Object> annotationAttributes = importingClassMetadata.getAnnotationAttributes(MyBatisMapperScan.class.getName());
