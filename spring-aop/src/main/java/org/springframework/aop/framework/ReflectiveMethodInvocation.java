@@ -156,7 +156,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 
 
 	@Override
-	@Nullable
+	@Nullable /* 代理拦截器 */
 	public Object proceed() throws Throwable {
 		// We start with an index of -1 and increment early.
 		/* currentInterceptorIndex == 拦截器执行索引 */

@@ -378,7 +378,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	@Override
 	public void addAdvice(Advice advice) throws AopConfigException {
 		int pos = this.advisors.size();
-		addAdvice(pos, advice);
+		addAdvice(pos, advice);/* Advice --> DefaultPointcutAdvisor */
 	}
 
 	/**
@@ -397,8 +397,8 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 			throw new AopConfigException("DynamicIntroductionAdvice may only be added as part of IntroductionAdvisor");
 		}
 		else {
-			/* 将advice包装成简单advisor */
-			/* advice --> DefaultPointcutAdvisor */
+			/* 将Advice包装成简单Advisor */
+			/* Advice --> DefaultPointcutAdvisor */
 			addAdvisor(pos, new DefaultPointcutAdvisor(advice));
 		}
 	}
