@@ -54,10 +54,11 @@ public abstract class AbstractAsyncConfiguration implements ImportAware {
 	@Nullable
 	protected Supplier<AsyncUncaughtExceptionHandler> exceptionHandler;
 
-
+	/* ImportAwareBeanPostProcessor.postProcessBeforeInitialization()回调
+	*  importMetadata == 注解所在配置类 */
 	@Override
 	public void setImportMetadata(AnnotationMetadata importMetadata) {
-		this.enableAsync = AnnotationAttributes.fromMap(
+		this.enableAsync = AnnotationAttributes.fromMap( /* 解析配置@EnableAsync */
 				importMetadata.getAnnotationAttributes(EnableAsync.class.getName()));
 		if (this.enableAsync == null) {
 			throw new IllegalArgumentException(
@@ -68,7 +69,7 @@ public abstract class AbstractAsyncConfiguration implements ImportAware {
 	/**
 	 * Collect any {@link AsyncConfigurer} beans through autowiring.
 	 */
-	@Autowired
+	@Autowired /* 属性注入 */
 	void setConfigurers(ObjectProvider<AsyncConfigurer> configurers) {
 		Supplier<AsyncConfigurer> configurer = SingletonSupplier.of(() -> {
 			List<AsyncConfigurer> candidates = configurers.stream().toList();

@@ -62,12 +62,12 @@ public abstract class AdviceModeImportSelector<A extends Annotation> implements 
 	 * on the importing {@code @Configuration} class or if {@link #selectImports(AdviceMode)}
 	 * returns {@code null}
 	 */
-	@Override /* importingClassMetadata == 声明注解（@EnableAsync ）的配置类，如 MyAppConfig*/
+	@Override /* importingClassMetadata == 注解（@EnableAsync ）所在的配置类，如MyAppConfig */
 	public final String[] selectImports(AnnotationMetadata importingClassMetadata) {
-		/* 解析泛型，如EnableAsync */
+		/* 解析泛型，如@EnableAsync */
 		Class<?> annType = GenericTypeResolver.resolveTypeArgument(getClass(), AdviceModeImportSelector.class);
 		Assert.state(annType != null, "Unresolvable type argument for AdviceModeImportSelector");
-        /* 解析注解配置信息 */
+        /* 解析注解配置信息（@EnableAsync） */
 		AnnotationAttributes attributes = AnnotationConfigUtils.attributesFor(importingClassMetadata, annType);
 		if (attributes == null) {
 			throw new IllegalArgumentException(String.format(

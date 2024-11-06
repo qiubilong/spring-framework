@@ -38,14 +38,14 @@ import org.springframework.util.Assert;
  * @see AsyncConfigurationSelector
  */
 @Configuration(proxyBeanMethods = false)
-@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE) /* 支持异步@Async */
 public class ProxyAsyncConfiguration extends AbstractAsyncConfiguration {
 
 	@Bean(name = TaskManagementConfigUtils.ASYNC_ANNOTATION_PROCESSOR_BEAN_NAME)
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public AsyncAnnotationBeanPostProcessor asyncAdvisor() {
 		Assert.state(this.enableAsync != null, "@EnableAsync annotation metadata was not injected");
-		AsyncAnnotationBeanPostProcessor bpp = new AsyncAnnotationBeanPostProcessor(); /* 异步BeanPostProcessor */
+		AsyncAnnotationBeanPostProcessor bpp = new AsyncAnnotationBeanPostProcessor(); /* 支持异步 @Async 处理器BeanPostProcessor */
 		bpp.configure(this.executor, this.exceptionHandler);
 		Class<? extends Annotation> customAsyncAnnotation = this.enableAsync.getClass("annotation");
 		if (customAsyncAnnotation != AnnotationUtils.getDefaultValue(EnableAsync.class, "annotation")) {
