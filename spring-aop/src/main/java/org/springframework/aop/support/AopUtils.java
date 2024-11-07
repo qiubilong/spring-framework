@@ -228,7 +228,7 @@ public abstract class AopUtils {
 		}
 
 		MethodMatcher methodMatcher = pc.getMethodMatcher();
-		if (methodMatcher == MethodMatcher.TRUE) {
+		if (methodMatcher == MethodMatcher.TRUE) {//全匹配
 			// No need to iterate the methods if we're matching any method anyway...
 			return true;
 		}
@@ -245,11 +245,11 @@ public abstract class AopUtils {
 		classes.addAll(ClassUtils.getAllInterfacesForClassAsSet(targetClass));
 
 		for (Class<?> clazz : classes) {
-			Method[] methods = ReflectionUtils.getAllDeclaredMethods(clazz);
+			Method[] methods = ReflectionUtils.getAllDeclaredMethods(clazz);/* 遍历所有Method  */
 			for (Method method : methods) {
 				if (introductionAwareMethodMatcher != null ?
 						introductionAwareMethodMatcher.matches(method, targetClass, hasIntroductions) :
-						/* 方法匹配 */
+						/* TransactionAttributeSourcePointcut --> 事务PointCut */
 						methodMatcher.matches(method, targetClass)) {
 					return true;
 				}

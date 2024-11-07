@@ -49,7 +49,7 @@ public class TransactionManagementConfigurationSelector extends AdviceModeImport
 		return switch (adviceMode) {
 			/* 默认Proxy */
 			case PROXY -> new String[] {AutoProxyRegistrar.class.getName(),/* 注入AOP子类InfrastructureAdvisorAutoProxyCreator */
-					ProxyTransactionManagementConfiguration.class.getName()};/* 导入Bean，事务Advisor */
+					ProxyTransactionManagementConfiguration.class.getName()};/* 导入Bean，事务Advisor（BeanFactoryTransactionAttributeSourceAdvisor） */
 			case ASPECTJ -> new String[] {determineTransactionAspectClass()};
 		};
 	}
