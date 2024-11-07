@@ -9,16 +9,17 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2024/11/7
  */
 @Component
-public class MyAsyncService {
+public class MyAsyncService implements IMyAsyncService{
 
-	@Async
+	//@Async
 	public void asyncTest1(){
 		System.out.println("asyncTest1");
 	}
 
 	@Async("myTaskExecutor")
 	@Transactional
-	public final void asyncTest2(){
+	@Override
+	public void asyncTest2(){
 		System.out.println("asyncTest2");
 		throw new UnsupportedOperationException();
 	}
