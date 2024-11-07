@@ -16,4 +16,11 @@ public class UserServiceAopImpl implements UserServiceAopApi {
 		System.out.println("UserServiceAop test");
 		throw new NullPointerException();
 	}
+
+	public final void testFinal(){
+
+	}
+
+
+
 }

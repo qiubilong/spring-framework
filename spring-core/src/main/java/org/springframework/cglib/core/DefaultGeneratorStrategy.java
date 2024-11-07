@@ -23,7 +23,7 @@ public class DefaultGeneratorStrategy implements GeneratorStrategy {
     @Override
 	public byte[] generate(ClassGenerator cg) throws Exception {
         DebuggingClassWriter cw = getClassVisitor();
-        transform(cg).generateClass(cw);
+        transform(cg).generateClass(cw);//Enhancer.generateClass()
         return transform(cw.toByteArray());
     }
 

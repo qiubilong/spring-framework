@@ -639,13 +639,14 @@ public class Enhancer extends AbstractClassGenerator {
 			}
 			methods.addAll(interfaceMethods);
 		}
-		CollectionUtils.filter(methods, new RejectModifierPredicate(Constants.ACC_STATIC));
-		CollectionUtils.filter(methods, new VisibilityPredicate(superclass, true));
+		/* 生成动态代理 - 方法过滤器 */
+		CollectionUtils.filter(methods, new RejectModifierPredicate(Constants.ACC_STATIC));    /* 排除静态static方法 */
+		CollectionUtils.filter(methods, new VisibilityPredicate(superclass, true)); /* 排除私有private方法 */
 		CollectionUtils.filter(methods, new DuplicatesPredicate());
-		CollectionUtils.filter(methods, new RejectModifierPredicate(Constants.ACC_FINAL));
+		CollectionUtils.filter(methods, new RejectModifierPredicate(Constants.ACC_FINAL));     /* 排除不可变final方法 */
 	}
 
-	@Override
+	@Override /* 生成代理类核心逻辑 */
 	public void generateClass(ClassVisitor v) throws Exception {
 		Class sc = (superclass == null) ? Object.class : superclass;
 

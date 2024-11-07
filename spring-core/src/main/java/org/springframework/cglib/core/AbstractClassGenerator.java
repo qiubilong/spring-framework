@@ -100,7 +100,7 @@ abstract public class AbstractClassGenerator<T> implements ClassGenerator {
 			}
 			this.classLoader = new WeakReference<>(classLoader);
 			Function<AbstractClassGenerator, Object> load = gen -> {
-				Class klass = gen.generate(ClassLoaderData.this);
+				Class klass = gen.generate(ClassLoaderData.this);/* 生成代理类 - Enhancer.generate方法回调 */
 				return gen.wrapCachedClass(klass);
 			};
 			generatedClasses = new LoadingCache<>(GET_KEY, load);
@@ -123,7 +123,7 @@ abstract public class AbstractClassGenerator<T> implements ClassGenerator {
 				return gen.generate(ClassLoaderData.this);
 			}
 			else {
-				Object cachedValue = generatedClasses.get(gen);
+				Object cachedValue = generatedClasses.get(gen);/* 生成代理类 - Enhancer.generate */
 				return gen.unwrapCachedValue(cachedValue);
 			}
 		}
@@ -310,7 +310,7 @@ abstract public class AbstractClassGenerator<T> implements ClassGenerator {
 				}
 			}
 			this.key = key;
-			Object obj = data.get(this, getUseCache());
+			Object obj = data.get(this, getUseCache());/* 生成代理类 */
 			if (obj instanceof Class<?> clazz) {
 				return firstInstance(clazz);
 			}
@@ -324,7 +324,7 @@ abstract public class AbstractClassGenerator<T> implements ClassGenerator {
 		}
 	}
 
-	protected Class generate(ClassLoaderData data) {
+	protected Class generate(ClassLoaderData data) { /* 生成代理类 */
 		Class gen;
 		Object save = CURRENT.get();
 		CURRENT.set(this);
@@ -359,7 +359,7 @@ abstract public class AbstractClassGenerator<T> implements ClassGenerator {
 						"Make sure to include a pre-generated class on the classpath instead: " + getClassName());
 			}
 			// SPRING PATCH END
-			byte[] b = strategy.generate(this);
+			byte[] b = strategy.generate(this);/* 生成代理类- DefaultGeneratorStrategy */
 			String className = ClassNameReader.getClassName(new ClassReader(b));
 			ProtectionDomain protectionDomain = getProtectionDomain();
 			synchronized (classLoader) { // just in case
