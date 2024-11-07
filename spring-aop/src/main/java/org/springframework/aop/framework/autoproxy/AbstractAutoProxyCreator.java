@@ -484,7 +484,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 		/* jdk/cglib 动态代理工厂 */
 		/*
-		*  JdkDynamicAopProxy -->  DynamicAdvisedInterceptor
+		*  JdkDynamicAopProxy -->  InvocationHandler.invoke()            -->创建代理拦截链ReflectiveMethodInvocation --> 执行Advice(MethodInterceptor)
+		*  CglibAopProxy      -->  DynamicAdvisedInterceptor.intercept() -->创建代理拦截链ReflectiveMethodInvocation --> 执行Advice(MethodInterceptor)
 		* */
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.copyFrom(this);
@@ -509,7 +510,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		}
 		/* Advice  --> DefaultPointcutAdvisor */
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
-		proxyFactory.addAdvisors(advisors);
+		proxyFactory.addAdvisors(advisors);        /* 增强器Advisor */
 		proxyFactory.setTargetSource(targetSource);/* 目标对象bean */
 		customizeProxyFactory(proxyFactory);
 
@@ -523,7 +524,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		if (classLoader instanceof SmartClassLoader smartClassLoader && classLoader != beanClass.getClassLoader()) {
 			classLoader = smartClassLoader.getOriginalClassLoader();
 		}
-		/*  proxyFactory.getProxy(classLoader)) --> 创建代理类  */
+		/*  proxyFactory.getProxy(classLoader)) --> 创建代理对象  */
 		return (classOnly ? proxyFactory.getProxyClass(classLoader) : proxyFactory.getProxy(classLoader));
 	}
 

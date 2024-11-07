@@ -98,7 +98,7 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 	 * otherwise.
 	 */
 	@Override
-	@Nullable
+	@Nullable  /* 异步代理入口Advice */
 	public Object invoke(final MethodInvocation invocation) throws Throwable {
 		Class<?> targetClass = (invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null);
 		Method specificMethod = ClassUtils.getMostSpecificMethod(invocation.getMethod(), targetClass);

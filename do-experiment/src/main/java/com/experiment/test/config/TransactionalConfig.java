@@ -26,7 +26,7 @@ public class TransactionalConfig {
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/experiment?characterEncoding=utf-8&amp;serverTimezone=Asia/Shanghai&amp;useSSL=false");
+		dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/experiment?characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false");
 		dataSource.setUsername("root");
 		dataSource.setPassword("123456");
 		return dataSource;
