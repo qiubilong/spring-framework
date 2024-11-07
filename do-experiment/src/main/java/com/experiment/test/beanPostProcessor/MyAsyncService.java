@@ -18,7 +18,8 @@ public class MyAsyncService {
 
 	@Async("myTaskExecutor")
 	@Transactional
-	public void asyncTest2(){
+	public final void asyncTest2(){
 		System.out.println("asyncTest2");
+		throw new UnsupportedOperationException();
 	}
 }
