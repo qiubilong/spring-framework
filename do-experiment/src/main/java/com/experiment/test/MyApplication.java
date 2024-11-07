@@ -4,6 +4,7 @@ import com.experiment.spring.test.service.MyUserInfoService;
 import com.experiment.test.aop.impl.MallAopService;
 import com.experiment.test.aop.impl.UserServiceAopImpl;
 import com.experiment.test.autowired.AutowiredByTypeService;
+import com.experiment.test.beanPostProcessor.MyAsyncService;
 import com.experiment.test.config.MyAppConfig;
 import com.experiment.test.factory.OrderFeignService;
 import com.experiment.test.mybatis.test.service.MyBatisExchangeService;
@@ -84,6 +85,10 @@ public class MyApplication {
 		userServiceAopImpl.ping();
 		System.out.println();
 		applicationContext.getBean(MallAopService.class).testAop();
+
+        //异步
+		applicationContext.getBean(MyAsyncService.class).asyncTest1();
+		applicationContext.getBean(MyAsyncService.class).asyncTest2();
 
 	}
 }

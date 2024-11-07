@@ -104,7 +104,7 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 		Method specificMethod = ClassUtils.getMostSpecificMethod(invocation.getMethod(), targetClass);
 		final Method userDeclaredMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
 
-		AsyncTaskExecutor executor = determineAsyncExecutor(userDeclaredMethod);
+		AsyncTaskExecutor executor = determineAsyncExecutor(userDeclaredMethod);/* 指定线程池 -->通用TaskExecutor --> 创建 SimpleAsyncTaskExecutor  */
 		if (executor == null) {
 			throw new IllegalStateException(
 					"No executor specified and no default executor set on AsyncExecutionInterceptor either");
@@ -157,8 +157,8 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 	@Override
 	@Nullable
 	protected Executor getDefaultExecutor(@Nullable BeanFactory beanFactory) {
-		Executor defaultExecutor = super.getDefaultExecutor(beanFactory);
-		return (defaultExecutor != null ? defaultExecutor : new SimpleAsyncTaskExecutor());
+		Executor defaultExecutor = super.getDefaultExecutor(beanFactory); /* 获取容器TaskExecutor */
+		return (defaultExecutor != null ? defaultExecutor : new SimpleAsyncTaskExecutor());/* 创建默认线程池SimpleAsyncTaskExecutor */
 	}
 
 	@Override

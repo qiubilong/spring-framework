@@ -8,8 +8,10 @@ import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Random;
+import java.util.concurrent.Executor;
 
 /**
  * @author chenxuegui
@@ -49,5 +51,28 @@ public class MyAppConfig {
 		messageSource.setBasename("i18n/messages");
 		messageSource.setDefaultEncoding("utf-8");
 		return messageSource;
+	}
+
+
+	@Bean("myTaskExecutor")
+	public Executor getAsyncExecutor() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setBeanName("myTaskExecutor");
+		executor.setCorePoolSize(5); // 设置核心线程数
+		executor.setMaxPoolSize(10); // 设置最大线程数
+		executor.setQueueCapacity(100); // 设置队列容量
+		executor.initialize();
+		return executor;
+	}
+
+	@Bean("myTaskExecutor2")
+	public Executor getAsyncExecutor2() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setBeanName("myTaskExecutor2");
+		executor.setCorePoolSize(5); // 设置核心线程数
+		executor.setMaxPoolSize(10); // 设置最大线程数
+		executor.setQueueCapacity(100); // 设置队列容量
+		executor.initialize();
+		return executor;
 	}
 }

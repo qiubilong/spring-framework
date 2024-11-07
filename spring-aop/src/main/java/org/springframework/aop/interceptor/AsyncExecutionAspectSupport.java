@@ -93,8 +93,8 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 	 * executor will be looked up at invocation time against the enclosing bean factory
 	 */
 	public AsyncExecutionAspectSupport(@Nullable Executor defaultExecutor) {
-		this.defaultExecutor = new SingletonSupplier<>(defaultExecutor, () -> getDefaultExecutor(this.beanFactory));
-		this.exceptionHandler = SingletonSupplier.of(SimpleAsyncUncaughtExceptionHandler::new);
+		this.defaultExecutor = new SingletonSupplier<>(defaultExecutor, () -> getDefaultExecutor(this.beanFactory)); /* 默认异步线程池 */
+		this.exceptionHandler = SingletonSupplier.of(SimpleAsyncUncaughtExceptionHandler::new);/* 默认异步错误处理器 */
 	}
 
 	/**
@@ -119,7 +119,7 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 	public void configure(@Nullable Supplier<Executor> defaultExecutor,
 			@Nullable Supplier<AsyncUncaughtExceptionHandler> exceptionHandler) {
 
-		this.defaultExecutor = new SingletonSupplier<>(defaultExecutor, () -> getDefaultExecutor(this.beanFactory));
+		this.defaultExecutor = new SingletonSupplier<>(defaultExecutor, () -> getDefaultExecutor(this.beanFactory));/* 获取默认线程池 */
 		this.exceptionHandler = new SingletonSupplier<>(exceptionHandler, SimpleAsyncUncaughtExceptionHandler::new);
 	}
 
@@ -177,7 +177,7 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 				targetExecutor = findQualifiedExecutor(this.beanFactory, qualifier);
 			}
 			else {
-				targetExecutor = this.defaultExecutor.get();
+				targetExecutor = this.defaultExecutor.get(); /* 默认线程池 --> getDefaultExecutor()在BeanFactory中获取TaskExecutor --> 创建 SimpleAsyncTaskExecutor  */
 			}
 			if (targetExecutor == null) {
 				return null;
@@ -238,7 +238,7 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 				// Search for TaskExecutor bean... not plain Executor since that would
 				// match with ScheduledExecutorService as well, which is unusable for
 				// our purposes here. TaskExecutor is more clearly designed for it.
-				return beanFactory.getBean(TaskExecutor.class);
+				return beanFactory.getBean(TaskExecutor.class);/* 自定义通用线程池TaskExecutor */
 			}
 			catch (NoUniqueBeanDefinitionException ex) {
 				logger.debug("Could not find unique TaskExecutor bean. " +

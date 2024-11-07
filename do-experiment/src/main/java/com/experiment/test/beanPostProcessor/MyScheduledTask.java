@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MyScheduledTask {
 
-	/* 模拟出现并发执行 */
+	/* 模拟出现并发执行，未出现并发，单线程池执行？ */
 	/* ScheduledAnnotationBeanPostProcessor --> 解析@Scheduled -->  */
     @Scheduled(fixedRate = 1000) // Executes every 1 second
     public void executeTask() {

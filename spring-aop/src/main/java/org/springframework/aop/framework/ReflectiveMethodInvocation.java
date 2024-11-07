@@ -64,11 +64,11 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 	protected final Object proxy;
 
 	@Nullable
-	protected final Object target;
+	protected final Object target; /* 目标对象 */
 
-	protected final Method method;
+	protected final Method method; /* 目标方法 */
 
-	protected Object[] arguments;
+	protected Object[] arguments;  /* 目标方法参数 */
 
 	@Nullable
 	private final Class<?> targetClass;
@@ -161,7 +161,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 		// We start with an index of -1 and increment early.
 		/* currentInterceptorIndex == 拦截器执行索引 */
 		if (this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) {
-			/* 最后执行被代理对象的方法 */
+			/* 最后执行目标对象目标方法Method */
 			return invokeJoinpoint();
 		}
 

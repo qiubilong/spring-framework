@@ -68,8 +68,22 @@ public abstract class AbstractAsyncConfiguration implements ImportAware {
 
 	/**
 	 * Collect any {@link AsyncConfigurer} beans through autowiring.
+	 * ===========AsyncConfigurer自定义异步线程池===============================
+	 * public class AsyncConfig implements AsyncConfigurer {
+	 *     @Override
+	 *     public Executor getAsyncExecutor() {
+	 *         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+	 *         executor.setCorePoolSize(5); // 设置核心线程数
+	 *         executor.setMaxPoolSize(10); // 设置最大线程数
+	 *         executor.setQueueCapacity(100); // 设置队列容量
+	 *         executor.initialize();
+	 *         return executor;
+	 *     }
+	 *     // 可以重写其他方法来处理异常等
+	 * }
+	 *
 	 */
-	@Autowired /* 属性注入 */
+	@Autowired /* 属性注入回调 */
 	void setConfigurers(ObjectProvider<AsyncConfigurer> configurers) {
 		Supplier<AsyncConfigurer> configurer = SingletonSupplier.of(() -> {
 			List<AsyncConfigurer> candidates = configurers.stream().toList();
@@ -81,7 +95,7 @@ public abstract class AbstractAsyncConfiguration implements ImportAware {
 			}
 			return candidates.get(0);
 		});
-		this.executor = adapt(configurer, AsyncConfigurer::getAsyncExecutor);
+		this.executor = adapt(configurer, AsyncConfigurer::getAsyncExecutor);//SingletonSupplier运行时获取
 		this.exceptionHandler = adapt(configurer, AsyncConfigurer::getAsyncUncaughtExceptionHandler);
 	}
 

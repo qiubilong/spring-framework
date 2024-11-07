@@ -43,7 +43,7 @@ public class SingletonSupplier<T> implements Supplier<T> {
 	private final Supplier<? extends T> defaultSupplier;
 
 	@Nullable
-	private volatile T singletonInstance;
+	private volatile T singletonInstance; /* 单例Bean */
 
 
 	/**
@@ -89,15 +89,15 @@ public class SingletonSupplier<T> implements Supplier<T> {
 	@Nullable
 	public T get() {
 		T instance = this.singletonInstance;
-		if (instance == null) {
+		if (instance == null) {         /* 懒加载双重null校验 */
 			synchronized (this) {
 				instance = this.singletonInstance;
-				if (instance == null) {
+				if (instance == null) { /* 懒加载双重null校验 */
 					if (this.instanceSupplier != null) {
 						instance = this.instanceSupplier.get();
 					}
 					if (instance == null && this.defaultSupplier != null) {
-						instance = this.defaultSupplier.get();
+						instance = this.defaultSupplier.get(); /* 默认值 */
 					}
 					this.singletonInstance = instance;
 				}

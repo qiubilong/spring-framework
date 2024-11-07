@@ -2008,6 +2008,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/**
 	 * Serializable ObjectFactory/ObjectProvider for lazy resolution of a dependency.
 	 */
+	/* 运行时按需获取Spring容器中的bean
+	*
+	*  */
 	private class DependencyObjectProvider implements BeanObjectProvider<Object> {
 
 		private final DependencyDescriptor descriptor;

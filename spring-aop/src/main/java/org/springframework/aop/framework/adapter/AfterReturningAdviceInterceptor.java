@@ -54,7 +54,7 @@ public class AfterReturningAdviceInterceptor implements MethodInterceptor, After
 	@Override
 	@Nullable
 	public Object invoke(MethodInvocation mi) throws Throwable {
-		/* 先执行代理责任链 --> 被代理方法 */
+		/* 先执行代理拦截链 --> 执行目标方法 */
 		Object retVal = mi.proceed();
 		/* 后执行代理逻辑 */
 		this.advice.afterReturning(retVal, mi.getMethod(), mi.getArguments(), mi.getThis());
