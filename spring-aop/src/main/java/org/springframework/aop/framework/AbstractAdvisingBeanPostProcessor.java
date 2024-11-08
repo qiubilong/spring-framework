@@ -92,7 +92,7 @@ public abstract class AbstractAdvisingBeanPostProcessor extends ProxyProcessorSu
 			return bean;
 		}
 
-		if (bean instanceof Advised advised) { /* 已经是代理对象 */
+		if (bean instanceof Advised advised) { /* 优先级最高的AbstractAutoProxyCreator已经创建了代理对象 */
 			if (!advised.isFrozen() && isEligible(AopUtils.getTargetClass(bean))) {
 				// Add our local Advisor to the existing proxy's Advisor chain.
 				if (this.beforeExistingAdvisors) {
