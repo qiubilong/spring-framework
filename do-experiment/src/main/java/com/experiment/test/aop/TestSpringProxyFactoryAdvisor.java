@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 public class TestSpringProxyFactoryAdvisor {
 
 	public static void main(String[] args) {
+		System.setProperty("jdk.proxy.ProxyGenerator.saveGeneratedFiles", "true");
 
 		UserServiceAopImpl target = new UserServiceAopImpl();
 
