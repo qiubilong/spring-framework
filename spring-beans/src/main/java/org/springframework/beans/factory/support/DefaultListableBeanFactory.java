@@ -1391,7 +1391,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			/* 注入-单个Bean -->筛选候选者 class --> @Qualifier */
 			Map<String, Object> matchingBeans = findAutowireCandidates(beanName, type, descriptor);
 			if (matchingBeans.isEmpty()) {
-				if (isRequired(descriptor)) {
+				if (isRequired(descriptor)) {//Bean不存在异常NoSuchBeanDefinitionException
 					raiseNoMatchingBeanFound(type, descriptor.getResolvableType(), descriptor);
 				}
 				return null;
@@ -1401,7 +1401,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			Object instanceCandidate;
 
 			if (matchingBeans.size() > 1) {
-				/* 多个候选者优先规则 --> @Primary > @Priority > name*/
+				/* 多个候选者优先规则 --> @Primary > @Priority > name  */
 				autowiredBeanName = determineAutowireCandidate(matchingBeans, descriptor);
 				if (autowiredBeanName == null) {
 					if (isRequired(descriptor) || !indicatesMultipleBeans(type)) {
