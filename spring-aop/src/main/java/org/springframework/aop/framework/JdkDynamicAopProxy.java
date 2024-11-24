@@ -106,7 +106,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 	public JdkDynamicAopProxy(AdvisedSupport config) throws AopConfigException {
 		Assert.notNull(config, "AdvisedSupport must not be null");
 		this.advised = config;                 /* 代理类实现Advised接口 */
-		this.proxiedInterfaces = AopProxyUtils.completeProxiedInterfaces(this.advised, true);
+		this.proxiedInterfaces = AopProxyUtils.completeProxiedInterfaces(this.advised, true); /* 继承代理对象接口 */
 		findDefinedEqualsAndHashCodeMethods(this.proxiedInterfaces);
 	}
 

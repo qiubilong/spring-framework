@@ -229,7 +229,7 @@ public class ScheduledAnnotationBeanPostProcessor
 		}
 	}
 
-	@Override
+	@Override /* App启动完成事件广播回调 -- 效果等同 SmartInitializingSingleton  */
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		if (event.getApplicationContext() == this.applicationContext) {
 			// Running in an ApplicationContext -> register tasks this late...
@@ -244,6 +244,7 @@ public class ScheduledAnnotationBeanPostProcessor
 			this.registrar.setScheduler(this.scheduler);
 		}
 
+		/* 1、SchedulingConfigurer 方式自定义任务线程池 */
 		if (this.beanFactory instanceof ListableBeanFactory lbf) {
 			Map<String, SchedulingConfigurer> beans = lbf.getBeansOfType(SchedulingConfigurer.class);
 			List<SchedulingConfigurer> configurers = new ArrayList<>(beans.values());
@@ -256,6 +257,7 @@ public class ScheduledAnnotationBeanPostProcessor
 		if (this.registrar.hasTasks() && this.registrar.getScheduler() == null) {
 			Assert.state(this.beanFactory != null, "BeanFactory must be set to find scheduler by type");
 			try {
+				/* 2、ThreadPoolTaskScheduler 方式自定义任务线程池 */
 				// Search for TaskScheduler bean...
 				this.registrar.setTaskScheduler(resolveSchedulerBean(this.beanFactory, TaskScheduler.class, false));
 			}
@@ -283,6 +285,7 @@ public class ScheduledAnnotationBeanPostProcessor
 							ex.getMessage());
 				}
 				// Search for ScheduledExecutorService bean next...
+				/* 3、ScheduledExecutorService 方式自定义任务线程池 */
 				try {
 					this.registrar.setScheduler(resolveSchedulerBean(this.beanFactory, ScheduledExecutorService.class, false));
 				}
@@ -315,7 +318,7 @@ public class ScheduledAnnotationBeanPostProcessor
 			}
 		}
 
-		this.registrar.afterPropertiesSet();
+		this.registrar.afterPropertiesSet(); /* 4、程序员未配置定时器线程池 -- 创建默认单线程池 Executors.newSingleThreadScheduledExecutor() */
 	}
 
 	private <T> T resolveSchedulerBean(BeanFactory beanFactory, Class<T> schedulerType, boolean byName) {

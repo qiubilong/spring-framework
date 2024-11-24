@@ -366,7 +366,7 @@ public class ScheduledTaskRegistrar implements ScheduledTaskHolder, Initializing
 	/**
 	 * Calls {@link #scheduleTasks()} at bean construction time.
 	 */
-	@Override
+	@Override /* Bean属性赋值后 - 初始化阶段回调 */
 	public void afterPropertiesSet() {
 		scheduleTasks();
 	}
@@ -377,7 +377,7 @@ public class ScheduledTaskRegistrar implements ScheduledTaskHolder, Initializing
 	 */
 	protected void scheduleTasks() {
 		if (this.taskScheduler == null) {
-			this.localExecutor = Executors.newSingleThreadScheduledExecutor();
+			this.localExecutor = Executors.newSingleThreadScheduledExecutor();/* 创建默认任务执行线程池 -- 单线程池 */
 			this.taskScheduler = new ConcurrentTaskScheduler(this.localExecutor);
 		}
 		if (this.triggerTasks != null) {

@@ -1,6 +1,7 @@
 package com.experiment.test.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @EnableTransactionManagement/* 开启事务 --> 导入 BeanFactoryTransactionAttributeSourceAdvisor、TransactionInterceptor */
+@Configuration
 public class TransactionalConfig {
 	@Bean
 	public JdbcTemplate jdbcTemplate() {
