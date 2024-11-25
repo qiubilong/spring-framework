@@ -71,9 +71,10 @@ import org.springframework.util.Assert;
  * @see org.springframework.jdbc.datasource.DataSourceTransactionManager
  * @see org.springframework.jdbc.datasource.DataSourceUtils#getConnection
  */
+/* 事务同步管理器 */
 public abstract class TransactionSynchronizationManager {
 
-	private static final ThreadLocal<Map<Object, Object>> resources =
+	private static final ThreadLocal<Map<Object, Object>> resources =    /* 数据库资源Connection等资源 */
 			new NamedThreadLocal<>("Transactional resources");
 
 	private static final ThreadLocal<Set<TransactionSynchronization>> synchronizations =
@@ -130,7 +131,7 @@ public abstract class TransactionSynchronizationManager {
 	 * @see ResourceTransactionManager#getResourceFactory()
 	 */
 	@Nullable
-	public static Object getResource(Object key) {
+	public static Object getResource(Object key) {         /* 获取当前线程ThreadLocal中的数据库连接 */
 		Object actualKey = TransactionSynchronizationUtils.unwrapResourceIfNecessary(key);
 		return doGetResource(actualKey);
 	}
@@ -139,7 +140,7 @@ public abstract class TransactionSynchronizationManager {
 	 * Actually check the value of the resource that is bound for the given key.
 	 */
 	@Nullable
-	private static Object doGetResource(Object actualKey) {
+	private static Object doGetResource(Object actualKey) { /* 获取当前线程ThreadLocal中的数据库连接 */
 		Map<Object, Object> map = resources.get();
 		if (map == null) {
 			return null;
