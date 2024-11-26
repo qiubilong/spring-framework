@@ -5,6 +5,7 @@ import com.experiment.test.mybatis.test.mapper.MomentCommentExtMapper;
 import com.experiment.test.mybatis.test.mapper.MomentCounterMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class MomentService {
     @Autowired
     private MomentCounterMapper momentCounterMapper;/* MapperProxy -->SqlSessionTemplate.sqlSessionInterceptor --> ThreadLocal获取DefaultSqlSession,不存在新建 --> 实现事务和线程安全  */
 
+	@Transactional
     public void batchInsertCounter(){
         List<MomentCounter> list = new ArrayList<>();
         list.add(new MomentCounter(System.currentTimeMillis()));

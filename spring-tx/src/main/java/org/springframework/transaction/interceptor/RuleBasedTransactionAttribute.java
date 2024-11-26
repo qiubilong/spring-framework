@@ -46,7 +46,7 @@ public class RuleBasedTransactionAttribute extends DefaultTransactionAttribute i
 
 
 	@Nullable
-	private List<RollbackRuleAttribute> rollbackRules;
+	private List<RollbackRuleAttribute> rollbackRules; /* 回滚规则 */
 
 
 	/**

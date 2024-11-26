@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 
 @EnableTransactionManagement/* 开启事务 --> 导入 BeanFactoryTransactionAttributeSourceAdvisor、TransactionInterceptor */
 @Configuration
-@MapperScan("com.experiment.test.mybatis.test.mapper") /* Mapper接口注入 -->Mybatis.Configuration.addMapper解析 --> 生成MapperProxy代理类 */
+@MapperScan("com.experiment.test.mybatis.test.mapper") /* Mapper接口扫描 -->Mybatis.Configuration.addMapper解析注入 --> 生成MapperProxy代理类 */
 public class DBConfig {
 
 	@Bean  /* 数据库操作工具类 - 支持事务 */

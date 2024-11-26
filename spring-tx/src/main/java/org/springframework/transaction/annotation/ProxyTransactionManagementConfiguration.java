@@ -56,15 +56,15 @@ public class ProxyTransactionManagementConfiguration extends AbstractTransaction
 		return advisor;
 	}
 
-	@Bean
+	@Bean /* 相当于Pointcut */
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public TransactionAttributeSource transactionAttributeSource() {
 		// Accept protected @Transactional methods on CGLIB proxies, as of 6.0.
-		/* 解析@Transactional注解，父类AbstractFallbackTransactionAttributeSource */
+		/* 解析@Transactional注解，父类 AbstractFallbackTransactionAttributeSource */
 		return new AnnotationTransactionAttributeSource(false);
 	}
 
-	/* 实现事务的方法拦截器MethodInterceptor */
+	/* Advice - 实现事务的方法拦截器MethodInterceptor */
 	@Bean
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public TransactionInterceptor transactionInterceptor(TransactionAttributeSource transactionAttributeSource) {

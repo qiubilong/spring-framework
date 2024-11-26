@@ -84,7 +84,7 @@ public class PropertySourceProcessor {
 			try {
 				String resolvedLocation = this.environment.resolveRequiredPlaceholders(location);
 				Resource resource = this.resourceLoader.getResource(resolvedLocation);
-				addPropertySource(factory.createPropertySource(name, new EncodedResource(resource, encoding)));
+				addPropertySource(factory.createPropertySource(name, new EncodedResource(resource, encoding)));/* 加载Properties配置文件 */
 			}
 			catch (IllegalArgumentException | FileNotFoundException | UnknownHostException | SocketException ex) {
 				// Placeholders not resolvable or resource not found when trying to open it

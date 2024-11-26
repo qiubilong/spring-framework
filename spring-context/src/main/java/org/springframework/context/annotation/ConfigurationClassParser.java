@@ -124,7 +124,7 @@ class ConfigurationClassParser {
 
 	private final ConditionEvaluator conditionEvaluator;
 
-	private final Map<ConfigurationClass, ConfigurationClass> configurationClasses = new LinkedHashMap<>();
+	private final Map<ConfigurationClass, ConfigurationClass> configurationClasses = new LinkedHashMap<>(); /* 解析得到的配置类*/
 
 	private final Map<String, ConfigurationClass> knownSuperclasses = new HashMap<>();
 
@@ -248,7 +248,7 @@ class ConfigurationClassParser {
 		}
 		while (sourceClass != null);
 
-		this.configurationClasses.put(configClass, configClass);
+		this.configurationClasses.put(configClass, configClass); /* 标记已经解析的配置类 */
 	}
 
 	/**
@@ -521,7 +521,7 @@ class ConfigurationClassParser {
 						// Candidate class is an ImportBeanDefinitionRegistrar ->
 						// delegate to it to register additional bean definitions
 						Class<?> candidateClass = candidate.loadClass();
-						/* 处理 ImportBeanDefinitionRegistrar --> 可获取注解信息  */
+						/* 处理 ImportBeanDefinitionRegistrar --> 可获取配置类（注解）信息  */
 						ImportBeanDefinitionRegistrar registrar =
 								ParserStrategyUtils.instantiateClass(candidateClass, ImportBeanDefinitionRegistrar.class,
 										this.environment, this.resourceLoader, this.registry);

@@ -74,7 +74,7 @@ class PropertySourceRegistry {
 				(factoryClass != PropertySourceFactory.class ? factoryClass : null);
 		PropertySourceDescriptor descriptor = new PropertySourceDescriptor(Arrays.asList(locations), ignoreResourceNotFound, name,
 				factorClassToUse, encoding);
-		this.propertySourceProcessor.processPropertySource(descriptor);
+		this.propertySourceProcessor.processPropertySource(descriptor);/*加载properties配置文件*/
 		this.descriptors.add(descriptor);
 	}
 
