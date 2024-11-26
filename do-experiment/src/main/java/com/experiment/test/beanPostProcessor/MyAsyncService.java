@@ -20,6 +20,6 @@ public class MyAsyncService {
 	@Transactional
 	public final void asyncTest2(){
 		System.out.println("asyncTest2");
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
 	}
 }

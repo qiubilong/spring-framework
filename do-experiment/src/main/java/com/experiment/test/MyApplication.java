@@ -7,6 +7,7 @@ import com.experiment.test.autowired.AutowiredByTypeService;
 import com.experiment.test.beanPostProcessor.MyAsyncService;
 import com.experiment.test.config.MyAppConfig;
 import com.experiment.test.factory.OrderFeignService;
+import com.experiment.test.mybatis.test.service.MomentService;
 import com.experiment.test.mybatis.test.service.MyBatisExchangeService;
 import com.experiment.test.service.PrizeService;
 import com.experiment.test.circularRef.UserInfoLazyService;
@@ -90,5 +91,10 @@ public class MyApplication {
 		applicationContext.getBean(MyAsyncService.class).asyncTest1();
 		applicationContext.getBean(MyAsyncService.class).asyncTest2();
 
+		//mybatis-测试
+		MomentService momentService = applicationContext.getBean(MomentService.class);
+		momentService.batchInsertCounter();
+		momentService.selectMomentLikeNum();
+		momentService.insertCounter();
 	}
 }

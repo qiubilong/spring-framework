@@ -15,8 +15,8 @@ import javax.sql.DataSource;
 
 @EnableTransactionManagement/* 开启事务 --> 导入 BeanFactoryTransactionAttributeSourceAdvisor、TransactionInterceptor */
 @Configuration
-@MapperScan("com.experiment.test.mybatis.test.mapper") /* Mybatis Mapper接口注入 */
-public class TransactionalConfig {
+@MapperScan("com.experiment.test.mybatis.test.mapper") /* Mapper接口注入 -->Mybatis.Configuration.addMapper解析 --> 生成MapperProxy代理类 */
+public class DBConfig {
 
 	@Bean  /* 数据库操作工具类 - 支持事务 */
 	public JdbcTemplate jdbcTemplate() {
@@ -40,7 +40,7 @@ public class TransactionalConfig {
 	}
 
 	@Bean /* 创建Mybatis - DefaultSqlSessionFactory --> 创建Mybatis全局配置Configuration */
-	public SqlSessionFactory sqlSessionFactory() throws Exception {
+	public SqlSessionFactory createSqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());/* 指定mybatis数据源 */
 		org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();

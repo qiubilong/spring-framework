@@ -27,6 +27,9 @@ dependencies {
     implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 
     api(project(":spring-webmvc"))
+
+    implementation 'org.mybatis:mybatis-spring:2.0.8-my-SNAPSHOT'
+
 }
 
 test {
