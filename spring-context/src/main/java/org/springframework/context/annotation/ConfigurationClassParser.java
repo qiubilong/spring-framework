@@ -634,7 +634,7 @@ class ConfigurationClassParser {
 
 
 	@SuppressWarnings("serial")
-	private static class ImportStack extends ArrayDeque<ConfigurationClass> implements ImportRegistry {
+	private static class ImportStack extends ArrayDeque<ConfigurationClass> implements ImportRegistry { /* 记录Bean被哪个配置类导入的关系 */
 
 		private final MultiValueMap<String, AnnotationMetadata> imports = new LinkedMultiValueMap<>();
 

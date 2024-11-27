@@ -404,7 +404,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 				definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);
 		/* 开启事务,获取连接 */
 		doBegin(transaction, definition);
-		/* 绑定相关变量到ThreadLocal */
+		/* 绑定事务信息到ThreadLocal */
 		prepareSynchronization(status, definition);
 		return status;
 	}
@@ -513,7 +513,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 
 		DefaultTransactionStatus status = newTransactionStatus(
 				definition, transaction, newTransaction, newSynchronization, debug, suspendedResources);
-		prepareSynchronization(status, definition);
+		prepareSynchronization(status, definition);/* 绑定事务信息到ThreadLocal */
 		return status;
 	}
 
@@ -1272,10 +1272,10 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	protected static final class SuspendedResourcesHolder {
 
 		@Nullable
-		private final Object suspendedResources;
+		private final Object suspendedResources;  /* DataSourceTransactionObject -- 连接对象  */
 
 		@Nullable
-		private List<TransactionSynchronization> suspendedSynchronizations;
+		private List<TransactionSynchronization> suspendedSynchronizations;   /* 事务监听器 */
 
 		@Nullable
 		private String name;

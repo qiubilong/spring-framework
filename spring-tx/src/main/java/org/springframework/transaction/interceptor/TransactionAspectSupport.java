@@ -737,18 +737,18 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	protected static final class TransactionInfo {
 
 		@Nullable
-		private final PlatformTransactionManager transactionManager;
+		private final PlatformTransactionManager transactionManager; /* 事务管理器（数据库数据源） - DataSourceTransactionManager - JDBC数据库事务管理器 */
 
 		@Nullable
-		private final TransactionAttribute transactionAttribute;
+		private final TransactionAttribute transactionAttribute;    /* @Transactional 事务配置信息 RuleBasedTransactionAttribute */
 
-		private final String joinpointIdentification;
-
-		@Nullable
-		private TransactionStatus transactionStatus;
+		private final String joinpointIdentification;               /* 事务ID */
 
 		@Nullable
-		private TransactionInfo oldTransactionInfo; /* 旧的事务信息，支持事务嵌套 */
+		private TransactionStatus transactionStatus;                /* DefaultTransactionStatus */
+
+		@Nullable
+		private TransactionInfo oldTransactionInfo;                 /* 前一个方法的旧的事务信息，支持事务嵌套 */
 
 		public TransactionInfo(@Nullable PlatformTransactionManager transactionManager,
 				@Nullable TransactionAttribute transactionAttribute, String joinpointIdentification) {
