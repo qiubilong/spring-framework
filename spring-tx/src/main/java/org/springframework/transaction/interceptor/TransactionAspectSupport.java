@@ -685,7 +685,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 				logger.trace("Completing transaction for [" + txInfo.getJoinpointIdentification() +
 						"] after exception: " + ex);
 			}
-			if (txInfo.transactionAttribute != null && txInfo.transactionAttribute.rollbackOn(ex)) {
+			if (txInfo.transactionAttribute != null && txInfo.transactionAttribute.rollbackOn(ex)) {/* 回滚规则匹配- RuleBasedTransactionAttribute */
 				try {
 					txInfo.getTransactionManager().rollback(txInfo.getTransactionStatus());
 				}

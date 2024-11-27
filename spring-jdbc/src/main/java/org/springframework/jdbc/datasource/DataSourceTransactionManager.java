@@ -341,7 +341,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		}
 	}
 
-	@Override
+	@Override /* 获取数据库连接 - 发起回滚 */
 	protected void doRollback(DefaultTransactionStatus status) {
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) status.getTransaction();
 		Connection con = txObject.getConnectionHolder().getConnection();

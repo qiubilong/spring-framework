@@ -708,7 +708,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			processRollback(defStatus, false);
 			return;
 		}
-
+		/* 全局回滚 */
 		if (!shouldCommitOnGlobalRollbackOnly() && defStatus.isGlobalRollbackOnly()) {
 			if (defStatus.isDebug()) {
 				logger.debug("Global transaction is marked as rollback-only but transactional code requested commit");
@@ -841,16 +841,16 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 					if (status.isDebug()) {
 						logger.debug("Initiating transaction rollback");
 					}
-					doRollback(status);
+					doRollback(status);/* 数据库回滚 */
 				}
-				else {
+				else { /* 同个事务嵌套分支 */
 					// Participating in larger transaction
 					if (status.hasTransaction()) {
 						if (status.isLocalRollbackOnly() || isGlobalRollbackOnParticipationFailure()) {
 							if (status.isDebug()) {
 								logger.debug("Participating transaction failed - marking existing transaction as rollback-only");
 							}
-							doSetRollbackOnly(status);
+							doSetRollbackOnly(status);/* 标记该事务全部回滚 */
 						}
 						else {
 							if (status.isDebug()) {

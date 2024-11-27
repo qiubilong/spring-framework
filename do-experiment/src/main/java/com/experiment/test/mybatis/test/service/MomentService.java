@@ -23,6 +23,10 @@ public class MomentService {
     @Autowired
     private MomentCounterMapper momentCounterMapper;/* MapperProxy -->SqlSessionTemplate.sqlSessionInterceptor --> ThreadLocal获取DefaultSqlSession,不存在新建 --> 实现事务和线程安全  */
 
+
+	@Autowired
+	private MomentService momentService;
+
 	@Transactional
     public void batchInsertCounter(){
         List<MomentCounter> list = new ArrayList<>();
@@ -40,7 +44,19 @@ public class MomentService {
         momentCounterMapper.selectMomentLikeNum(list);
     }
 
+	@Transactional
     public boolean insertCounter(){
-        return momentCounterMapper.insertCounter(new MomentCounter(System.currentTimeMillis()));
+		boolean b = momentCounterMapper.insertCounter(new MomentCounter(System.currentTimeMillis()));
+		throw new UnsupportedOperationException();
     }
+
+	@Transactional /* 两个操作全部回滚，跟相同事务嵌套时 - 全局回滚标志有关 */
+	public void updateCommentReplyNum(){
+		momentCommentExtMapper.updateCommentReplyNum(333L,1);
+		try {
+			momentService.insertCounter();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
 }

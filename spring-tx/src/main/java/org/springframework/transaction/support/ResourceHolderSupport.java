@@ -37,7 +37,7 @@ public abstract class ResourceHolderSupport implements ResourceHolder {
 
 	private boolean synchronizedWithTransaction = false; /* 开启事务 */
 
-	private boolean rollbackOnly = false;
+	private boolean rollbackOnly = false;  /* 强制全局回滚标记 */
 
 	@Nullable
 	private Date deadline;

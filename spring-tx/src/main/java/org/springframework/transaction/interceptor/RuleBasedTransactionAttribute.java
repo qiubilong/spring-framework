@@ -128,7 +128,7 @@ public class RuleBasedTransactionAttribute extends DefaultTransactionAttribute i
 
 		if (this.rollbackRules != null) {
 			for (RollbackRuleAttribute rule : this.rollbackRules) {
-				int depth = rule.getDepth(ex);
+				int depth = rule.getDepth(ex);/* 最匹配Exception */
 				if (depth >= 0 && depth < deepest) {
 					deepest = depth;
 					winner = rule;
@@ -138,7 +138,7 @@ public class RuleBasedTransactionAttribute extends DefaultTransactionAttribute i
 
 		// User superclass behavior (rollback on unchecked) if no rule matches.
 		if (winner == null) {
-			return super.rollbackOn(ex);
+			return super.rollbackOn(ex); /* 默认回滚规则 - (ex instanceof RuntimeException || ex instanceof Error); */
 		}
 
 		return !(winner instanceof NoRollbackRuleAttribute);

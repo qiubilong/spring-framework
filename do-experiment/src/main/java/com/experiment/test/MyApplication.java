@@ -93,8 +93,10 @@ public class MyApplication {
 
 		//mybatis-测试
 		MomentService momentService = applicationContext.getBean(MomentService.class);
-		momentService.batchInsertCounter();
-		momentService.selectMomentLikeNum();
-		momentService.insertCounter();
+		//momentService.batchInsertCounter();
+		momentService.updateCommentReplyNum();//事务测试
+
+
+		applicationContext.close();
 	}
 }
