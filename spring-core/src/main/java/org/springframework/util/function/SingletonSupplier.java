@@ -37,10 +37,10 @@ import org.springframework.util.Assert;
 public class SingletonSupplier<T> implements Supplier<T> {
 
 	@Nullable
-	private final Supplier<? extends T> instanceSupplier;
+	private final Supplier<? extends T> instanceSupplier; /* Bean对象提供器 */
 
 	@Nullable
-	private final Supplier<? extends T> defaultSupplier;
+	private final Supplier<? extends T> defaultSupplier; /* Bean对象默认提供器 */
 
 	@Nullable
 	private volatile T singletonInstance; /* 单例Bean */
@@ -91,7 +91,7 @@ public class SingletonSupplier<T> implements Supplier<T> {
 		T instance = this.singletonInstance;
 		if (instance == null) {         /* 懒加载双重null校验 */
 			synchronized (this) {
-				instance = this.singletonInstance;
+				instance = this.singletonInstance; /* synchronized不保证代码块内指令按顺序执行，需要加volatile，防止instance指向对象未完全初始化 */
 				if (instance == null) { /* 懒加载双重null校验 */
 					if (this.instanceSupplier != null) {
 						instance = this.instanceSupplier.get();

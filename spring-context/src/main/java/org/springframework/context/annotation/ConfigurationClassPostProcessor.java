@@ -403,7 +403,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			parser.parse(candidates);
 			parser.validate();
 
-			Set<ConfigurationClass> configClasses = new LinkedHashSet<>(parser.getConfigurationClasses());
+			Set<ConfigurationClass> configClasses = new LinkedHashSet<>(parser.getConfigurationClasses());/* 解析到的新的配置类 */
 			configClasses.removeAll(alreadyParsed);
 
 			// Read the model and create bean definitions based on its content
@@ -428,9 +428,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				for (String candidateName : newCandidateNames) {
 					if (!oldCandidateNames.contains(candidateName)) {
 						BeanDefinition bd = registry.getBeanDefinition(candidateName);
-						/* 新的配置类 */
 						if (ConfigurationClassUtils.checkConfigurationClassCandidate(bd, this.metadataReaderFactory) &&
 								!alreadyParsedClasses.contains(bd.getBeanClassName())) {
+							/* 继续解析新的配置类 */
 							candidates.add(new BeanDefinitionHolder(bd, candidateName));
 						}
 					}
@@ -441,7 +441,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		while (!candidates.isEmpty());
 
 		// Register the ImportRegistry as a bean in order to support ImportAware @Configuration classes
-		if (sbr != null && !sbr.containsSingleton(IMPORT_REGISTRY_BEAN_NAME)) { /* 配置类映射关系 */
+		if (sbr != null && !sbr.containsSingleton(IMPORT_REGISTRY_BEAN_NAME)) { /* 配置类映射关系--ImportAwareBeanPostProcessor.beforeInitialization时回调 */
 			sbr.registerSingleton(IMPORT_REGISTRY_BEAN_NAME, parser.getImportRegistry());
 		}
 

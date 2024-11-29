@@ -104,6 +104,7 @@ import org.springframework.util.StringUtils;
  * @see RowMapper
  * @see org.springframework.jdbc.support.SQLExceptionTranslator
  */
+/* 数据库操作模板工具类，线程安全，支持事务 */
 public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 
 	private static final String RETURN_RESULT_SET_PREFIX = "#result-set-";
@@ -372,7 +373,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 	@Nullable
 	private <T> T execute(StatementCallback<T> action, boolean closeResources) throws DataAccessException {
 		Assert.notNull(action, "Callback object must not be null");
-
+		/* 获取当前ThreadLocal的连接，否则新建一个 --> 支持事务  */
 		Connection con = DataSourceUtils.getConnection(obtainDataSource());
 		Statement stmt = null;
 		try {

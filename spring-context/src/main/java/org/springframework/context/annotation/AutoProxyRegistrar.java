@@ -67,7 +67,7 @@ public class AutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 			Object mode = candidate.get("mode");
 			Object proxyTargetClass = candidate.get("proxyTargetClass");
 			if (mode != null && proxyTargetClass != null && AdviceMode.class == mode.getClass() &&
-					Boolean.class == proxyTargetClass.getClass()) {  /* 找到注解@EnableTransactionManagement */
+					Boolean.class == proxyTargetClass.getClass()) {  /* 找到注解@EnableTransactionManagement，为啥不直接获取@EnableTransactionManagement注解 */
 				candidateFound = true;
 				if (mode == AdviceMode.PROXY) {
 					/* 注入AOP子类 InfrastructureAdvisorAutoProxyCreator */

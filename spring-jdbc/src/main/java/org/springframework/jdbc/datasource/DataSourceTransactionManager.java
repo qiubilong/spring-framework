@@ -113,12 +113,12 @@ import org.springframework.util.Assert;
  * @see LazyConnectionDataSourceProxy
  * @see org.springframework.jdbc.core.JdbcTemplate
  */
-@SuppressWarnings("serial")
+@SuppressWarnings("serial")  /* JDBC数据库事务管理器 */
 public class DataSourceTransactionManager extends AbstractPlatformTransactionManager
 		implements ResourceTransactionManager, InitializingBean {
 
 	@Nullable
-	private DataSource dataSource;
+	private DataSource dataSource;  /* 数据库数据源 */
 
 	private boolean enforceReadOnly = false;
 
@@ -267,7 +267,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 				if (logger.isDebugEnabled()) {
 					logger.debug("Acquired Connection [" + newCon + "] for JDBC transaction");
 				}
-				txObject.setConnectionHolder(new ConnectionHolder(newCon), true);
+				txObject.setConnectionHolder(new ConnectionHolder(newCon), true);/* 保存数据库新连接 */
 			}
 
 			txObject.getConnectionHolder().setSynchronizedWithTransaction(true);
@@ -341,7 +341,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		}
 	}
 
-	@Override
+	@Override /* 获取数据库连接 - 发起回滚 */
 	protected void doRollback(DefaultTransactionStatus status) {
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) status.getTransaction();
 		Connection con = txObject.getConnectionHolder().getConnection();
@@ -446,12 +446,12 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	 */
 	private static class DataSourceTransactionObject extends JdbcTransactionObjectSupport {
 
-		private boolean newConnectionHolder;
+		private boolean newConnectionHolder; //新连接
 
 		private boolean mustRestoreAutoCommit;
 
 		public void setConnectionHolder(@Nullable ConnectionHolder connectionHolder, boolean newConnectionHolder) {
-			super.setConnectionHolder(connectionHolder);
+			super.setConnectionHolder(connectionHolder);//连接对象
 			this.newConnectionHolder = newConnectionHolder;
 		}
 

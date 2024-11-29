@@ -404,7 +404,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 				definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);
 		/* 开启事务,获取连接 */
 		doBegin(transaction, definition);
-		/* 绑定相关变量到ThreadLocal */
+		/* 绑定事务信息到ThreadLocal */
 		prepareSynchronization(status, definition);
 		return status;
 	}
@@ -513,7 +513,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 
 		DefaultTransactionStatus status = newTransactionStatus(
 				definition, transaction, newTransaction, newSynchronization, debug, suspendedResources);
-		prepareSynchronization(status, definition);
+		prepareSynchronization(status, definition);/* 绑定事务信息到ThreadLocal */
 		return status;
 	}
 
@@ -708,7 +708,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			processRollback(defStatus, false);
 			return;
 		}
-
+		/* 全局回滚 */
 		if (!shouldCommitOnGlobalRollbackOnly() && defStatus.isGlobalRollbackOnly()) {
 			if (defStatus.isDebug()) {
 				logger.debug("Global transaction is marked as rollback-only but transactional code requested commit");
@@ -841,16 +841,16 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 					if (status.isDebug()) {
 						logger.debug("Initiating transaction rollback");
 					}
-					doRollback(status);
+					doRollback(status);/* 数据库回滚 */
 				}
-				else {
+				else { /* 同个事务嵌套分支 */
 					// Participating in larger transaction
 					if (status.hasTransaction()) {
 						if (status.isLocalRollbackOnly() || isGlobalRollbackOnParticipationFailure()) {
 							if (status.isDebug()) {
 								logger.debug("Participating transaction failed - marking existing transaction as rollback-only");
 							}
-							doSetRollbackOnly(status);
+							doSetRollbackOnly(status);/* 标记该事务全部回滚 */
 						}
 						else {
 							if (status.isDebug()) {
@@ -1272,10 +1272,10 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	protected static final class SuspendedResourcesHolder {
 
 		@Nullable
-		private final Object suspendedResources;
+		private final Object suspendedResources;  /* DataSourceTransactionObject -- 连接对象  */
 
 		@Nullable
-		private List<TransactionSynchronization> suspendedSynchronizations;
+		private List<TransactionSynchronization> suspendedSynchronizations;   /* 事务监听器 */
 
 		@Nullable
 		private String name;

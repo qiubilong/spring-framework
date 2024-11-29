@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 public class MyInitBeanPostProcessor implements BeanPostProcessor {
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-		System.out.println("Bean生命周期-Init-Before-----------beanName="+beanName+",bean="+bean);
+		//System.out.println("Bean生命周期-Init-Before-----------beanName="+beanName+",bean="+bean);
 		return BeanPostProcessor.super.postProcessBeforeInitialization(bean, beanName);
 	}
 
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-		System.out.println("Bean生命周期-Init-After(AOP拓展点)---beanName="+beanName+",bean="+bean);
+		//System.out.println("Bean生命周期-Init-After(AOP拓展点)---beanName="+beanName+",bean="+bean);
 		return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
 	}
 }

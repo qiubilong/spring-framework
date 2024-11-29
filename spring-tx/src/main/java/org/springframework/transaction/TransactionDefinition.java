@@ -49,7 +49,7 @@ public interface TransactionDefinition {
 	 * <p>This is typically the default setting of a transaction definition
 	 * and typically defines a transaction synchronization scope.
 	 */
-	int PROPAGATION_REQUIRED = 0;
+	int PROPAGATION_REQUIRED = 0;   /* 不存在事务就创建新事务 */
 
 	/**
 	 * Support a current transaction; execute non-transactionally if none exists.
@@ -93,7 +93,7 @@ public interface TransactionDefinition {
 	 * and resumed appropriately.
 	 * @see org.springframework.transaction.jta.JtaTransactionManager#setTransactionManager
 	 */
-	int PROPAGATION_REQUIRES_NEW = 3;
+	int PROPAGATION_REQUIRES_NEW = 3;  /* 挂起已有事务，创建新事务 */
 
 	/**
 	 * Do not support a current transaction; rather always execute non-transactionally.
@@ -116,7 +116,7 @@ public interface TransactionDefinition {
 	 * <p>Note that transaction synchronization is <i>not</i> available within a
 	 * {@code PROPAGATION_NEVER} scope.
 	 */
-	int PROPAGATION_NEVER = 5;
+	int PROPAGATION_NEVER = 5;   /* 有事务报错 */
 
 	/**
 	 * Execute within a nested transaction if a current transaction exists,
@@ -129,7 +129,7 @@ public interface TransactionDefinition {
 	 * nested transactions as well.
 	 * @see org.springframework.jdbc.datasource.DataSourceTransactionManager
 	 */
-	int PROPAGATION_NESTED = 6;
+	int PROPAGATION_NESTED = 6;   /* 支持savePoint */
 
 
 	/**

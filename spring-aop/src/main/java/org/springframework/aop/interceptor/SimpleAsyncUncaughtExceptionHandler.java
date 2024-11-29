@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Juergen Hoeller
  * @since 4.1
  */
+/* 默认异步异常处理器 */
 public class SimpleAsyncUncaughtExceptionHandler implements AsyncUncaughtExceptionHandler {
 
 	private static final Log logger = LogFactory.getLog(SimpleAsyncUncaughtExceptionHandler.class);

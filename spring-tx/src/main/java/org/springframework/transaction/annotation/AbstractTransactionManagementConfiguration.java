@@ -54,7 +54,7 @@ public abstract class AbstractTransactionManagementConfiguration implements Impo
 	protected TransactionManager txManager;
 
 
-	@Override
+	@Override /* ConfigurationClassPostProcessor设置 -- 在 ImportAwareBeanPostProcessor.beforeInitialization时回调 */
 	public void setImportMetadata(AnnotationMetadata importMetadata) {
 		this.enableTx = AnnotationAttributes.fromMap(
 				importMetadata.getAnnotationAttributes(EnableTransactionManagement.class.getName()));

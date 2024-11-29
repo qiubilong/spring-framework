@@ -56,7 +56,7 @@ import org.springframework.util.Assert;
  * @see NoRollbackRuleAttribute
  */
 @SuppressWarnings("serial")
-public class RollbackRuleAttribute implements Serializable{
+public class RollbackRuleAttribute implements Serializable{ /* 事务回滚规则 */
 
 	/**
 	 * The {@linkplain RollbackRuleAttribute rollback rule} for

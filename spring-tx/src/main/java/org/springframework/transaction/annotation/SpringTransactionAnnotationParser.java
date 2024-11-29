@@ -84,7 +84,7 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 		rbta.setQualifier(attributes.getString("value"));
 		rbta.setLabels(Set.of(attributes.getStringArray("label")));
 
-		/* 回归规则 */
+		/* 回滚规则 */
 		List<RollbackRuleAttribute> rollbackRules = new ArrayList<>();
 		for (Class<?> rbRule : attributes.getClassArray("rollbackFor")) {
 			rollbackRules.add(new RollbackRuleAttribute(rbRule));

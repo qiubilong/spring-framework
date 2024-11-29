@@ -14,20 +14,20 @@ import org.springframework.stereotype.Component;
 public class MyInstantiationBeanPostProcessor implements InstantiationAwareBeanPostProcessor { /* 自定义Bean实例化Bean处理器 */
 	@Override
 	public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {//自定义实例化Bean
-		System.out.println("----------------------------------------------------------------------------------------------------------");
-		System.out.println("Bean生命周期-Instant-Before---beanName="+beanName+",beanClass="+beanClass);
+		//System.out.println("----------------------------------------------------------------------------------------------------------");
+		//System.out.println("Bean生命周期-Instant-Before---beanName="+beanName+",beanClass="+beanClass);
 		return InstantiationAwareBeanPostProcessor.super.postProcessBeforeInstantiation(beanClass, beanName);
 	}
 
 	@Override
 	public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
-		System.out.println("Bean生命周期-Instant-After----beanName="+beanName+",bean="+bean);
+		//System.out.println("Bean生命周期-Instant-After----beanName="+beanName+",bean="+bean);
 		return InstantiationAwareBeanPostProcessor.super.postProcessAfterInstantiation(bean, beanName);
 	}
 
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) throws BeansException {
-		System.out.println("Bean生命周期-Instant-Properties----beanName="+beanName+",Properties="+bean);
+		//System.out.println("Bean生命周期-Instant-Properties----beanName="+beanName+",Properties="+bean);
 		return InstantiationAwareBeanPostProcessor.super.postProcessProperties(pvs, bean, beanName);
 	}
 }

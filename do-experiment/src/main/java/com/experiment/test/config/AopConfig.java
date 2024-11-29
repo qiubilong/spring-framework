@@ -10,6 +10,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @EnableAspectJAutoProxy /* 注解中导入AspectJAutoProxyRegistrar --> AnnotationAwareAspectJAutoProxyCreator --> 解析@Aspect --> Advisor(Advice + Pointcut) --> ProxyFactory --> Bean Proxy */
-@Import(TransactionalConfig.class)
+@Import(DBConfig.class)
 public class AopConfig {
 }

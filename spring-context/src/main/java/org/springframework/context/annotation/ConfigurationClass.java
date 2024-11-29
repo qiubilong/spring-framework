@@ -63,7 +63,7 @@ final class ConfigurationClass {
 	private final Map<String, Class<? extends BeanDefinitionReader>> importedResources =
 			new LinkedHashMap<>();
 
-	private final Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> importBeanDefinitionRegistrars = /* ImportBeanDefinitionRegistrar <-->  注解信息  */
+	private final Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> importBeanDefinitionRegistrars = /* ImportBeanDefinitionRegistrar <-->  声明注解的配置类信息  */
 			new LinkedHashMap<>();
 
 	final Set<String> skippedBeanMethods = new HashSet<>();

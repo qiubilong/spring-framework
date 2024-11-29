@@ -40,6 +40,7 @@ import org.springframework.util.CollectionUtils;
  * @see #setDefaultTargetDataSource
  * @see #determineCurrentLookupKey()
  */
+/* 动态数据源，用于实现数据分库，baimidou是直接继承AbstractDataSource自己实现分库 */
 public abstract class AbstractRoutingDataSource extends AbstractDataSource implements InitializingBean {
 
 	@Nullable

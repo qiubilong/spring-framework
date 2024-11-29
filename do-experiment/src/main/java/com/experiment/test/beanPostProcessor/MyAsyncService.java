@@ -21,6 +21,6 @@ public class MyAsyncService implements IMyAsyncService{
 	@Override
 	public void asyncTest2(){
 		System.out.println("asyncTest2");
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
 	}
 }

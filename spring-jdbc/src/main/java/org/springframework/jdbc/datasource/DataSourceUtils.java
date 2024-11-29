@@ -50,6 +50,7 @@ import org.springframework.util.Assert;
  * @see org.springframework.transaction.jta.JtaTransactionManager
  * @see org.springframework.transaction.support.TransactionSynchronizationManager
  */
+/* 获取数据库连接Connection工具类，保证同一个事务使用同一个数据库连接Connection */
 public abstract class DataSourceUtils {
 
 	/**
@@ -75,6 +76,7 @@ public abstract class DataSourceUtils {
 	 * @see #releaseConnection(Connection, DataSource)
 	 * @see #isConnectionTransactional(Connection, DataSource)
 	 */
+	/* 获取当前ThreadLocal的连接，否则新建一个 */
 	public static Connection getConnection(DataSource dataSource) throws CannotGetJdbcConnectionException {
 		try {
 			return doGetConnection(dataSource);
@@ -101,7 +103,7 @@ public abstract class DataSourceUtils {
 	 */
 	public static Connection doGetConnection(DataSource dataSource) throws SQLException {
 		Assert.notNull(dataSource, "No DataSource specified");
-
+		/* 获取当前ThreadLocal的连接 */
 		ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
 		if (conHolder != null && (conHolder.hasConnection() || conHolder.isSynchronizedWithTransaction())) {
 			conHolder.requested();
@@ -109,14 +111,14 @@ public abstract class DataSourceUtils {
 				logger.debug("Fetching resumed JDBC Connection from DataSource");
 				conHolder.setConnection(fetchConnection(dataSource));
 			}
-			return conHolder.getConnection();
+			return conHolder.getConnection();/* 当前事务已经存在连接，直接返回 */
 		}
 		// Else we either got no holder or an empty thread-bound holder here.
 
 		logger.debug("Fetching JDBC Connection from DataSource");
-		Connection con = fetchConnection(dataSource);
+		Connection con = fetchConnection(dataSource);/* 获取新的连接 */
 
-		if (TransactionSynchronizationManager.isSynchronizationActive()) {
+		if (TransactionSynchronizationManager.isSynchronizationActive()) {/* 开启了事务，也就是存在@Transactional */
 			try {
 				// Use same Connection for further JDBC actions within the transaction.
 				// Thread-bound object will get removed by synchronization at transaction completion.
@@ -131,7 +133,7 @@ public abstract class DataSourceUtils {
 				TransactionSynchronizationManager.registerSynchronization(
 						new ConnectionSynchronization(holderToUse, dataSource));
 				holderToUse.setSynchronizedWithTransaction(true);
-				if (holderToUse != conHolder) {
+				if (holderToUse != conHolder) { /* 绑定当前线程的连接 */
 					TransactionSynchronizationManager.bindResource(dataSource, holderToUse);
 				}
 			}
