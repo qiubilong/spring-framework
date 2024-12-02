@@ -332,10 +332,10 @@ class CglibAopProxy implements AopProxy, Serializable {
 				new StaticDispatcher(this.advised.getTargetSource().getTarget()) : new SerializableNoOp());
 
 		Callback[] mainCallbacks = new Callback[] {
-				aopInterceptor,  // for normal advice
+				aopInterceptor,  // for normal advice   /* 织入DynamicAdvisedInterceptor代理拦截器入口 */
 				targetInterceptor,  // invoke target without considering advice, if optimized
 				new SerializableNoOp(),  // no override for methods mapped to this
-				targetDispatcher, this.advisedDispatcher,
+				targetDispatcher, this.advisedDispatcher, /* 织入ProxyFactory */
 				new EqualsInterceptor(this.advised),
 				new HashCodeInterceptor(this.advised)
 		};
@@ -701,7 +701,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 				// Get as late as possible to minimize the time we "own" the target, in case it comes from a pool...
 				target = targetSource.getTarget();/* 被代理目标对象 */
 				Class<?> targetClass = (target != null ? target.getClass() : null);
-				/* 寻找ProxyFactory设置的代理逻辑 拦截器 */
+				/* 寻找ProxyFactory设置的符合method条件的代理方法拦截器 */
 				List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
 				Object retVal;
 				// Check whether we only have one InvokerInterceptor: that is,

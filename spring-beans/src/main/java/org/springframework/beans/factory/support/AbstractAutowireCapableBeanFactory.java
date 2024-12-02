@@ -433,8 +433,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
 			throws BeansException {
 		/* 最后阶段 - AfterInitialization
-		*  AnnotationAwareAspectJAutoProxyCreator --> AbstractAutoProxyCreator --> 动态代理 --> 切面、事务
-		*  AsyncAnnotationBeanPostProcessor       --> 异步
+		*  AnnotationAwareAspectJAutoProxyCreator --> AbstractAutoProxyCreator   --> 动态代理 --> 切面、事务
+		*  AsyncAnnotationBeanPostProcessor       --> AbstractAdvisingBeanPostProcessor --> 动态代理-->异步
 		*  ScheduledAnnotationBeanPostProcessor   --> 定时器
 		* */
 		Object result = existingBean;

@@ -121,7 +121,7 @@ public class TransactionInterceptor extends TransactionAspectSupport implements 
 			@Override
 			@Nullable
 			public Object proceedWithInvocation() throws Throwable {
-				return invocation.proceed();/* 拦截器链--最终执行目标方法 */
+				return invocation.proceed();
 			}
 			@Override
 			public Object getTarget() {
