@@ -19,8 +19,7 @@ public class Interrupt {
 		LogUtil.log(Thread.currentThread().getName() +"  释放锁");
 	}
 
-	@Test
-	public  void testInterruptSyncronized(){
+	public static void testInterruptSyncronized(){
 		Thread t1 = new Thread("t1"){
 			@Override
 			public void run() {
@@ -46,5 +45,9 @@ public class Interrupt {
 		LogUtil.log("t2 run - 发起中断");
 	}
 
+
+	public static void main(String[] args) {
+		testInterruptSyncronized();
+	}
 
 }
