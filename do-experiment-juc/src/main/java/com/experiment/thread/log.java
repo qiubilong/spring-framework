@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
  * @author chenxuegui
  * @since 2024/12/2
  */
-public class LogUtil {
+public class log {
 	private static final Logger logger = LoggerFactory.getLogger("");
-	public static void log(Object... arguments){
+	public static void info(Object... arguments){
 		logger.info("{}",arguments);
 	}
 }

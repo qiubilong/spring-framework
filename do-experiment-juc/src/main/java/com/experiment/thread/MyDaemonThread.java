@@ -12,10 +12,10 @@ public class MyDaemonThread extends Thread{
 
 		try {
 			while (true){
-				System.out.println("MyDaemonThread run");
+				log.info("MyDaemonThread run");
 			}
 		}finally {
-			System.out.println("MyDaemonThread finally"); /* 线程是守护线程时，线程可以随时退出，不一定执行finally方法 */
+			log.info("MyDaemonThread finally"); /* 线程是守护线程时，线程可以随时退出，不一定执行finally方法 */
 		}
 
 	}
@@ -26,7 +26,7 @@ public class MyDaemonThread extends Thread{
 
 		thread.start();
 
-		Thread.sleep(20);
-		System.out.println("MainThread end");
+		Thread.sleep(0);
+		log.info("MainThread end");
 	}
 }

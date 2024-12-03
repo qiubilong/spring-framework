@@ -10,15 +10,12 @@ public class ThreadEnd {     /* 业务线程最好的结束方式 */
 		@Override
 		public void run() {
 			try {
-				while (!Thread.currentThread().isInterrupted()){
+				while (!Thread.currentThread().isInterrupted()){/* 建议使用中断标志位interrupted来终止线程，线程阻塞后也能及时响应中断 */
 					System.out.println("BizThreadInterrupted run");
-					Thread.sleep(3000); /* 建议使用中断标志位interrupted来终止线程，线程阻塞后也能及时响应中断 */
+					SleepUtil.sleep(3000);
 				}
 
-			}catch (Exception e){
-
-			}
-			finally {
+			} finally {
 				System.out.println("BizThreadInterrupted finally");
 			}
 		}
@@ -29,7 +26,7 @@ public class ThreadEnd {     /* 业务线程最好的结束方式 */
 		@Override
 		public void run() {
 			try {
-				while (!end){
+				while (!end){ /* 自定义标志位来终止线程，线程阻塞后不能及时响应中断 */
 					System.out.println("BizThreadVolatile run");
 					Thread.sleep(3000); /* 自定义标志位来终止线程，线程阻塞后不能及时响应中断 */
 				}
