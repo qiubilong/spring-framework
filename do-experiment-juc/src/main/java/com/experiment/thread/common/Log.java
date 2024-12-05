@@ -1,4 +1,4 @@
-package com.experiment.thread;
+package com.experiment.thread.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
  * @author chenxuegui
  * @since 2024/12/2
  */
-public class log {
+public class Log {
 	private static final Logger logger = LoggerFactory.getLogger("");
 	public static void info(Object... arguments){
 		logger.info("{}",arguments);

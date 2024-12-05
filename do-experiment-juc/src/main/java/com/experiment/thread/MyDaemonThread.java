@@ -1,5 +1,7 @@
 package com.experiment.thread;
 
+import com.experiment.thread.common.Log;
+
 /**
  * @author chenxuegui
  * @since 2024/12/2
@@ -12,10 +14,10 @@ public class MyDaemonThread extends Thread{
 
 		try {
 			while (true){
-				log.info("MyDaemonThread run");
+				Log.info("MyDaemonThread run");
 			}
 		}finally {
-			log.info("MyDaemonThread finally"); /* 线程是守护线程时，线程可以随时退出，不一定执行finally方法 */
+			Log.info("MyDaemonThread finally"); /* 线程是守护线程时，线程可以随时退出，不一定执行finally方法 */
 		}
 
 	}
@@ -27,6 +29,6 @@ public class MyDaemonThread extends Thread{
 		thread.start();
 
 		Thread.sleep(0);
-		log.info("MainThread end");
+		Log.info("MainThread end");
 	}
 }

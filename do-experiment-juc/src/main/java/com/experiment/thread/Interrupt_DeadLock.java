@@ -1,6 +1,9 @@
 package com.experiment.thread;
 
 
+import com.experiment.thread.common.Log;
+import com.experiment.thread.common.SleepUtil;
+
 /**
  * @author chenxuegui
  * @since 2024/12/2
@@ -11,10 +14,10 @@ public class Interrupt_DeadLock {  /* synchronized死锁时，不能响应中断
 
 	public static void lockMulti(Object lock1, Object lock2){ /* 发生死锁，可用 jstack -pid 查看 */
 		synchronized (lock1){
-			log.info("获锁lock1="+lock1);
+			Log.info("获锁lock1="+lock1);
 			SleepUtil.sleep(200);
 			synchronized (lock2){
-				log.info("获锁lock2="+lock2);
+				Log.info("获锁lock2="+lock2);
 				SleepUtil.sleep(200);
 			}
 		}
