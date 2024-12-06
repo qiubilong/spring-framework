@@ -1,6 +1,6 @@
 package com.experiment.thread.线程通讯;
 
-import com.experiment.thread.common.SleepUtil;
+import com.experiment.common.SleepUtil;
 
 /**
  * @author chenxuegui

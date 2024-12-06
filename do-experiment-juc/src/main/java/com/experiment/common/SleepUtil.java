@@ -1,4 +1,4 @@
-package com.experiment.thread.common;
+package com.experiment.common;
 
 /**
  * @author chenxuegui

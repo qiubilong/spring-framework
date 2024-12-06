@@ -1,4 +1,4 @@
-package com.experiment.thread.common;
+package com.experiment.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

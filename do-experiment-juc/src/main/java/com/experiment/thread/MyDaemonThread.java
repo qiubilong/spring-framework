@@ -1,6 +1,6 @@
 package com.experiment.thread;
 
-import com.experiment.thread.common.Log;
+import com.experiment.common.Log;
 
 /**
  * @author chenxuegui

@@ -1,8 +1,8 @@
 package com.experiment.thread;
 
 
-import com.experiment.thread.common.Log;
-import com.experiment.thread.common.SleepUtil;
+import com.experiment.common.Log;
+import com.experiment.common.SleepUtil;
 import org.junit.Test;
 
 /**
