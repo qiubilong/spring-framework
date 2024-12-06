@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadLocal_内存泄漏 {
 
-	static ThreadLocal<byte[]> bigThreadLocal = new ThreadLocal<>();
+	static ThreadLocal<byte[]> bigThreadLocal = new ThreadLocal<>(); /* 静态类ThreadLocal对象因为有强引用，就算是弱引用，也不会被GC回收 */
 
 	public static void main(String[] args) {
 
@@ -24,12 +24,17 @@ public class ThreadLocal_内存泄漏 {
 			poolExecutor.submit(new Runnable() {
 				@Override
 				public void run() {
+					/*
+					 * Thread.ThreadLocalMap.Entry = ThreadLocal对象 + value
+					 * ThreadLocal对象 被包装成 弱引用WeakReference，方法栈帧销毁后，没有强引用指向，被gc回收。
+					 *  但 线程池中的线程不会销毁，强引用着Thread.ThreadLocalMap.Entry.value，无法回收造成内存泄漏 */
+					ThreadLocal<byte[]> bigThreadLocal = new ThreadLocal<>();
 
-					bigThreadLocal.set(new byte[5 * 1024 * 1024 * 8]);//5M
+					byte[] value = new byte[5 * 1024 * 1024];//5M
+					bigThreadLocal.set(value);
 
-					SleepUtil.sleepSec(3);
+					SleepUtil.sleep(200);
 					Log.info("run end");
-					bigThreadLocal.remove();
 				}
 			});
 		}
