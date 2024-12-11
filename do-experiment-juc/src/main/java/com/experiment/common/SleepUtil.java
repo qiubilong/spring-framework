@@ -10,7 +10,7 @@ public class SleepUtil {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -18,7 +18,7 @@ public class SleepUtil {
 		try {
 			Thread.sleep(sec * 1000);
 		} catch (InterruptedException e) {
-
+			Thread.currentThread().interrupt();
 		}
 	}
 }

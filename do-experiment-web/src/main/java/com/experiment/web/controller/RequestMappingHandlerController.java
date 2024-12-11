@@ -70,7 +70,7 @@ public class RequestMappingHandlerController implements FeignController{
 
 
 
-	/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
+	/* 参数解析器  -- RequestPartMethodArgumentResolver -- MultipartFile pic */
 	/* 参数解析器  -- RequestParamMethodArgumentResolver(兜底) -- String email */
 	@RequestMapping("/byRequestFile")
 	public String byRequestFile(MultipartFile pic,String email){ /* pic是文件名 */
@@ -78,9 +78,9 @@ public class RequestMappingHandlerController implements FeignController{
 	}
 
     // 表单提交 Content-Type: multipart/form-data; boundary=--分隔符
-	/* 参数解析器  -- RequestParamMethodArgumentResolver -- MultipartFile pic */
+	/* 参数解析器  -- RequestPartMethodArgumentResolver -- MultipartFile pic */
 	@RequestMapping("/byRequestPart")
-	public String byRequestPart(@RequestPart MultipartFile pic, @RequestPart String email){ /* pic是文件名 */
+	public String byRequestPart(@RequestPart MultipartFile pic, @RequestPart Integer email){ /* pic是文件名 */
 		return pic.getOriginalFilename() + "----" + email;
 	}
 

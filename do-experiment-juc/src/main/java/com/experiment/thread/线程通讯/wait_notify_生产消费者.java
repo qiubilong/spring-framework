@@ -5,89 +5,89 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author chenxuegui
- * @since 2024/12/10
+ * @since 2024/12/11
  */
 @Slf4j
-public class ReentrantLock_生产者消费者 {
+public class wait_notify_生产消费者 {
+	volatile static boolean stop = false;
 
 	public static void main(String[] args) throws IOException {
+		wait_notify_生产消费者.Queue queue = new wait_notify_生产消费者.Queue(3);
+		Producer producer = new Producer(queue);
+		producer.start();
+		Consumer consumer = new Consumer(queue);
+		consumer.start();
 
-		Queue queue = new Queue(3);
+		SleepUtil.sleepSec(20);
 
-		new Producer(queue).start();
-		new Consumer(queue).start();
+		producer.interrupt();
+		consumer.interrupt();
 
-
-		System.in.read();
-
+		SleepUtil.sleepSec(6);
+		System.out.println(queue.itemProduct);
+		System.out.println(queue.itemConsume);
 	}
 
+	private static class Queue {
+		private List<Object> itemProduct = new ArrayList<>(100);
+		private List<Object> itemConsume = new ArrayList<>(100);
 
-	private static class Queue{
 		private Object[] datas;
 		private int size;
+
 		private int offerIndex;
 		private int takeIndex;
 
-        private final ReentrantLock lock = new ReentrantLock();
-		private final Condition conditionProduct;
-		private final Condition conditionConsumer;
-
 		public Queue(int size) {
 			datas = new Object[size];
-			conditionProduct = lock.newCondition();
-			conditionConsumer = lock.newCondition();
 		}
 
 		@SneakyThrows
-		public boolean offerData(Object data){
-			lock.lock();
-			try {
+		public  void  offerData(Object data){
+			synchronized (this){
 				while (datas.length == size){
-					conditionConsumer.await();
+					wait();
 				}
-				if(offerIndex == datas.length){
+				if(offerIndex == datas.length ){
 					offerIndex = 0;
 				}
-				datas[offerIndex ++] = data;
-				size ++;
+				datas[offerIndex++] = data;
+				size++;
 
 				log.info("offerData offerIndex="+(offerIndex-1)+",data="+data);
-				conditionProduct.signalAll();
-			}finally {
-				lock.unlock();
+				notifyAll();
+
+				itemProduct.add(data);
 			}
-			return true;
+
 		}
 
 		@SneakyThrows
 		public Object takeData(){
-			lock.lock();
-			try {
-				while (size == 0){
-					conditionProduct.await();
+			synchronized (this){
+				while ( 0 == size){
+					wait();
 				}
 				if(takeIndex == datas.length){
-					takeIndex = 0;
+					takeIndex  = 0;
 				}
 				Object data = datas[takeIndex++];
-				size --;
-
+				size--;
+				notifyAll();
 				log.info("takeData takeIndex="+(takeIndex-1)+",data="+data);
-				conditionConsumer.signalAll();
+
+				itemConsume.add(data);
 				return data;
-			}finally {
-				lock.unlock();
 			}
 		}
-	}
 
+	}
 
 	private static class Producer extends Thread{
 		private Queue queue;
@@ -97,7 +97,6 @@ public class ReentrantLock_生产者消费者 {
 			this.queue = queue;
 		}
 
-
 		@Override
 		public void run() {
 			while (!Thread.currentThread().isInterrupted()){
@@ -106,12 +105,10 @@ public class ReentrantLock_生产者消费者 {
 				queue.offerData(data);
 				SleepUtil.sleepSec(2);
 			}
-
 		}
 	}
 
 	private static class Consumer extends Thread{
-
 		private Queue queue;
 
 		public Consumer(Queue queue) {

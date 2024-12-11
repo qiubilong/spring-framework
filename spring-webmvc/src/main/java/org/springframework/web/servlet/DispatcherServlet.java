@@ -1255,7 +1255,7 @@ org.springframework.web.servlet.function.support.HandlerFunctionAdapter
 			}
 			else {
 				try {
-					return this.multipartResolver.resolveMultipart(request);
+					return this.multipartResolver.resolveMultipart(request);/*  解析multipart/form-data报文 */
 				}
 				catch (MultipartException ex) {
 					if (request.getAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE) != null) {
