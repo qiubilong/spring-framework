@@ -11,7 +11,7 @@ public class CountDownLatchDemo2 {
             final int index = i;
             new Thread(() -> {
                 try {
-                    Thread.sleep(1000 + ThreadLocalRandom.current().nextInt(2000));
+                    Thread.sleep(10000 + ThreadLocalRandom.current().nextInt(2000));
                     System.out.println("任务" + index +"执行完成");
                     countDownLatch.countDown();
                 } catch (InterruptedException e) {
