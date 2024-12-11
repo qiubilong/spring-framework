@@ -23,6 +23,7 @@ public class ReentranLock_抢票 {
 				SleepUtil.sleepSec(3);
 				ticket --;
 				log.info("buyTicket success");
+
 				buyTicket();//重入锁
 			}else {
 				log.info("buyTicket fail, ticket out");

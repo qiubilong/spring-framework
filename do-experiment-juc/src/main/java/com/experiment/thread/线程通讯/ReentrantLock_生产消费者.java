@@ -60,9 +60,9 @@ public class ReentrantLock_生产消费者 {
 				size ++;
 
 				log.info("offerData offerIndex="+(offerIndex-1)+",data="+data);
-				notEmpty.signalAll();
+				notEmpty.signalAll(); /* 将条件等待队列的所有线程节点，迁移到 获锁同步队列 */
 			}finally {
-				lock.unlock();
+				lock.unlock(); /* 唤醒获锁同步队列首节点线程，竞争获锁 */
 			}
 			return true;
 		}
