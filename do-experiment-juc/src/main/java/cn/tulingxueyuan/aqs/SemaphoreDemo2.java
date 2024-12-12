@@ -119,7 +119,7 @@ class Connect {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("连接#" + id + "#已与数据库建立通道！");
+        //System.out.println("连接#" + id + "#已与数据库建立通道！");
     }
 
     @Override
