@@ -18,7 +18,7 @@ public class CyclicBarrierDemo {
                 @Override
                 public void run() {
                     try {
-                        System.out.println(id+"号马上就到");
+
                         int sleepMills = ThreadLocalRandom.current().nextInt(2000);
                         Thread.sleep(sleepMills);
                         System.out.println(id + "号到了，上车");
