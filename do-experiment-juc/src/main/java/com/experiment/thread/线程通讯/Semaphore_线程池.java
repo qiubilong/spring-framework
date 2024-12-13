@@ -27,7 +27,7 @@ public class Semaphore_线程池 {
 					Connection connection = null;
 					try {
 						log.info("等待获取连接...");
-						Thread.interrupted();//初始化log时设置了中断标志位，不清除时影响获取锁
+						Thread.interrupted();//线程池提交的任务不知道为啥有中断标志位，不清除时影响获取锁
 						connection = pool.getConnection();
 						log.info("获取连接成功，connection=" + connection);
 						SleepUtil.sleepSec(new Random().nextInt(10));

@@ -1,8 +1,14 @@
 package com.experiment.thread.线程通讯;
 
+import com.experiment.common.Log;
+import com.experiment.common.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -14,6 +20,34 @@ public class wait_notify_线程池 {
 
 	public static void main(String[] args) {
 		Pool pool = new Pool(3);
+
+		ExecutorService executorService = Executors.newCachedThreadPool();
+
+		for (int i = 0; i < 5; i++) {
+			executorService.submit(new Runnable() {
+				@Override
+				public void run() {
+					Connection connect = null;
+					try {
+						Log.info("等待获取连接...");
+						connect = pool.getConnect(5000);
+						Log.info("获取连接成功 connect="+connect);
+						SleepUtil.sleepSec(new Random().nextInt(20));
+					} catch (Exception e) {
+						Log.info("获取连接失败",e);
+					}finally {
+						if(connect != null){
+							pool.releaseConnect(connect);
+							Log.info("释放连接 connect="+ connect);
+						}
+					}
+
+				}
+			});
+		}
+
+		executorService.shutdown();
+
 	}
 
 	private static class Pool{
@@ -32,25 +66,24 @@ public class wait_notify_线程池 {
 			}
 		}
 
-		public Connection getConnect(long waitMills) throws InterruptedException {
+		public Connection getConnect(long waitMills) throws Exception {
 			long deadLine = waitMills + System.currentTimeMillis();
-			long waitTime = waitMills;
+			long remainTime = waitMills;
 			synchronized (lock){
 				while (connections.isEmpty()){
 					if(waitMills<=0){
 						lock.wait();
 					}else {
-						lock.wait(waitTime);
-						waitTime = deadLine - System.currentTimeMillis();
+						lock.wait(remainTime);
+						remainTime = deadLine - System.currentTimeMillis();
+						if(remainTime<=0){
+							throw new TimeoutException(waitMills+" Mills");
+						}
 					}
 				}
 
-				if(!connections.isEmpty()){
-					return connections.removeFirst();
-				}
+				return connections.removeFirst();
 			}
-
-			return null;
 		}
 
 		public void releaseConnect(Connection connection){
