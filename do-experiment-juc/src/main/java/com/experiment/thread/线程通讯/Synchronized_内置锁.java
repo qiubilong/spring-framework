@@ -6,7 +6,7 @@ import com.experiment.common.SleepUtil;
  * @author chenxuegui
  * @since 2024/12/4
  */
-public class Syncronized {
+public class Synchronized_内置锁 {
 
 	private final Object lock = new Object();
 
@@ -21,13 +21,13 @@ public class Syncronized {
 
 	public static void main(String[] args) {
 
-		Syncronized syncronized = new Syncronized();
+		Synchronized_内置锁 synchronized内置锁 = new Synchronized_内置锁();
 
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				for (int i = 0; i < 10000; i++) {
-					syncronized.incrCount();
+					synchronized内置锁.incrCount();
 				}
 			}
 		}).start();
@@ -36,13 +36,13 @@ public class Syncronized {
 			@Override
 			public void run() {
 				for (int i = 0; i < 10000; i++) {
-					syncronized.incrCount();
+					synchronized内置锁.incrCount();
 				}
 			}
 		}).start();
 
 		SleepUtil.sleep(2000);
-		System.out.println("count = " + syncronized.count);
+		System.out.println("count = " + synchronized内置锁.count);
 
 	}
 }

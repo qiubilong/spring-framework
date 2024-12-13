@@ -8,7 +8,7 @@ public class PhaserDemo {
         final Phaser phaser = new Phaser() {
             //重写该方法来增加阶段到达动作
             @Override
-            protected boolean onAdvance(int phase, int registeredParties) {
+            protected boolean onAdvance(int phase, int registeredParties) {//registeredParties==当前线程数
                 // 参与者数量，去除主线程
                 int staffs = registeredParties - 1;
                 switch (phase) {

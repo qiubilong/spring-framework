@@ -9,7 +9,7 @@ import org.junit.Test;
  * @author chenxuegui
  * @since 2024/12/2
  */
-public class InterruptSyncronized {
+public class InterruptSynchronized内置锁 {
 
 	private final static Object lock1 = new Object();
 	private final static Object lock2 = new Object();
