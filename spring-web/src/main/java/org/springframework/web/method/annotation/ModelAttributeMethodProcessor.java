@@ -171,7 +171,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 			WebDataBinder binder = binderFactory.createBinder(webRequest, attribute, name);/* 创建数据绑定器 */
 			if (binder.getTarget() != null) {
 				if (!mavContainer.isBindingDisabled(name)) {
-					bindRequestParameters(binder, webRequest);/* 参数对象属性赋值 */
+					bindRequestParameters(binder, webRequest);/* 参数对象属性赋值,ServletModelAttributeMethodProcessor.bindRequestParameters */
 				}
 				validateIfApplicable(binder, parameter);/* @Valid参数校验  */
 				if (binder.getBindingResult().hasErrors() && isBindExceptionRequired(binder, parameter)) {

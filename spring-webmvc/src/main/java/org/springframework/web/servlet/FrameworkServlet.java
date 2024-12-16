@@ -886,7 +886,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * Override the parent class implementation in order to intercept requests
 	 * using PATCH or non-standard HTTP methods (WebDAV).
 	 */
-	/* DispatcherServlet -- FrameworkServlet -- HttpServlet
+	/* DispatcherServlet <-- FrameworkServlet <-- HttpServlet
 	*  tomcat反射调用DispatcherServlet的service(request, response)方法
 	*  */
 	@Override

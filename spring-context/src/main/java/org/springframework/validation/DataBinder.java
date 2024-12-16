@@ -921,7 +921,7 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 	 * @see #setValidator(Validator)
 	 * @see SmartValidator#validate(Object, Errors, Object...)
 	 */
-	public void validate(Object... validationHints) {
+	public void validate(Object... validationHints) { /* 参数 @Valid / @Validated 校验 */
 		Object target = getTarget(); /* 参数对象 */
 		Assert.state(target != null, "No target to validate");
 		BindingResult bindingResult = getBindingResult();/* 校验结果 */
