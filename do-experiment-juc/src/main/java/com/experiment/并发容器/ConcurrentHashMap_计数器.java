@@ -1,4 +1,4 @@
-package com.experiment.thread.并发容器;
+package com.experiment.并发容器;
 
 import com.experiment.common.SleepUtil;
 import org.slf4j.Logger;

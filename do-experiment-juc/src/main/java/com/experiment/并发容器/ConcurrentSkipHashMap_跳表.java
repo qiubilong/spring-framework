@@ -1,4 +1,4 @@
-package com.experiment.thread.并发容器;
+package com.experiment.并发容器;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
