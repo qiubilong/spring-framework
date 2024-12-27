@@ -141,7 +141,7 @@ public class HandlerExecutionChain {
 	 * next interceptor or the handler itself. Else, DispatcherServlet assumes
 	 * that this interceptor has already dealt with the response itself.
 	 */
-	boolean applyPreHandle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	boolean applyPreHandle(HttpServletRequest request, HttpServletResponse response) throws Exception { /* 处理前拦截 */
 		for (int i = 0; i < this.interceptorList.size(); i++) {
 			HandlerInterceptor interceptor = this.interceptorList.get(i);
 			if (!interceptor.preHandle(request, response, this.handler)) {

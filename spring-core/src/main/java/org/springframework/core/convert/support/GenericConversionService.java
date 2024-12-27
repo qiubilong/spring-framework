@@ -345,11 +345,11 @@ public class GenericConversionService implements ConfigurableConversionService {
 	@SuppressWarnings("unchecked")
 	private final class ConverterAdapter implements ConditionalGenericConverter {
 
-		private final Converter<Object, Object> converter;
+		private final Converter<Object, Object> converter; /* 具体转换逻辑 */
 
-		private final ConvertiblePair typeInfo; /* sourceType -- targetType  */
+		private final ConvertiblePair typeInfo; /* sourceType -- targetType ，来源-目标类型配对  */
 
-		private final ResolvableType targetType;
+		private final ResolvableType targetType; /* 目标类型 */
 
 		public ConverterAdapter(Converter<?, ?> converter, ResolvableType sourceType, ResolvableType targetType) {
 			this.converter = (Converter<Object, Object>) converter;

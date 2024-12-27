@@ -63,7 +63,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Sam Brannen
  * @since 3.1
  */
-public class HandlerMethod {
+public class HandlerMethod { /* @RequestMapping 处理器方法 */
 
 	/** Logger that is available to subclasses. */
 	protected static final Log logger = LogFactory.getLog(HandlerMethod.class);
@@ -71,18 +71,18 @@ public class HandlerMethod {
 	private final Object bean;/* bean实例 或者 beanName */
 
 	@Nullable
-	private final BeanFactory beanFactory;
+	private final BeanFactory beanFactory; /* spring容器 */
 
 	@Nullable
 	private final MessageSource messageSource;
 
 	private final Class<?> beanType;
 
-	private final Method method;
+	private final Method method; /* 处理方法 */
 
-	private final Method bridgedMethod;
+	private final Method bridgedMethod; /* 真正的处理方法 （桥接方法，泛型参数替换为Object） */
 
-	private final MethodParameter[] parameters;
+	private final MethodParameter[] parameters; /* 方法参数 */
 
 	@Nullable
 	private HttpStatusCode responseStatus;

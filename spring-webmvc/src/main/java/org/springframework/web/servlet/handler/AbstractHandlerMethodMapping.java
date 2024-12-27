@@ -238,7 +238,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	protected String[] getCandidateBeanNames() {
 		return (this.detectHandlerMethodsInAncestorContexts ?
 				BeanFactoryUtils.beanNamesForTypeIncludingAncestors(obtainApplicationContext(), Object.class) :
-				obtainApplicationContext().getBeanNamesForType(Object.class));
+				obtainApplicationContext().getBeanNamesForType(Object.class));/* 获取所有的Bean */
 	}
 
 	/**
@@ -274,7 +274,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @param handler either a bean name or an actual handler instance
 	 * @see #getMappingForMethod
 	 */
-	protected void detectHandlerMethods(Object handler) {
+	protected void detectHandlerMethods(Object handler) { //这里handler == beanName
 		Class<?> handlerType = (handler instanceof String beanName ?
 				obtainApplicationContext().getType(beanName) : handler.getClass());
 
@@ -333,7 +333,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @throws IllegalStateException if another method was already registered
 	 * under the same mapping
 	 */
-	protected void registerHandlerMethod(Object handler, Method method, T mapping) {
+	protected void registerHandlerMethod(Object handler, Method method, T mapping) { //handler == beanName
 		/* 保存请求处理器映射关系 */
 		this.mappingRegistry.register(mapping, handler, method);
 	}

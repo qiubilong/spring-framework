@@ -523,11 +523,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		boolean isFactoryDereference = BeanFactoryUtils.isFactoryDereference(name);
 
 		// Check manually registered singletons.
-		Object beanInstance = getSingleton(beanName, false);
+		Object beanInstance = getSingleton(beanName, false); /* Bean实例  */
 		if (beanInstance != null && beanInstance.getClass() != NullBean.class) {
 			if (beanInstance instanceof FactoryBean<?> factoryBean) {
 				if (!isFactoryDereference) {
-					Class<?> type = getTypeForFactoryBean(factoryBean);
+					Class<?> type = getTypeForFactoryBean(factoryBean); /* Bean由BeanFactory生成 */
 					return (type != null && typeToMatch.isAssignableFrom(type));
 				}
 				else {
@@ -535,7 +535,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 			}
 			else if (!isFactoryDereference) {
-				if (typeToMatch.isInstance(beanInstance)) {
+				if (typeToMatch.isInstance(beanInstance)) { /* 实例类型匹配 */
 					// Direct match for exposed instance?
 					return true;
 				}

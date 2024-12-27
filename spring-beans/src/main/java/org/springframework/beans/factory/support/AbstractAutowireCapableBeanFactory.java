@@ -514,7 +514,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
-			/* 实例化前BeanPostProcessor拓展点，若有直接返回Bean,跳过后续流程 */
+			/* 实例化前BeanPostProcessor拓展点，若程序员自定义返回Bean, 则结束spring创建bean流程 */
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
 				return bean;
@@ -526,7 +526,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
-			/* 一般Bean创建流程 */
+			/* Bean一般创建流程 */
 			Object beanInstance = doCreateBean(beanName, mbdToUse, args);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Finished creating instance of bean '" + beanName + "'");
@@ -600,10 +600,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-			/* 用于解决循环依赖 --> 提前曝光原始对象or代理对象 --> 三级缓存singletonFactory早期对象单例工厂
+			/* 用于解决循环依赖 --> 提前曝光原始对象or代理对象 --> 三级缓存singletonFactory提前曝光对象单例工厂
 			*  二级缓存earlySingletonObjects，缓存singletonFactory结果。
 			*  1、为什么需要二级缓存，假设C是需要代理对象，那么当A、B都依赖到C时，二级缓存能保证拿到同一个C代理对象
-			*  2、为什么不提前生成代理对象，因为大多数情况不会出现循环依赖，减少没必要性能消耗，也保证Bean初始化的正确性（例如多次动态代理）
+			*  2、为什么不提前生成代理对象，因为大多数情况不会出现循环依赖，减少没必要性能消耗，也保证Bean初始化的一致性和正确性（例如如果动态代理框架每次为原始对象生成不同的代理对象，那么前后的代理对象不同）
 			*  */
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
@@ -627,15 +627,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		if (earlySingletonExposure) {
 			Object earlySingletonReference = getSingleton(beanName, false);
-			/* earlySingletonReference != null --> 发生了循环依赖，提前生成了动态代理对象  */
+			/* earlySingletonReference != null --> 发生了循环依赖，二级缓存里存在 原始对象or动态代理对象  */
 			if (earlySingletonReference != null) {
 				/* exposedObject == bean --> 仍然是原始对象(说明执行initializeBean时没发生代理（AOP代理缓存存在则跳过）) --> 返回提前生成的动态代理对象*/
 				if (exposedObject == bean) {
-					exposedObject = earlySingletonReference;
+					exposedObject = earlySingletonReference;/* 返回提前生成的代理对象，后面再生成代理对象时代理框架可以缓存代理过的对象，不再新生成代理对象，那么就会exposedObject == bean */
 				}
 				/* exposedObject != bean --> 循环依赖提前生成的动态代理对象与最后生成的动态代理对象不同 --> 报错 */
 				else if (!this.allowRawInjectionDespiteWrapping && hasDependentBean(beanName)) {
-					//取出依赖的bean的对象
+					//取出依赖了这个bean的对象
 					String[] dependentBeans = getDependentBeans(beanName);
 					Set<String> actualDependentBeans = new LinkedHashSet<>(dependentBeans.length);
 					for (String dependentBean : dependentBeans) {

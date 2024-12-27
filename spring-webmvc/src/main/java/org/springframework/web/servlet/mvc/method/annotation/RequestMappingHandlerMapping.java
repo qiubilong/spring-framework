@@ -73,7 +73,7 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * @author Sam Brannen
  * @since 3.1
  */
-public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMapping
+public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMapping /* @RequestMapping解析器 */
 		implements MatchableHandlerMapping, EmbeddedValueResolverAware {
 
 	private boolean defaultPatternParser = true;
@@ -200,7 +200,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void afterPropertiesSet() {
+	public void afterPropertiesSet() { /* Bean初始化回调 <-- BeforeInitialization后，AfterInitialization前 */
 		this.config = new RequestMappingInfo.BuilderConfiguration();
 		this.config.setTrailingSlashMatch(useTrailingSlashMatch());
 		this.config.setContentNegotiationManager(getContentNegotiationManager());
@@ -303,7 +303,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 		if (info != null) {
 			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType); /* 解析class注解@RequestMapping - - 包括重写的父类和接口 */
 			if (typeInfo != null) {
-				info = typeInfo.combine(info);
+				info = typeInfo.combine(info);/* 合并 */
 			}
 			String prefix = getPathPrefix(handlerType);
 			if (prefix != null) {

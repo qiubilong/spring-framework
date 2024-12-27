@@ -46,7 +46,7 @@ import org.springframework.util.Assert;
  * @author Juergen Hoeller
  * @see org.springframework.web.context.support.WebApplicationObjectSupport
  */
-public abstract class ApplicationObjectSupport implements ApplicationContextAware {
+public abstract class ApplicationObjectSupport implements ApplicationContextAware { /* Aware在BeforeInitialization前回调 */
 
 	/** Logger that is available to subclasses. */
 	protected final Log logger = LogFactory.getLog(getClass());
@@ -60,7 +60,7 @@ public abstract class ApplicationObjectSupport implements ApplicationContextAwar
 	private MessageSourceAccessor messageSourceAccessor;
 
 
-	@Override
+	@Override /* BeforeInitialization前回调 */
 	public final void setApplicationContext(@Nullable ApplicationContext context) throws BeansException {
 		if (context == null && !isContextRequired()) {
 			// Reset internal context state.

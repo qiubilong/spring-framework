@@ -63,7 +63,7 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * @author Rossen Stoyanchev
  * @since 3.1
  */
-public final class RequestMappingInfo implements RequestCondition<RequestMappingInfo> {
+public final class RequestMappingInfo implements RequestCondition<RequestMappingInfo> { /* @RequestMapping信息 */
 
 	private static final PathPatternsRequestCondition EMPTY_PATH_PATTERNS = new PathPatternsRequestCondition();
 

@@ -355,7 +355,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	protected void beforeSingletonCreation(String beanName) {
 		if (!this.inCreationCheckExclusions.contains(beanName) && !this.singletonsCurrentlyInCreation.add(beanName)) {
-			throw new BeanCurrentlyInCreationException(beanName);
+			throw new BeanCurrentlyInCreationException(beanName);/* 构造函数循环依赖 --> 重复添加创建中标记 --> 循环依赖异常 */
 		}
 	}
 

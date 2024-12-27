@@ -267,7 +267,7 @@ public class LocalValidatorFactoryBean extends SpringValidatorAdapter
 			if (this.validationProviderResolver != null) {
 				bootstrap = bootstrap.providerResolver(this.validationProviderResolver);
 			}
-			configuration = bootstrap.configure();
+			configuration = bootstrap.configure();/* SPI机制加载校验器 -->  ServiceLoader.load( ValidationProvider.class, classloader ) -->META-INF/services/jakarta.validation.spi.ValidationProvider -->如果引进了hibernate-validate.jar，则加载HibernateValidator  */
 		}
 
 		// Try Hibernate Validator 5.2's externalClassLoader(ClassLoader) method
@@ -329,8 +329,8 @@ public class LocalValidatorFactoryBean extends SpringValidatorAdapter
 		postProcessConfiguration(configuration);
 
 		try {
-			this.validatorFactory = configuration.buildValidatorFactory();
-			setTargetValidator(this.validatorFactory.getValidator());
+			this.validatorFactory = configuration.buildValidatorFactory();/* HibernateValidator.ValidatorFactoryImpl */
+			setTargetValidator(this.validatorFactory.getValidator());/* HibernateValidator.ValidatorFactoryImpl.ValidatorImpl */
 		}
 		finally {
 			closeMappingStreams(mappingStreams);
