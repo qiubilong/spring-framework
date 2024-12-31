@@ -6,13 +6,13 @@ import com.experiment.common.SleepUtil;
  * @author chenxuegui
  * @since 2024/12/2
  */
-public class ThreadEnd {     /* 业务线程最好的结束方式 */
+public class ThreadEnd_线程结束 {     /* 中断的结束方式 */
 
 	private static class BizThreadInterrupted extends Thread{
 		@Override
 		public void run() {
 			try {
-				while (!Thread.currentThread().isInterrupted()){/* 建议使用中断标志位interrupted来终止线程，线程阻塞后也能及时响应中断 */
+				while (!Thread.currentThread().isInterrupted()){/* 使用中断标志位interrupted来终止线程，线程阻塞后也能及时响应中断 */
 					System.out.println("BizThreadInterrupted run");
 					SleepUtil.sleep(3000);
 				}

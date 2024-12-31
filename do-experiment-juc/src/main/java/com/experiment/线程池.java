@@ -1,5 +1,6 @@
-package com.experiment.thread;
+package com.experiment;
 
+import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -32,7 +33,7 @@ public class 线程池 {
 		f.get();
 
 		threadPoolExecutor.shutdown();
-		threadPoolExecutor.shutdownNow();
+		List<Runnable> runnables = threadPoolExecutor.shutdownNow();
 
 		threadPoolExecutor.awaitTermination(3,TimeUnit.MINUTES);
 	}
