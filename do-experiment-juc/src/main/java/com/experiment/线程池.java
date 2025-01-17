@@ -33,6 +33,15 @@ public class 线程池 {
 		f.get();
 
 		threadPoolExecutor.shutdown();
+
+		threadPoolExecutor.execute(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("...threadPoolExecutor.shutdown");
+			}
+		});
+
+
 		List<Runnable> runnables = threadPoolExecutor.shutdownNow();
 
 		threadPoolExecutor.awaitTermination(3,TimeUnit.MINUTES);

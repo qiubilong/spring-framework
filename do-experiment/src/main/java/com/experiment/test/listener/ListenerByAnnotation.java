@@ -5,6 +5,8 @@ import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
+
 /**
  * @author chenxuegui
  * @since 2024/9/9
@@ -20,4 +22,9 @@ public class ListenerByAnnotation {
 
 	}
 	//EventListenerMethodProcessor是一个BeanFactoryPostProcessor
+
+	@PreDestroy
+	public void closeTest(){
+		System.out.println("listenerByAnnotationTest closeTest=");
+	}
 }

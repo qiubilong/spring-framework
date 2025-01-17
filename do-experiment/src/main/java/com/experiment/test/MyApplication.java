@@ -43,6 +43,9 @@ public class MyApplication {
 
 		applicationContext.refresh();/* 加载配置，生成非懒加载bean */
 
+		applicationContext.registerShutdownHook();//优雅关机
+
+
 		//通过别名查询
 		UserInfoService userInfoService = (UserInfoService) applicationContext.getBean("com.experiment.test.service.UserInfoService");
 		userInfoService.queryUsers();
@@ -95,9 +98,14 @@ public class MyApplication {
 		//mybatis-测试
 		MomentService momentService = applicationContext.getBean(MomentService.class);
 		//momentService.batchInsertCounter();
-		momentService.updateCommentReplyNum();//事务测试
+		//momentService.updateCommentReplyNum();//事务测试
 
 
-		applicationContext.close();
+		try {
+			Thread.sleep(20000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		//applicationContext.close();
 	}
 }

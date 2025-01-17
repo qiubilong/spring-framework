@@ -22,7 +22,7 @@ public class Synchronized_内置锁 {
 	public static void main(String[] args) {
 
 		Synchronized_内置锁 synchronized内置锁 = new Synchronized_内置锁();
-
+/*
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -39,7 +39,7 @@ public class Synchronized_内置锁 {
 					synchronized内置锁.incrCount();
 				}
 			}
-		}).start();
+		}).start();*/
 
 		SleepUtil.sleep(2000);
 		System.out.println("count = " + synchronized内置锁.count);

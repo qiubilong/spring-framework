@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
+
 /**
  * @author chenxuegui
  * @since 2024/9/11
@@ -20,5 +22,10 @@ public class ListenerByImpl implements ApplicationListener<ApplicationEvent> {
 			System.out.println("ListenerByImplTest PayloadApplicationEvent="+applicationEvent.getPayload());
 		}
 
+	}
+
+	@PreDestroy
+	public void closeTest(){
+		System.out.println("ListenerByImplTest closeTest=");
 	}
 }

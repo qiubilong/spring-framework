@@ -509,7 +509,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			}
 		}
 		/* Advice  --> DefaultPointcutAdvisor */
-		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
+		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);//specificInterceptors是advisors
 		proxyFactory.addAdvisors(advisors);        /* 增强器Advisor */
 		proxyFactory.setTargetSource(targetSource);/* 目标对象bean */
 		customizeProxyFactory(proxyFactory);
@@ -569,7 +569,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		Advisor[] commonInterceptors = resolveInterceptorNames();
 
 		List<Object> allInterceptors = new ArrayList<>();
-		if (specificInterceptors != null) {
+		if (specificInterceptors != null) { //specificInterceptors是匹配到的Advisor列表
 			if (specificInterceptors.length > 0) {
 				// specificInterceptors may equal PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS
 				allInterceptors.addAll(Arrays.asList(specificInterceptors));

@@ -162,7 +162,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/** Map from scope identifier String to corresponding Scope. */
 	private final Map<String, Scope> scopes = new LinkedHashMap<>(8);
 
-	/** Map from bean name to merged RootBeanDefinition. */
+	/** Map from bean name to merged RootBeanDefinition. */   /* 所有BeanDefinition, beanName <--> BeanDefinition */
 	private final Map<String, RootBeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>(256);
 
 	/** Names of beans that have already been created at least once. */
@@ -322,7 +322,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 				// Create bean instance.
 				if (mbd.isSingleton()) {
-					sharedInstance = getSingleton(beanName, () -> { /* 实例化单例Bean匿名工厂 */
+					sharedInstance = getSingleton(beanName, () -> { /* 实例化单例Bean --- bean创建中标记--createBean()--addSingleton添加到单例缓存map */
 						try {
 							/* 创建单例bean */
 							return createBean(beanName, mbd, args);
