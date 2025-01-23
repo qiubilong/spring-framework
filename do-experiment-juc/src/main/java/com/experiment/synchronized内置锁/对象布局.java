@@ -15,5 +15,6 @@ public class 对象布局 {
 
 	private static class Test {
 		private long p;
+		private boolean flag;
 	}
 }
