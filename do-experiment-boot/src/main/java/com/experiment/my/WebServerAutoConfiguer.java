@@ -1,9 +1,5 @@
-package com.experiment.web.conf;
+package com.experiment.my;
 
-import com.experiment.my.JettyWebServer;
-import com.experiment.my.MyOnClassConditional;
-import com.experiment.my.TomcatWebServer;
-import com.experiment.my.WebServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
