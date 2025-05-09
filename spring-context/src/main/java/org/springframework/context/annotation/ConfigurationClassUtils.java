@@ -181,7 +181,7 @@ public abstract class ConfigurationClassUtils {
 		}
 
 		// Finally, let's look for @Bean methods...
-		/* class上没有注解配置，检查是否存在@Bean方法，通过@Import导入的Bean存在这种情况 */
+		/* class上没有注解配置，检查是否存在@Bean方法，手动register、@Import导入的Bean 存在这种情况 */
 		return hasBeanMethods(metadata);
 	}
 

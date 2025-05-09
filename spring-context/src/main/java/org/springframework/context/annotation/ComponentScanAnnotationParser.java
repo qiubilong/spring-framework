@@ -118,7 +118,7 @@ class ComponentScanAnnotationParser {
 			basePackages.add(ClassUtils.getPackageName(clazz));
 		}
 		if (basePackages.isEmpty()) {
-			basePackages.add(ClassUtils.getPackageName(declaringClass));
+			basePackages.add(ClassUtils.getPackageName(declaringClass));/* ComponentScan如果没有指定basePackages，则使用当前类的包路径，springboot就是这样 */
 		}
         /* 排除自己 */
 		scanner.addExcludeFilter(new AbstractTypeHierarchyTraversingFilter(false, false) {

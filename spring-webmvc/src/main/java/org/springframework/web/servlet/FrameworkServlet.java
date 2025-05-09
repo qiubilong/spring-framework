@@ -222,7 +222,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 	/** WebApplicationContext for this servlet. */
 	@Nullable
-	private WebApplicationContext webApplicationContext;
+	private WebApplicationContext webApplicationContext; /* SpringMVC 容器 */
 
 	/** If the WebApplicationContext was injected via {@link #setApplicationContext}. */
 	private boolean webApplicationContextInjected = false;

@@ -1402,7 +1402,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			Object instanceCandidate;
 
 			if (matchingBeans.size() > 1) {
-				/* 多个候选者优先规则 --> @Primary > @Priority > name  */
+				/* 多个候选者优先规则 --> @Primary > @Priority > 属性name  */
 				autowiredBeanName = determineAutowireCandidate(matchingBeans, descriptor);
 				if (autowiredBeanName == null) {
 					if (isRequired(descriptor) || !indicatesMultipleBeans(type)) {

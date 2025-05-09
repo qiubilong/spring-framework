@@ -34,7 +34,7 @@ public enum Propagation {
 	 * Analogous to EJB transaction attribute of the same name.
 	 * <p>This is the default setting of a transaction annotation.
 	 */
-	REQUIRED(TransactionDefinition.PROPAGATION_REQUIRED),
+	REQUIRED(TransactionDefinition.PROPAGATION_REQUIRED), /* 不存在就创建新事务 ---  默认 */
 
 	/**
 	 * Support a current transaction, execute non-transactionally if none exists.
@@ -47,13 +47,13 @@ public enum Propagation {
 	 * the actual synchronization configuration of the transaction manager.
 	 * @see org.springframework.transaction.support.AbstractPlatformTransactionManager#setTransactionSynchronization
 	 */
-	SUPPORTS(TransactionDefinition.PROPAGATION_SUPPORTS),
+	SUPPORTS(TransactionDefinition.PROPAGATION_SUPPORTS), /* 有就有，没有就没有 */
 
 	/**
 	 * Support a current transaction, throw an exception if none exists.
 	 * Analogous to EJB transaction attribute of the same name.
 	 */
-	MANDATORY(TransactionDefinition.PROPAGATION_MANDATORY),
+	MANDATORY(TransactionDefinition.PROPAGATION_MANDATORY),/* 必须存在事务，没有就报错 */
 
 	/**
 	 * Create a new transaction, and suspend the current transaction if one exists.
@@ -65,7 +65,7 @@ public enum Propagation {
 	 * made available to it (which is server-specific in standard Jakarta EE).
 	 * @see org.springframework.transaction.jta.JtaTransactionManager#setTransactionManager
 	 */
-	REQUIRES_NEW(TransactionDefinition.PROPAGATION_REQUIRES_NEW),
+	REQUIRES_NEW(TransactionDefinition.PROPAGATION_REQUIRES_NEW), /* 每次使用新事务 */
 
 	/**
 	 * Execute non-transactionally, suspend the current transaction if one exists.
@@ -77,13 +77,13 @@ public enum Propagation {
 	 * made available to it (which is server-specific in standard Jakarta EE).
 	 * @see org.springframework.transaction.jta.JtaTransactionManager#setTransactionManager
 	 */
-	NOT_SUPPORTED(TransactionDefinition.PROPAGATION_NOT_SUPPORTED),
+	NOT_SUPPORTED(TransactionDefinition.PROPAGATION_NOT_SUPPORTED), /* 不使用事务 */
 
 	/**
 	 * Execute non-transactionally, throw an exception if a transaction exists.
 	 * Analogous to EJB transaction attribute of the same name.
 	 */
-	NEVER(TransactionDefinition.PROPAGATION_NEVER),
+	NEVER(TransactionDefinition.PROPAGATION_NEVER),/* 禁止存在事务，有事务报错 */
 
 	/**
 	 * Execute within a nested transaction if a current transaction exists,
@@ -94,7 +94,7 @@ public enum Propagation {
 	 * transactions as well.
 	 * @see org.springframework.jdbc.datasource.DataSourceTransactionManager
 	 */
-	NESTED(TransactionDefinition.PROPAGATION_NESTED);
+	NESTED(TransactionDefinition.PROPAGATION_NESTED); /* 嵌套事务，savePoint */
 
 
 	private final int value;

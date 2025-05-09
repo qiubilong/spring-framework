@@ -15,7 +15,7 @@ import cn.tulingxueyuan.tools.SleepTools;
  */
 /* volatile声明的变量存在主存，而非cpu缓存 */
 public class VolatileCase {
-    private volatile static boolean ready;
+    private  static boolean ready;
     private static int number;
 
     private static class PrintThread extends Thread{

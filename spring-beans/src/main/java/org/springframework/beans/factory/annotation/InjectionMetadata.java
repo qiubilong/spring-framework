@@ -115,7 +115,7 @@ public class InjectionMetadata {
 			Set<InjectedElement> checkedElements = new LinkedHashSet<>((this.injectedElements.size() * 4 / 3) + 1);
 			for (InjectedElement element : this.injectedElements) {
 				Member member = element.getMember();
-				if (!beanDefinition.isExternallyManagedConfigMember(member)) {
+				if (!beanDefinition.isExternallyManagedConfigMember(member)) { /* 保证属性只初始化一次 */
 					beanDefinition.registerExternallyManagedConfigMember(member);
 					checkedElements.add(element);
 				}
@@ -239,7 +239,7 @@ public class InjectionMetadata {
 			if (this.isField) {
 				Field field = (Field) this.member;
 				ReflectionUtils.makeAccessible(field);
-				/* ResourceElement注入点 */
+				/* @Resource 的ResourceElement注入点 */
 				field.set(target, getResourceToInject(target, requestingBeanName));
 			}
 			else {

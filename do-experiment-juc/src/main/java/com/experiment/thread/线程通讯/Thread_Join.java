@@ -14,7 +14,7 @@ public class Thread_Join {
 		Thread t1 = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				SleepUtil.sleepSec(30);
+				SleepUtil.sleepSec(10);
 				Log.info("t1 end ");
 			}
 		},"t1");
@@ -24,7 +24,7 @@ public class Thread_Join {
 
 		Log.info("main run  ");
 
-		t1.join(3*1000);//wait t1 finish
+		t1.join();//wait t1 finish
 
 
 		Log.info("main end  ");

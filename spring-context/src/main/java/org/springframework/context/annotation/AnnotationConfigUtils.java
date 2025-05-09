@@ -171,7 +171,7 @@ public abstract class AnnotationConfigUtils {
 		 * ConfigurationClassPostProcessor
 		 * 重要的事情说三遍
 		 */
-		/* 注册BeanDefinition - BeanFactoryBeanProcessor - ConfigurationClassPostProcessor  --> 用户扫描生成BeanDefinition */
+		/* 注册BeanDefinition - BeanFactoryBeanProcessor - ConfigurationClassPostProcessor  --> 扫描用户指定的classpath生成BeanDefinition */
 		if (!registry.containsBeanDefinition(CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(ConfigurationClassPostProcessor.class);
 			def.setSource(source);

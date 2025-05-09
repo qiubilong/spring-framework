@@ -468,7 +468,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			throw new NoSuchBeanDefinitionException(element.lookupType,
 					"No resource factory configured - specify the 'resourceFactory' property");
 		}
-		return autowireResource(this.resourceFactory, element, requestingBeanName);
+		return autowireResource(this.resourceFactory, element, requestingBeanName);/* 获取 @Resource对象*/
 	}
 
 	/**
@@ -490,14 +490,14 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		if (factory instanceof AutowireCapableBeanFactory autowireCapableBeanFactory) {
 			DependencyDescriptor descriptor = element.getDependencyDescriptor();
 			if (this.fallbackToDefaultTypeMatch && element.isDefaultName && !factory.containsBean(name)) {
-				autowiredBeanNames = new LinkedHashSet<>();
+				autowiredBeanNames = new LinkedHashSet<>(); /* name对应的bean不存在，byClass获取Bean 注入@Resource */
 				resource = autowireCapableBeanFactory.resolveDependency(descriptor, requestingBeanName, autowiredBeanNames, null);
 				if (resource == null) {
 					throw new NoSuchBeanDefinitionException(element.getLookupType(), "No resolvable resource object");
 				}
 			}
 			else {
-				resource = autowireCapableBeanFactory.resolveBeanByName(name, descriptor);
+				resource = autowireCapableBeanFactory.resolveBeanByName(name, descriptor); /* byName获取Bean注入@Resource */
 				autowiredBeanNames = Collections.singleton(name);
 			}
 		}
@@ -592,7 +592,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			String resourceName = resource.name();
 			Class<?> resourceType = resource.type();
 			this.isDefaultName = !StringUtils.hasLength(resourceName);
-			if (this.isDefaultName) {
+			if (this.isDefaultName) { /* 未指定注入名字，就使用属性名字 */
 				resourceName = this.member.getName();
 				if (this.member instanceof Method && resourceName.startsWith("set") && resourceName.length() > 3) {
 					resourceName = StringUtils.uncapitalizeAsProperty(resourceName.substring(3));
@@ -619,7 +619,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		@Override
 		protected Object getResourceToInject(Object target, @Nullable String requestingBeanName) {
 			return (this.lazyLookup ? buildLazyResourceProxy(this, requestingBeanName) :
-					getResource(this, requestingBeanName));
+					getResource(this, requestingBeanName));/* 获取@Resource依赖bean */
 		}
 	}
 
