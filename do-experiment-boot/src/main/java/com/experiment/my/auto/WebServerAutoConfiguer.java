@@ -1,14 +1,16 @@
-package com.experiment.my;
+package com.experiment.my.auto;
 
+import com.experiment.my.auto.webserver.JettyWebServer;
+import com.experiment.my.auto.webserver.TomcatWebServer;
+import com.experiment.my.auto.webserver.WebServer;
+import com.experiment.my.condition.MyOnClassConditional;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @author chenxuegui
  * @since 2025/5/9
  */
-@Configuration
-public class WebServerAutoConfiguer {
+public class WebServerAutoConfiguer implements AutoConfiguer {
 
 	@Bean
 	@MyOnClassConditional("org.apache.catalina.startup.Tomcat")

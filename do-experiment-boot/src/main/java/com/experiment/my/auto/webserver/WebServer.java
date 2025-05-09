@@ -1,4 +1,4 @@
-package com.experiment.my;
+package com.experiment.my.auto.webserver;
 
 import org.springframework.web.context.WebApplicationContext;
 

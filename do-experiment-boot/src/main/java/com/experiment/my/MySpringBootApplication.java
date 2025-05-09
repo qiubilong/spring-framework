@@ -1,5 +1,6 @@
 package com.experiment.my;
 
+import com.experiment.my.auto.ImportSelectorAutoConfiguer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -16,6 +17,6 @@ import java.lang.annotation.*;
 
 @Configuration
 @ComponentScan
-@Import(WebServerAutoConfiguer.class)
+@Import(ImportSelectorAutoConfiguer.class)
 public @interface MySpringBootApplication {
 }

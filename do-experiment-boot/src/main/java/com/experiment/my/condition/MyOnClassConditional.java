@@ -1,5 +1,6 @@
-package com.experiment.my;
+package com.experiment.my.condition;
 
+import com.experiment.my.condition.MyOnClassCondition;
 import org.springframework.context.annotation.Conditional;
 
 import java.lang.annotation.*;

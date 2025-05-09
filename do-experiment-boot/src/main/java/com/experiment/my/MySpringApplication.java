@@ -1,6 +1,6 @@
 package com.experiment.my;
 
-import org.springframework.context.ApplicationContext;
+import com.experiment.my.auto.webserver.WebServer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 

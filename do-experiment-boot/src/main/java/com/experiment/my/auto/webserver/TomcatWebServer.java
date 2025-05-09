@@ -1,4 +1,4 @@
-package com.experiment.my;
+package com.experiment.my.auto.webserver;
 
 import org.apache.catalina.*;
 import org.apache.catalina.connector.Connector;
@@ -15,7 +15,7 @@ import javax.servlet.Servlet;
  * @author chenxuegui
  * @since 2025/5/9
  */
-public class TomcatWebServer implements WebServer{
+public class TomcatWebServer implements WebServer {
 	@Override
 	public void start(WebApplicationContext applicationContext) {
 		System.out.println("start Tomcat");
