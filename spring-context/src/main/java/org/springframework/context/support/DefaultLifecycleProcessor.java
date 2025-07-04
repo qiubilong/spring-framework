@@ -203,7 +203,7 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 			List<Integer> keys = new ArrayList<>(phases.keySet());
 			keys.sort(Collections.reverseOrder());
 			for (Integer key : keys) {
-				phases.get(key).stop();
+				phases.get(key).stop();/* 关闭 - SmartLifecycle  */
 			}
 		}
 	}
@@ -244,7 +244,7 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 							logger.trace("Stopping bean '" + beanName + "' of type [" +
 									bean.getClass().getName() + "]");
 						}
-						bean.stop();
+						bean.stop(); /* smartLifecycle.sop() */
 						if (logger.isDebugEnabled()) {
 							logger.debug("Successfully stopped bean '" + beanName + "'");
 						}
@@ -365,7 +365,7 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 				logger.debug("Stopping beans in phase " + this.phase);
 			}
 			this.members.sort(Collections.reverseOrder());
-			CountDownLatch latch = new CountDownLatch(this.smartMemberCount);
+			CountDownLatch latch = new CountDownLatch(this.smartMemberCount); /* 倒计数器 */
 			Set<String> countDownBeanNames = Collections.synchronizedSet(new LinkedHashSet<>());
 			Set<String> lifecycleBeanNames = new HashSet<>(this.lifecycleBeans.keySet());
 			for (LifecycleGroupMember member : this.members) {
@@ -378,7 +378,7 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 				}
 			}
 			try {
-				latch.await(this.timeout, TimeUnit.MILLISECONDS);
+				latch.await(this.timeout, TimeUnit.MILLISECONDS);/* 等待30s */
 				if (latch.getCount() > 0 && !countDownBeanNames.isEmpty() && logger.isInfoEnabled()) {
 					logger.info("Failed to shut down " + countDownBeanNames.size() + " bean" +
 							(countDownBeanNames.size() > 1 ? "s" : "") + " with phase value " +

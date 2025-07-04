@@ -207,7 +207,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/** LifecycleProcessor for managing the lifecycle of beans within this context. */
 	@Nullable
-	private LifecycleProcessor lifecycleProcessor;
+	private LifecycleProcessor lifecycleProcessor; /* DefaultLifecycleProcessor */
 
 	/** MessageSource we delegate our implementation of this interface to. */
 	@Nullable
@@ -1062,7 +1062,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// Stop all Lifecycle beans, to avoid delays during individual destruction.
 			if (this.lifecycleProcessor != null) {
 				try {
-					this.lifecycleProcessor.onClose();
+					this.lifecycleProcessor.onClose();/* 2、关闭Tomcat - DefaultLifecycleProcessor */
 				}
 				catch (Throwable ex) {
 					logger.warn("Exception thrown from LifecycleProcessor on context close", ex);
@@ -1070,13 +1070,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 
 			// Destroy all cached singletons in the context's BeanFactory.
-			destroyBeans(); /* 2、销毁Bean */
+			destroyBeans(); /* 3、销毁Bean */
 
 			// Close the state of this context itself.
 			closeBeanFactory();
 
 			// Let subclasses do some final clean-up if they wish...
-			onClose();     /* 3、关闭Tomcat */
+			onClose();
 
 			// Reset local application listeners to pre-refresh state.
 			if (this.earlyApplicationListeners != null) {
