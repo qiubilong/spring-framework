@@ -106,6 +106,7 @@ public class MyApplication {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//applicationContext.close();
+
+		applicationContext.close();
 	}
 }

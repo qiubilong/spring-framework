@@ -120,7 +120,7 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 
 	@Override
 	public void onRefresh() {
-		startBeans(true);
+		startBeans(true); /* 调用所有的 SmartLifecycle.onstart() */
 		this.running = true;
 	}
 
@@ -169,13 +169,13 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 			for (String dependency : dependenciesForBean) {
 				doStart(lifecycleBeans, dependency, autoStartupOnly);
 			}
-			if (!bean.isRunning() &&
+			if (!bean.isRunning() && /* SmartLifecycle状态 - 未启动 */
 					(!autoStartupOnly || !(bean instanceof SmartLifecycle smartLifecycle) || smartLifecycle.isAutoStartup())) {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Starting bean '" + beanName + "' of type [" + bean.getClass().getName() + "]");
 				}
 				try {
-					bean.start();
+					bean.start(); /* 启动 - SmartLifecycle  */
 				}
 				catch (Throwable ex) {
 					throw new ApplicationContextException("Failed to start bean '" + beanName + "'", ex);
@@ -353,7 +353,7 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 			}
 			Collections.sort(this.members);
 			for (LifecycleGroupMember member : this.members) {
-				doStart(this.lifecycleBeans, member.name, this.autoStartupOnly);
+				doStart(this.lifecycleBeans, member.name, this.autoStartupOnly); /* 启动 SmartLifecycle.start() */
 			}
 		}
 

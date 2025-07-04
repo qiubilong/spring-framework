@@ -582,7 +582,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
-				onRefresh();
+				onRefresh();/* 创建Tomcat */
 
 				// Check for listener beans and register them.//注册事件监听器
 				registerListeners();
@@ -592,7 +592,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
-				finishRefresh();/* 发布启动完成事件 */
+				finishRefresh();/* 发布启动完成事件 - 启动Tomcat */
 			}
 
 			catch (BeansException ex) {
@@ -851,7 +851,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 		}
 		else {
-			DefaultLifecycleProcessor defaultProcessor = new DefaultLifecycleProcessor();
+			DefaultLifecycleProcessor defaultProcessor = new DefaultLifecycleProcessor(); /* 生命周期处理器 */
 			defaultProcessor.setBeanFactory(beanFactory);
 			this.lifecycleProcessor = defaultProcessor;
 			beanFactory.registerSingleton(LIFECYCLE_PROCESSOR_BEAN_NAME, this.lifecycleProcessor);
@@ -948,13 +948,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		clearResourceCaches();
 
 		// Initialize lifecycle processor for this context.
-		initLifecycleProcessor();
+		initLifecycleProcessor();/* DefaultLifecycleProcessor */
 
 		// Propagate refresh to lifecycle processor first.
-		getLifecycleProcessor().onRefresh();
+		getLifecycleProcessor().onRefresh(); /*  start() 所有的 SmartLifecycle对象 */
 
 		// Publish the final event.
-		publishEvent(new ContextRefreshedEvent(this));/* 启动完成事件 */
+		publishEvent(new ContextRefreshedEvent(this));/* 发布 - 启动完成事件 */
 	}
 
 	/**
@@ -1001,7 +1001,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			this.shutdownHook = new Thread(SHUTDOWN_HOOK_THREAD_NAME) {
 				@Override
 				public void run() {
-					synchronized (startupShutdownMonitor) {
+					synchronized (startupShutdownMonitor) { /* JVM关闭钩子 */
 						doClose();
 					}
 				}
@@ -1053,7 +1053,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 			try {
 				// Publish shutdown event.
-				publishEvent(new ContextClosedEvent(this));
+				publishEvent(new ContextClosedEvent(this)); /* 1、关闭事件 */
 			}
 			catch (Throwable ex) {
 				logger.warn("Exception thrown from ApplicationListener handling ContextClosedEvent", ex);
@@ -1070,13 +1070,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 
 			// Destroy all cached singletons in the context's BeanFactory.
-			destroyBeans();
+			destroyBeans(); /* 2、销毁Bean */
 
 			// Close the state of this context itself.
 			closeBeanFactory();
 
 			// Let subclasses do some final clean-up if they wish...
-			onClose();
+			onClose();     /* 3、关闭Tomcat */
 
 			// Reset local application listeners to pre-refresh state.
 			if (this.earlyApplicationListeners != null) {
