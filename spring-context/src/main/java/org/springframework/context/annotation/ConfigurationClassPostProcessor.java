@@ -268,7 +268,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * Derive further bean definitions from the configuration classes in the registry.
 	 */
 	@Override
-	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
+	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) { /* 处理BeanDefinition注入 - ApplicationContext.refresh() -- invokeBeanFactoryPostProcessor阶段 */
 		int registryId = System.identityHashCode(registry);
 		if (this.registriesPostProcessed.contains(registryId)) {
 			throw new IllegalStateException(
@@ -342,7 +342,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * Build and validate a configuration model based on the registry of
 	 * {@link Configuration} classes.
 	 */
-	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
+	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) { /* 处理配置Bean */
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
 		String[] candidateNames = registry.getBeanDefinitionNames();
 		/* 首先主要是取得设置的配置类 --> 如MyAppConfig  */

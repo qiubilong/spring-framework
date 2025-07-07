@@ -256,7 +256,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.trace("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
-			/* 处理BeanFactory创建的对象，如果是beanName得到的是BeanFactory,则返回BeanFactory.getObject()对象 */
+			/* 处理FactoryBean创建的对象，如果是beanName是 FactoryBean,则返回 FactoryBean.getObject()对象 */
 			beanInstance = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
@@ -267,8 +267,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
 
-			// Check if bean definition exists in this factory. //父工厂ParentBeanFactory中查找
-			BeanFactory parentBeanFactory = getParentBeanFactory();
+			// Check if bean definition exists in this factory.
+			BeanFactory parentBeanFactory = getParentBeanFactory();/* 父容器 ParentBeanFactory 中查找 */
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
 				String nameToLookup = originalBeanName(name);
@@ -335,7 +335,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 							throw ex;
 						}
 					});
-					/* 如果创建的Bean是FactoryBean，则调用FactoryBean.getObject()得到真正的Bean */
+					/* 如果创建的Bean是 FactoryBean，则调用 FactoryBean.getObject()得到真正的Bean */
 					beanInstance = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
 				}
 
@@ -1787,7 +1787,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	protected Object getObjectForBeanInstance(
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
-		/* name=&开头，获取工厂FactoryBean */
+		/* name &开头，获取工厂 FactoryBean */
 		// Don't let calling code try to dereference the factory if the bean isn't a factory.
 		if (BeanFactoryUtils.isFactoryDereference(name)) {
 			if (beanInstance instanceof NullBean) {
@@ -1826,7 +1826,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				mbd = getMergedLocalBeanDefinition(beanName);
 			}
 			boolean synthetic = (mbd != null && mbd.isSynthetic());
-			/* 2、这个Bean是工厂Bean，而且不是想要获取工厂Bean，则调用BeanFactory.getObject()返回的创建的Bean */
+			/* 2、这个Bean是 工厂Bean，而且不是想要获取 工厂Bean，则调用BeanFactory.getObject()返回的创建的Bean */
 			object = getObjectFromFactoryBean(factoryBean, beanName, !synthetic);
 		}
 		return object;

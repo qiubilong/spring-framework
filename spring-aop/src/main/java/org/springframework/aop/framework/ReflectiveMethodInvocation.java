@@ -61,7 +61,7 @@ import org.springframework.lang.Nullable;
  */
 public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Cloneable {
 
-	protected final Object proxy;
+	protected final Object proxy; /* 动态生成的代理对象 */
 
 	@Nullable
 	protected final Object target; /* 目标对象 */

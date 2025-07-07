@@ -65,7 +65,7 @@ public abstract class ConfigurationClassUtils {
 
 	private static final Log logger = LogFactory.getLog(ConfigurationClassUtils.class);
 
-	private static final Set<String> candidateIndicators = Set.of(
+	private static final Set<String> candidateIndicators = Set.of( /* 配置类注解 + @Configuration */
 			Component.class.getName(),
 			ComponentScan.class.getName(),
 			Import.class.getName(),

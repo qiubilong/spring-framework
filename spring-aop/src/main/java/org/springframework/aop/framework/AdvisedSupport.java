@@ -73,7 +73,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 
 	/** Package-protected to allow direct access for efficiency. */
 	@SuppressWarnings("serial")
-	TargetSource targetSource = EMPTY_TARGET_SOURCE;
+	TargetSource targetSource = EMPTY_TARGET_SOURCE; /* 目标对象 */
 
 	/** Whether the Advisors are already filtered for the specific target class. */
 	private boolean preFiltered = false;
@@ -97,7 +97,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	 * in an Advisor before being added to this List.
 	 */
 	@SuppressWarnings("serial")
-	private List<Advisor> advisors = new ArrayList<>();
+	private List<Advisor> advisors = new ArrayList<>(); /* 切面列表 */
 
 
 	/**

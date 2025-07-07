@@ -59,7 +59,7 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 		Class<?> actualClass = (targetClass != null ? targetClass : method.getDeclaringClass());
 		Boolean hasIntroductions = null;
 
-		for (Advisor advisor : advisors) { /* 变量Advisor */
+		for (Advisor advisor : advisors) { /* 遍历Advisor列表 */
 			if (advisor instanceof PointcutAdvisor pointcutAdvisor) {
 				// Add it conditionally.
 				    /* 规则配置Pointcut --> class匹配  */

@@ -435,7 +435,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 					logger.trace("Scanning " + resource);
 				}
 				try {
-					/* ASM类解析器 */
+					/* ASM类解析器 - 不需要通过JVM加载Class - 提高解析速度 */
 					MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
 					/* 过滤器匹配 --> @Component  --> BeanDefinition */
 					if (isCandidateComponent(metadataReader)) {

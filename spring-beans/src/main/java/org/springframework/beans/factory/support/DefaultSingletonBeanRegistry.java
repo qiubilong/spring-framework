@@ -233,7 +233,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					this.suppressedExceptions = new LinkedHashSet<>();
 				}
 				try {
-					/* 其实就是 AbstractAutowireCapableBeanFactory.createBean() */
+					/* 其实就是 上级调用的 AbstractAutowireCapableBeanFactory.createBean() */
 					singletonObject = singletonFactory.getObject();
 					newSingleton = true;
 				}
@@ -259,7 +259,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					}
 					afterSingletonCreation(beanName);
 				}
-				if (newSingleton) { /* 添加到单例缓存Map */
+				if (newSingleton) { /* 添加到 单例缓存池Map - singletonObjects */
 					addSingleton(beanName, singletonObject);
 				}
 			}

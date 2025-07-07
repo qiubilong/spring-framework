@@ -495,8 +495,7 @@ class ConfigurationClassParser {
 			this.importStack.push(configClass);
 			try {
 				for (SourceClass candidate : importCandidates) {
-					    /* 处理 ImportSelector类 */
-					if (candidate.isAssignable(ImportSelector.class)) {
+					if (candidate.isAssignable(ImportSelector.class)) {    /* 1、处理 ImportSelector类 */
 						// Candidate class is an ImportSelector -> delegate to it to determine imports
 						Class<?> candidateClass = candidate.loadClass();
 						/* 实例化 ImportSelector */
@@ -517,11 +516,10 @@ class ConfigurationClassParser {
 							processImports(configClass, currentSourceClass, importSourceClasses, exclusionFilter, false);
 						}
 					}
-					else if (candidate.isAssignable(ImportBeanDefinitionRegistrar.class)) {
+					else if (candidate.isAssignable(ImportBeanDefinitionRegistrar.class)) {	            /* 2、处理 ImportBeanDefinitionRegistrar --> 可获取配置类（注解）信息 - 组件常用  */
 						// Candidate class is an ImportBeanDefinitionRegistrar ->
 						// delegate to it to register additional bean definitions
 						Class<?> candidateClass = candidate.loadClass();
-						/* 处理 ImportBeanDefinitionRegistrar --> 可获取配置类（注解）信息  */
 						ImportBeanDefinitionRegistrar registrar =
 								ParserStrategyUtils.instantiateClass(candidateClass, ImportBeanDefinitionRegistrar.class,
 										this.environment, this.resourceLoader, this.registry);
@@ -532,8 +530,7 @@ class ConfigurationClassParser {
 						// process it as an @Configuration class
 						this.importStack.registerImport(
 								currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());
-						/* 递归解析 - 普通配置类 */
-						processConfigurationClass(candidate.asConfigClass(configClass), exclusionFilter);
+						processConfigurationClass(candidate.asConfigClass(configClass), exclusionFilter); /* 3、递归解析 - 普通配置类 */
 					}
 				}
 			}

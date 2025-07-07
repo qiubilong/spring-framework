@@ -161,7 +161,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
 
 	/** Map of bean definition objects, keyed by bean name. */
-	/* BeanDefinition集合 */
+	/* BeanDefinition 集合 */
 	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 
 	/** Map from bean name to merged BeanDefinitionHolder. */
@@ -985,7 +985,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			if (singletonInstance instanceof SmartInitializingSingleton smartSingleton) {
 				StartupStep smartInitialize = this.getApplicationStartup().start("spring.beans.smart-initialize")
 						.tag("beanName", beanName);
-				/* 所有单例bean实例化后 - afterSingletonsInstantiated回调 */
+				/* 所有单例bean实例化后 - afterSingletonsInstantiated回调  - SmartInitializingSingleton */
 				smartSingleton.afterSingletonsInstantiated();
 				smartInitialize.end();
 			}
@@ -1336,7 +1336,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			return new Jsr330Factory().createDependencyProvider(descriptor, requestingBeanName);
 		}
 		else {
-			/* @Autowired @Lazy 时生成代理Bean*/
+			/* @Autowired + @Lazy 时生成代理Bean - TargetSource */
 			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(
 					descriptor, requestingBeanName);
 			if (result == null) {

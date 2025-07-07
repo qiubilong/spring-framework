@@ -91,7 +91,7 @@ class ConditionEvaluator {
 			return shouldSkip(metadata, ConfigurationPhase.REGISTER_BEAN);
 		}
 
-		/* 加载注解@Conditional配置 */
+		/* 加载注解 @Conditional 配置 Class */
 		List<Condition> conditions = new ArrayList<>();
 		for (String[] conditionClasses : getConditionClasses(metadata)) {
 			for (String conditionClass : conditionClasses) {
@@ -108,7 +108,7 @@ class ConditionEvaluator {
 				requiredPhase = configurationCondition.getConfigurationPhase();
 			}
 			/* 条件不匹配，则跳过 */
-			if ((requiredPhase == null || requiredPhase == phase) && !condition.matches(this.context, metadata)) {
+			if ((requiredPhase == null || requiredPhase == phase) && !condition.matches(this.context, metadata)) { /* 条件匹配（容器，注解） */
 				return true;
 			}
 		}

@@ -289,7 +289,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 					/* BeanDefinition --> @Lazy 、@Primary等 */
 					AnnotationConfigUtils.processCommonDefinitionAnnotations(annotatedBeanDefinition);
 				}
-				/* 检查唯一性 */
+				/* 检查唯一性 - 防止名字相同或者扫描两次 */
 				if (checkCandidate(beanName, candidate)) {
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
 					definitionHolder =

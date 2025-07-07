@@ -497,7 +497,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Make sure bean class is actually resolved at this point, and
 		// clone the bean definition in case of a dynamically resolved Class
 		// which cannot be stored in the shared merged bean definition.
-		Class<?> resolvedClass = resolveBeanClass(mbd, beanName);/* 解析beanClass */
+		Class<?> resolvedClass = resolveBeanClass(mbd, beanName);/* 双亲委派 - 真正加载解析 beanClass */
 		if (resolvedClass != null && !mbd.hasBeanClass() && mbd.getBeanClassName() != null) {
 			mbdToUse = new RootBeanDefinition(mbd);
 			mbdToUse.setBeanClass(resolvedClass);
@@ -567,7 +567,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
-			/* 构造方法推断 --> 1、实例化*/
+			/* 构造方法推断 --> 1、实例化 */
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		Object bean = instanceWrapper.getWrappedInstance();
@@ -600,7 +600,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-			/* 用于解决循环依赖 --> 提前曝光原始对象or代理对象 --> 三级缓存singletonFactory提前曝光Bean对象的单例工厂
+			/* 用于解决循环依赖 --> 提前曝光原始对象or代理对象 --> 三级缓存singletonFactory - 提前曝光Bean原始对象的单例工厂
 			*  二级缓存earlySingletonObjects，缓存singletonFactory结果。
 			*  1、为什么需要二级缓存，假设C是需要代理对象，那么当A、B都依赖到C时，二级缓存能保证拿到同一个C代理对象
 			*  2、二级缓存能解决循环依赖吗/提前生成代理对象？如果要使用二级缓存解决循环依赖，意味着所有Bean在实例化后就要马上完成AOP代理，这样违背了Spring设计的原则，Spring在设计之初就是在Bean生命周期的最后一步来完成AOP代理，而不是在实例化后就立马进行AOP代理（如果动态代理框架每次为原始对象生成不同的代理对象，那么前后的代理对象不同。仅AutoProxyCreator缓存代理结果只生成一次）

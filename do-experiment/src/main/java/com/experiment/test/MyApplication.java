@@ -41,7 +41,7 @@ public class MyApplication {
 		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
 		applicationContext.register(MyAppConfig.class);/* 生成MyAppConfig配置类的BeanDefinition */
 
-		applicationContext.refresh();/* 加载配置，生成非懒加载bean */
+		applicationContext.refresh();/* 扫描BeanDefinition，实例化 非懒加载bean */
 
 		applicationContext.registerShutdownHook();//优雅关机
 

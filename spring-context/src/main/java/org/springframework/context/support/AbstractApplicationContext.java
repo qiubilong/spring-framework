@@ -181,7 +181,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/** Environment used by this context. */
 	@Nullable
-	private ConfigurableEnvironment environment;
+	private ConfigurableEnvironment environment; /* 环境&配置 */
 
 	/** BeanFactoryPostProcessors to apply on refresh. */
 	private final List<BeanFactoryPostProcessor> beanFactoryPostProcessors = new ArrayList<>();
@@ -207,7 +207,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/** LifecycleProcessor for managing the lifecycle of beans within this context. */
 	@Nullable
-	private LifecycleProcessor lifecycleProcessor; /* DefaultLifecycleProcessor */
+	private LifecycleProcessor lifecycleProcessor; /* DefaultLifecycleProcessor - 容器生命周期 - 处理器 */
 
 	/** MessageSource we delegate our implementation of this interface to. */
 	@Nullable
@@ -555,7 +555,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
-			/* 设置EL表达式，注册内部bean */
+			/* 容器初始化，注册内部bean */
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -567,7 +567,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				/* =============重点================= */
 				/* =============重点================= */
 				/* =============重点=================ConfigurationClassPostProcessor */
-				/* 实例化并调用Bean工厂处理器BeanFactoryProcessor --> 扫描配置类  --> 注册BeanDefinition */
+				/* 实例化并调用 Bean工厂处理器 BeanFactoryProcessor --> 扫描配置类  --> 注册BeanDefinition */
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
@@ -717,7 +717,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.registerResolvableDependency(ApplicationContext.class, this);
 
 		// Register early post-processor for detecting inner beans as ApplicationListeners.
-		/* ApplicationListener应用时间监听器 - BeanPostProcessor */
+		/* ApplicationListener应用事件监听器 - BeanPostProcessor */
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found.

@@ -145,7 +145,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	private Object doGetObjectFromFactoryBean(FactoryBean<?> factory, String beanName) throws BeanCreationException {
 		Object object;
 		try {
-			object = factory.getObject();
+			object = factory.getObject(); /* 工厂Bean - 创建Bean */
 		}
 		catch (FactoryBeanNotInitializedException ex) {
 			throw new BeanCurrentlyInCreationException(beanName, ex.toString());
