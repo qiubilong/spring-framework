@@ -320,7 +320,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
-					metadata = buildResourceMetadata(clazz);
+					metadata = buildResourceMetadata(clazz);	/* 寻找@Resource注入点  */
 					this.injectionMetadataCache.put(cacheKey, metadata);
 				}
 			}

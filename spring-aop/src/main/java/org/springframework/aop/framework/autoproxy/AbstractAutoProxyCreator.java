@@ -138,7 +138,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 	private final Set<String> targetSourcedBeans = Collections.newSetFromMap(new ConcurrentHashMap<>(16));
 
-	private final Map<Object, Object> earlyProxyReferences = new ConcurrentHashMap<>(16);
+	private final Map<Object, Object> earlyProxyReferences = new ConcurrentHashMap<>(16); /* 循环依赖时，提前生成的AOP代理对象 - 标记 */
 
 	private final Map<Object, Class<?>> proxyTypes = new ConcurrentHashMap<>(16);
 
@@ -316,7 +316,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			Object cacheKey = getCacheKey(bean.getClass(), beanName);
 			/* earlyProxyReferences --> 出现循环依赖，提前生成AOP代理对象，若是则跳过 */
 			if (this.earlyProxyReferences.remove(cacheKey) != bean) {
-				/* 检查能否创建AOP代理类 */
+				/* 检查是否创建AOP代理类 */
 				return wrapIfNecessary(bean, beanName, cacheKey);
 			}
 		}
@@ -356,7 +356,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		if (StringUtils.hasLength(beanName) && this.targetSourcedBeans.contains(beanName)) {
 			return bean;
 		}
-		/* advisedBeans无需代理缓存 */
+		/* advisedBeans无需代理  */
 		if (Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))) {
 			return bean;
 		}
@@ -484,8 +484,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 		/* jdk/cglib 动态代理工厂 */
 		/*
-		*  JdkDynamicAopProxy -->  InvocationHandler.invoke()            -->创建代理拦截链ReflectiveMethodInvocation --> 执行Advice(MethodInterceptor)
-		*  CglibAopProxy      -->  DynamicAdvisedInterceptor.intercept() -->创建代理拦截链ReflectiveMethodInvocation --> 执行Advice(MethodInterceptor)
+		*  JdkDynamicAopProxy -->  InvocationHandler.invoke()            -->创建代理拦截链 ReflectiveMethodInvocation --> 执行Advice(MethodInterceptor)
+		*  CglibAopProxy      -->  DynamicAdvisedInterceptor.intercept() -->创建代理拦截链 ReflectiveMethodInvocation --> 执行Advice(MethodInterceptor)
 		* */
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.copyFrom(this);
@@ -509,8 +509,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			}
 		}
 		/* Advice  --> DefaultPointcutAdvisor */
-		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);//specificInterceptors是advisors
-		proxyFactory.addAdvisors(advisors);        /* 增强器Advisor */
+		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);//specificInterceptors是 Advisor列表
+		proxyFactory.addAdvisors(advisors);        /* 增强器Advisor列表 */
 		proxyFactory.setTargetSource(targetSource);/* 目标对象bean */
 		customizeProxyFactory(proxyFactory);
 

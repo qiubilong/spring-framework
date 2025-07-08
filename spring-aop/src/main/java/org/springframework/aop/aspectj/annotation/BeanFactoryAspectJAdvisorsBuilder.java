@@ -47,7 +47,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 	@Nullable
 	private volatile List<String> aspectBeanNames;
 
-	private final Map<String, List<Advisor>> advisorsCache = new ConcurrentHashMap<>();
+	private final Map<String, List<Advisor>> advisorsCache = new ConcurrentHashMap<>(); /* beanMap <--> 增强器列表   */
 
 	private final Map<String, MetadataAwareAspectInstanceFactory> aspectFactoryCache = new ConcurrentHashMap<>();
 

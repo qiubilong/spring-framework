@@ -65,7 +65,7 @@ import org.springframework.util.ClassUtils;
  * @see org.springframework.scheduling.annotation.Async
  * @see org.springframework.scheduling.annotation.AsyncAnnotationAdvisor
  * @see org.springframework.scheduling.annotation.AnnotationAsyncExecutionInterceptor
- */
+ */          /* 异步执行拦截器 */
 public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport implements MethodInterceptor, Ordered {
 
 	/**
@@ -104,7 +104,7 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 		Method specificMethod = ClassUtils.getMostSpecificMethod(invocation.getMethod(), targetClass);
 		final Method userDeclaredMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
 
-		AsyncTaskExecutor executor = determineAsyncExecutor(userDeclaredMethod);/* 指定线程池 -->通用TaskExecutor --> 创建 SimpleAsyncTaskExecutor  */
+		AsyncTaskExecutor executor = determineAsyncExecutor(userDeclaredMethod);/* 指定线程池 > 通用TaskExecutor --> 创建 SimpleAsyncTaskExecutor  */
 		if (executor == null) {
 			throw new IllegalStateException(
 					"No executor specified and no default executor set on AsyncExecutionInterceptor either");
@@ -112,7 +112,7 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 
 		Callable<Object> task = () -> {
 			try {
-				Object result = invocation.proceed();/* 执行 ReflectiveMethodInvocation 下个方法 -->目标方法 */
+				Object result = invocation.proceed();/* 继续执行 ReflectiveMethodInvocation 下个方法 -->最后执行目标方法 */
 				if (result instanceof Future<?> future) {
 					return future.get();
 				}
@@ -158,7 +158,7 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 	@Nullable
 	protected Executor getDefaultExecutor(@Nullable BeanFactory beanFactory) {
 		Executor defaultExecutor = super.getDefaultExecutor(beanFactory); /* 获取容器TaskExecutor */
-		return (defaultExecutor != null ? defaultExecutor : new SimpleAsyncTaskExecutor());/* 创建默认线程池SimpleAsyncTaskExecutor */
+		return (defaultExecutor != null ? defaultExecutor : new SimpleAsyncTaskExecutor());/* 创建默认线程池SimpleAsyncTaskExecutor --> 每次创建一个线程 */
 	}
 
 	@Override

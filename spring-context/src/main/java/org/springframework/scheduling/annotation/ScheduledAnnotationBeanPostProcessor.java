@@ -267,7 +267,7 @@ public class ScheduledAnnotationBeanPostProcessor
 							ex.getMessage());
 				}
 				try {
-					this.registrar.setTaskScheduler(resolveSchedulerBean(this.beanFactory, TaskScheduler.class, true));
+					this.registrar.setTaskScheduler(resolveSchedulerBean(this.beanFactory, TaskScheduler.class, true)); /* 2.1 多个TaskScheduler，获取名为taskScheduler */
 				}
 				catch (NoSuchBeanDefinitionException ex2) {
 					if (logger.isInfoEnabled()) {

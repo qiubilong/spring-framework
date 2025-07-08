@@ -167,7 +167,6 @@ class CglibAopProxy implements AopProxy, Serializable {
 		if (logger.isTraceEnabled()) {
 			logger.trace("Creating CGLIB proxy: " + this.advised.getTargetSource());
 		}
-
 		try {
 			/* advised == ProxyFactory */
 			Class<?> rootClass = this.advised.getTargetClass();
@@ -201,9 +200,9 @@ class CglibAopProxy implements AopProxy, Serializable {
 			enhancer.setAttemptLoad(true);
 			enhancer.setStrategy(new ClassLoaderAwareGeneratorStrategy(classLoader));
 
-			/* 创建代理逻辑 方法拦截器，最重要的是创建DynamicAdvisedInterceptor */
-			/* 创建代理逻辑 方法拦截器，最重要的是创建DynamicAdvisedInterceptor */
-			/* 创建代理逻辑 方法拦截器，最重要的是创建DynamicAdvisedInterceptor */
+			/* 创建代理逻辑 方法拦截器，最重要的是创建 DynamicAdvisedInterceptor */
+			/* 创建代理逻辑 方法拦截器，最重要的是创建 DynamicAdvisedInterceptor */
+			/* 创建代理逻辑 方法拦截器，最重要的是创建 DynamicAdvisedInterceptor */
 			Callback[] callbacks = getCallbacks(rootClass);
 			Class<?>[] types = new Class<?>[callbacks.length];
 			for (int x = 0; x < types.length; x++) {
@@ -216,7 +215,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 			enhancer.setCallbackTypes(types);
 
 			// Generate the proxy class and create a proxy instance.
-			/* createProxyClassAndInstance(enhancer, callbacks)) --> 创建代理对象  */
+			/* createProxyClassAndInstance(enhancer, callbacks)) --> 创建代理对象 */  /* 代理类重写的方法都会转发调用 DynamicAdvisedInterceptor.intercept()方法 */
 			return (classOnly ? createProxyClass(enhancer) : createProxyClassAndInstance(enhancer, callbacks));
 		}
 		catch (CodeGenerationException | IllegalArgumentException ex) {

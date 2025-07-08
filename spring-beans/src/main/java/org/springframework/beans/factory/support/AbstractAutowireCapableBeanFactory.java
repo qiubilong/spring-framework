@@ -417,7 +417,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object result = existingBean;
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			/*
-			* ImportAwareBeanPostProcessor            --> 注入注解所在配置类setImportMetadata(importingClass)
+			* ImportAwareBeanPostProcessor            --> 所在配置类的注解信息 setImportMetadata(importingClass)
 			* InitDestroyAnnotationBeanPostProcessor  --> 解析@PostConstruct
 			 * */
 			Object current = processor.postProcessBeforeInitialization(result, beanName);
@@ -433,8 +433,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
 			throws BeansException {
 		/* 最后阶段 - AfterInitialization
-		*  AnnotationAwareAspectJAutoProxyCreator --> AbstractAutoProxyCreator   --> 动态代理 --> 切面、事务
-		*  AsyncAnnotationBeanPostProcessor       --> AbstractAdvisingBeanPostProcessor --> 动态代理-->异步
+		*  AnnotationAwareAspectJAutoProxyCreator --> AbstractAutoProxyCreator            --> 动态代理 --> 切面、事务
+		*  AsyncAnnotationBeanPostProcessor       --> AbstractAdvisingBeanPostProcessor(AOP代理抽象类) --> 动态代理-->异步
 		*  ScheduledAnnotationBeanPostProcessor   --> 定时器
 		* */
 		Object result = existingBean;
@@ -442,10 +442,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			Object current = processor.postProcessAfterInitialization(result, beanName);
 			if (current == null) {
 				return result;
-			}
-			result = current;
-		}
-		return result;
+			}                 /*                        - 无  -->   返回原始Bean                                                     */
+			result = current; /* current!=null，  是否代理                                                                           */
+		}                     /*                        - 有                          - 循环依赖  --> 返回原始Bean
+		                                                     -AbstractAutoProxyCreator                                             */
+		return result;        /*                                                      - 无循环依赖 --> 生成代理对象AdvisedBean
+
+		                                                                              - 代理对象AdvisedBean -->加到Advisor列表
+		                                                     - AbstractAdvisingBeanPostProcessor
+		                                                                               - 原始Bean  --> 生成代理对象AdvisedBean
+				             */
 	}
 
 	@Override
@@ -567,7 +573,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
-			/* 构造方法推断 --> 1、实例化 */
+			/* 构造方法推断 --> 1、Bean实例化 */
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		Object bean = instanceWrapper.getWrappedInstance();
@@ -600,7 +606,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-			/* 用于解决循环依赖 --> 提前曝光原始对象or代理对象 --> 三级缓存singletonFactory - 提前曝光Bean原始对象的单例工厂
+			/* 用于解决循环依赖 --> 提前曝光原始对象or代理对象 --> 三级缓存singletonFactory - 提前曝光 Bean原始对象or代理对象的 工厂
 			*  二级缓存earlySingletonObjects，缓存singletonFactory结果。
 			*  1、为什么需要二级缓存，假设C是需要代理对象，那么当A、B都依赖到C时，二级缓存能保证拿到同一个C代理对象
 			*  2、二级缓存能解决循环依赖吗/提前生成代理对象？如果要使用二级缓存解决循环依赖，意味着所有Bean在实例化后就要马上完成AOP代理，这样违背了Spring设计的原则，Spring在设计之初就是在Bean生命周期的最后一步来完成AOP代理，而不是在实例化后就立马进行AOP代理（如果动态代理框架每次为原始对象生成不同的代理对象，那么前后的代理对象不同。仅AutoProxyCreator缓存代理结果只生成一次）
@@ -630,7 +636,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			Object earlySingletonReference = getSingleton(beanName, false);
 			/* earlySingletonReference != null --> 发生了循环依赖，二级缓存里存在 原始对象or动态代理对象  */
 			if (earlySingletonReference != null) {
-				/* exposedObject == bean --> 仍然是原始对象(说明执行initializeBean时没发生代理（AOP代理缓存存在则跳过）) --> 返回提前生成的动态代理对象*/
+				/* exposedObject == bean --> 仍然是原始对象(说明执行initializeBean时没发生代理（AOP代理缓存在则跳过）) --> 那么这里需要返回提前生成的动态代理对象*/
 				if (exposedObject == bean) {
 					exposedObject = earlySingletonReference;/* 返回提前生成的代理对象，后面再生成代理对象时代理框架可以缓存代理过的对象，不再新生成代理对象，那么就会exposedObject == bean */
 				}
@@ -1438,7 +1444,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 			// Add property values based on autowire by type if applicable.
 			//class注入 --> setXXX --> 参数类型 --> 注入依赖
-			if (resolvedAutowireMode == AUTOWIRE_BY_TYPE) {
+			if (resolvedAutowireMode == AUTOWIRE_BY_TYPE) { /* mybatis MapperFactoryBean的注入方式 */
 				autowireByType(beanName, mbd, bw, newPvs);
 			}
 			pvs = newPvs;
@@ -1796,7 +1802,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @see #applyBeanPostProcessorsAfterInitialization
 	 */
 	protected Object initializeBean(String beanName, Object bean, @Nullable RootBeanDefinition mbd) {
-		/* Aware回调 */
+		/* Aware接口回调 */
 		invokeAwareMethods(beanName, bean);
 
 		Object wrappedBean = bean;

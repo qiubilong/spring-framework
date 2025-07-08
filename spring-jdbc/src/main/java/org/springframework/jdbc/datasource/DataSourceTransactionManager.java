@@ -262,7 +262,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		try {
 			if (!txObject.hasConnectionHolder() ||
 					txObject.getConnectionHolder().isSynchronizedWithTransaction()) {
-				/* 创建一个新的数据库连接 */
+				/* 1、创建一个新的数据库连接 */
 				Connection newCon = obtainDataSource().getConnection();
 				if (logger.isDebugEnabled()) {
 					logger.debug("Acquired Connection [" + newCon + "] for JDBC transaction");
@@ -285,7 +285,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 				if (logger.isDebugEnabled()) {
 					logger.debug("Switching JDBC Connection [" + con + "] to manual commit");
 				}
-				/* 设置自动提交为false */
+				/* 2、数据库连接 - 设置自动提交为false */
 				con.setAutoCommit(false);
 			}
 
@@ -299,7 +299,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 			}
 
 			// Bind the connection holder to the thread.
-			/* 绑定新连接到ThreadLocal */
+			/* 3、绑定新连接到ThreadLocal */
 			if (txObject.isNewConnectionHolder()) {
 				TransactionSynchronizationManager.bindResource(obtainDataSource(), txObject.getConnectionHolder());
 			}
@@ -334,7 +334,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 			logger.debug("Committing JDBC transaction on Connection [" + con + "]");
 		}
 		try {
-			con.commit();
+			con.commit();/* 提交事务 */
 		}
 		catch (SQLException ex) {
 			throw translateException("JDBC commit", ex);
@@ -445,7 +445,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	 * Used as transaction object by DataSourceTransactionManager.
 	 */
 	private static class DataSourceTransactionObject extends JdbcTransactionObjectSupport {
-
+		/* 父类 ConnectionHolder connectionHolder -  数据库连接Connection */
 		private boolean newConnectionHolder; //新连接
 
 		private boolean mustRestoreAutoCommit;

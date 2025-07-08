@@ -1360,7 +1360,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			/* 注入属性的class */
 			Class<?> type = descriptor.getDependencyType();
 			/* @Value注入  */
-			Object value = getAutowireCandidateResolver().getSuggestedValue(descriptor);
+			Object value = getAutowireCandidateResolver().getSuggestedValue(descriptor); //QualifierAnnotationAutowireCandidateResolver
 			if (value != null) {
 				if (value instanceof String strValue) {
 					/* 解析占位符，如 @Value("${xxx}")*/
@@ -1390,7 +1390,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 
 			/* 注入-单个Bean -->筛选候选者 class --> @Qualifier */
-			Map<String, Object> matchingBeans = findAutowireCandidates(beanName, type, descriptor);
+			Map<String, Object> matchingBeans = findAutowireCandidates(beanName, type, descriptor);//DefaultListableBeanFactory
 			if (matchingBeans.isEmpty()) {
 				if (isRequired(descriptor)) {//Bean不存在异常NoSuchBeanDefinitionException
 					raiseNoMatchingBeanFound(type, descriptor.getResolvableType(), descriptor);
@@ -1591,7 +1591,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 */
 	protected Map<String, Object> findAutowireCandidates(
 			@Nullable String beanName, Class<?> requiredType, DependencyDescriptor descriptor) {
-
+        /* 根据 依赖注入Class类型 找出 所有beanName */
 		String[] candidateNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 				this, requiredType, true, descriptor.isEager());
 		Map<String, Object> result = CollectionUtils.newLinkedHashMap(candidateNames.length);
@@ -1672,18 +1672,18 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Nullable
 	protected String determineAutowireCandidate(Map<String, Object> candidates, DependencyDescriptor descriptor) {
 		Class<?> requiredType = descriptor.getDependencyType();
-		/* @Primary优先 */
+		/* 1、@Primary优先 */
 		String primaryCandidate = determinePrimaryCandidate(candidates, requiredType);
 		if (primaryCandidate != null) {
 			return primaryCandidate;
 		}
-		/* @Priority 优先级 */
+		/* 2、@Priority 优先级 */
 		String priorityCandidate = determineHighestPriorityCandidate(candidates, requiredType);
 		if (priorityCandidate != null) {
 			return priorityCandidate;
 		}
 		// Fallback
-		/* 属性名字匹配 */
+		/* 3、属性名字匹配 */
 		for (Map.Entry<String, Object> entry : candidates.entrySet()) {
 			String candidateName = entry.getKey();
 			Object beanInstance = entry.getValue();
@@ -1804,7 +1804,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	protected Integer getPriority(Object beanInstance) {
 		Comparator<Object> comparator = getDependencyComparator();
 		if (comparator instanceof OrderComparator orderComparator) {
-			return orderComparator.getPriority(beanInstance);
+			return orderComparator.getPriority(beanInstance); // AnnotationAwareOrderComparator
 		}
 		return null;
 	}

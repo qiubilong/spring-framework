@@ -51,7 +51,7 @@ import org.springframework.util.Assert;
 public class DefaultTransactionStatus extends AbstractTransactionStatus {
 
 	@Nullable
-	private final Object transaction;         /*  DataSourceTransactionObject  */
+	private final Object transaction;         /*  DataSourceTransactionObject（数据库连接）  */
 
 	private final boolean newTransaction;     /* 新创建的事务，使用已有事务时这里为false */
 

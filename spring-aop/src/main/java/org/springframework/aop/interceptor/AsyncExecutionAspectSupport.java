@@ -177,7 +177,7 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 				targetExecutor = findQualifiedExecutor(this.beanFactory, qualifier);
 			}
 			else {
-				targetExecutor = this.defaultExecutor.get(); /* 默认线程池 --> getDefaultExecutor()在BeanFactory中获取TaskExecutor --> 创建 SimpleAsyncTaskExecutor  */
+				targetExecutor = this.defaultExecutor.get(); /* 默认线程池 > getDefaultExecutor()在BeanFactory中获取TaskExecutor > 创建 SimpleAsyncTaskExecutor(每次创建新线程)  */
 			}
 			if (targetExecutor == null) {
 				return null;
@@ -238,13 +238,13 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 				// Search for TaskExecutor bean... not plain Executor since that would
 				// match with ScheduledExecutorService as well, which is unusable for
 				// our purposes here. TaskExecutor is more clearly designed for it.
-				return beanFactory.getBean(TaskExecutor.class);/* 自定义通用线程池TaskExecutor */
+				return beanFactory.getBean(TaskExecutor.class);  /* 1、自定义通用线程池TaskExecutor */
 			}
 			catch (NoUniqueBeanDefinitionException ex) {
 				logger.debug("Could not find unique TaskExecutor bean. " +
 						"Continuing search for an Executor bean named 'taskExecutor'", ex);
 				try {
-					return beanFactory.getBean(DEFAULT_TASK_EXECUTOR_BEAN_NAME, Executor.class);
+					return beanFactory.getBean(DEFAULT_TASK_EXECUTOR_BEAN_NAME, Executor.class);/* 2、多个TaskExecutor，获取BeanName=taskExecutor线程池  */
 				}
 				catch (NoSuchBeanDefinitionException ex2) {
 					if (logger.isInfoEnabled()) {
@@ -258,7 +258,7 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 				logger.debug("Could not find default TaskExecutor bean. " +
 						"Continuing search for an Executor bean named 'taskExecutor'", ex);
 				try {
-					return beanFactory.getBean(DEFAULT_TASK_EXECUTOR_BEAN_NAME, Executor.class);
+					return beanFactory.getBean(DEFAULT_TASK_EXECUTOR_BEAN_NAME, Executor.class); /* 3、不存在TaskExecutor，获取 Executor */
 				}
 				catch (NoSuchBeanDefinitionException ex2) {
 					logger.info("No task executor bean found for async processing: " +

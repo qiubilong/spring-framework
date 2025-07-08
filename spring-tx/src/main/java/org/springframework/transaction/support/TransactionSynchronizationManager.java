@@ -74,7 +74,7 @@ import org.springframework.util.Assert;
 /* 事务同步管理器 */
 public abstract class TransactionSynchronizationManager {
 
-	private static final ThreadLocal<Map<Object, Object>> resources =    /* 数据库资源Connection等资源 */
+	private static final ThreadLocal<Map<Object, Object>> resources =    /* 数据库连接对象  <->  DataSourceTransactionObject（数据库资源Connection等资源）  */
 			new NamedThreadLocal<>("Transactional resources");
 
 	private static final ThreadLocal<Set<TransactionSynchronization>> synchronizations =

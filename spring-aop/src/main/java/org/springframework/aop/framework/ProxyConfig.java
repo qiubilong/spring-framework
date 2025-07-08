@@ -34,9 +34,9 @@ public class ProxyConfig implements Serializable {
 	private static final long serialVersionUID = -8409359707199703185L;
 
 
-	private boolean proxyTargetClass = false;
+	private boolean proxyTargetClass = false; /* 代理的是class -->  CglibAop */
 
-	private boolean optimize = false;
+	private boolean optimize = false;        /* 优化（旧jdk相对来说性能差） --> CglibAop */
 
 	boolean opaque = false;
 

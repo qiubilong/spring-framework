@@ -93,8 +93,8 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	 * @see #extendAdvisors
 	 */
 	protected List<Advisor> findEligibleAdvisors(Class<?> beanClass, String beanName) {
-		/* 寻找所有Advisor（包括事务Advisor ） */
-		List<Advisor> candidateAdvisors = findCandidateAdvisors();
+		/* 寻找所有Advisor（包括事务Advisor） + 解析 @AspectJ 的得到的 List<Advisor> */
+		List<Advisor> candidateAdvisors = findCandidateAdvisors();//子类 - AnnotationAwareAspectJAutoProxyCreator
 		/* 筛选advisor */
 		List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);
 		extendAdvisors(eligibleAdvisors);

@@ -377,7 +377,7 @@ public class ScheduledTaskRegistrar implements ScheduledTaskHolder, Initializing
 	 */
 	protected void scheduleTasks() {
 		if (this.taskScheduler == null) {
-			this.localExecutor = Executors.newSingleThreadScheduledExecutor();/* 创建默认任务执行线程池 -- 单线程池 */
+			this.localExecutor = Executors.newSingleThreadScheduledExecutor();/* 创建默认任务执行线程池 -- 单线程池 *///corePoolSize=1,maximumPoolSize=Integer.max，但任务队列DelayedWorkQueue不会满，所以不会新建线程，所以就是单线程
 			this.taskScheduler = new ConcurrentTaskScheduler(this.localExecutor);
 		}
 		if (this.triggerTasks != null) {

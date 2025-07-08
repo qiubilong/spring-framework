@@ -555,7 +555,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				ImportRegistry ir = this.beanFactory.getBean(IMPORT_REGISTRY_BEAN_NAME, ImportRegistry.class);
 				AnnotationMetadata importingClass = ir.getImportingClassFor(ClassUtils.getUserClass(bean).getName());
 				if (importingClass != null) {
-					importAware.setImportMetadata(importingClass);/* 导入Bean的配置类，如MyAppConfig */
+					importAware.setImportMetadata(importingClass);/* 导入Bean的配置类的注解信息，如MyAppConfig */
 				}
 			}
 			return bean;

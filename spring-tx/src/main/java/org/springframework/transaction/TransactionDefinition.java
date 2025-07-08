@@ -49,7 +49,7 @@ public interface TransactionDefinition {
 	 * <p>This is typically the default setting of a transaction definition
 	 * and typically defines a transaction synchronization scope.
 	 */
-	int PROPAGATION_REQUIRED = 0;   /* 不存在事务就创建新事务 */
+	int PROPAGATION_REQUIRED = 0;   /* 不存在事务就创建新事务，存在就使用的当前事务 */
 
 	/**
 	 * Support a current transaction; execute non-transactionally if none exists.

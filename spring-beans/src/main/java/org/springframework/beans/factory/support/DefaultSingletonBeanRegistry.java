@@ -233,7 +233,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					this.suppressedExceptions = new LinkedHashSet<>();
 				}
 				try {
-					/* 其实就是 上级调用的 AbstractAutowireCapableBeanFactory.createBean() */
+					/* 其实就是 上层调用的 AbstractAutowireCapableBeanFactory.createBean() */
 					singletonObject = singletonFactory.getObject();
 					newSingleton = true;
 				}

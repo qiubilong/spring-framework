@@ -121,7 +121,7 @@ public abstract class AbstractFallbackTransactionAttributeSource
 		}
 		else {
 			// We need to work it out.
-			/* 解析@Transactional注解 */
+			/* 解析 @Transactional 注解 */
 			TransactionAttribute txAttr = computeTransactionAttribute(method, targetClass);
 			// Put it in the cache.
 			if (txAttr == null) {
@@ -165,7 +165,7 @@ public abstract class AbstractFallbackTransactionAttributeSource
 	@Nullable
 	protected TransactionAttribute computeTransactionAttribute(Method method, @Nullable Class<?> targetClass) {
 		// Don't allow non-public methods, as configured.
-		if (allowPublicMethodsOnly() && !Modifier.isPublic(method.getModifiers())) {
+		if (allowPublicMethodsOnly() && !Modifier.isPublic(method.getModifiers())) { /* 必须是 Public方法 */
 			return null;
 		}
 
@@ -174,14 +174,14 @@ public abstract class AbstractFallbackTransactionAttributeSource
 		Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
 
 		// First try is the method in the target class.
-		/* 检查方法@Transactional -- RuleBasedTransactionAttribute  */
-		TransactionAttribute txAttr = findTransactionAttribute(specificMethod);
+		/* 检查方法注解 @Transactional -- RuleBasedTransactionAttribute  */
+		TransactionAttribute txAttr = findTransactionAttribute(specificMethod);//AnnotationTransactionAttributeSource
 		if (txAttr != null) {
 			return txAttr;
 		}
 
 		// Second try is the transaction attribute on the target class.
-		txAttr = findTransactionAttribute(specificMethod.getDeclaringClass());
+		txAttr = findTransactionAttribute(specificMethod.getDeclaringClass());//检查类上注解
 		if (txAttr != null && ClassUtils.isUserLevelMethod(method)) {
 			return txAttr;
 		}

@@ -114,7 +114,7 @@ public class AsyncAnnotationAdvisor extends AbstractPointcutAdvisor implements B
 		}
 
 		this.advice = buildAdvice(executor, exceptionHandler); /* 异步代理拦截器 - AnnotationAsyncExecutionInterceptor  */
-		this.pointcut = buildPointcut(asyncAnnotationTypes);/* AOP异步代理 - 匹配器 */
+		this.pointcut = buildPointcut(asyncAnnotationTypes);   /* AOP异步代理 - 匹配器 */
 	}
 
 
@@ -160,7 +160,7 @@ public class AsyncAnnotationAdvisor extends AbstractPointcutAdvisor implements B
 			@Nullable Supplier<Executor> executor, @Nullable Supplier<AsyncUncaughtExceptionHandler> exceptionHandler) {
 		/* 异步代理方法拦截器  */
 		AnnotationAsyncExecutionInterceptor interceptor = new AnnotationAsyncExecutionInterceptor(null);
-		interceptor.configure(executor, exceptionHandler);/* 没有指定executor时，获取默认线程池getDefaultExecutor */
+		interceptor.configure(executor, exceptionHandler);/* 没有指定executor时，获取默认线程池 getDefaultExecutor */
 		return interceptor;
 	}
 
