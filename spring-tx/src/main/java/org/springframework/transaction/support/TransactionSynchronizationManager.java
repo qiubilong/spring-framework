@@ -174,7 +174,7 @@ public abstract class TransactionSynchronizationManager {
 			map = new HashMap<>();
 			resources.set(map);
 		}
-		Object oldValue = map.put(actualKey, value);
+		Object oldValue = map.put(actualKey, value); /* dataSource <--> ConnectionHolder  */
 		// Transparently suppress a ResourceHolder that was marked as void...
 		if (oldValue instanceof ResourceHolder resourceHolder && resourceHolder.isVoid()) {
 			oldValue = null;

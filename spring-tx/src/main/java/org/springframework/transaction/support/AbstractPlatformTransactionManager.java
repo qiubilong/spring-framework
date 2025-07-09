@@ -345,7 +345,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 		TransactionDefinition def = (definition != null ? definition : TransactionDefinition.withDefaults());
 
 		/* 当前ThreadLocal绑定的事务信息 */
-		Object transaction = doGetTransaction();
+		Object transaction = doGetTransaction();//DataSourceTransactionObject -- DataSourceTransactionManager
 		boolean debugEnabled = logger.isDebugEnabled();
 
 		/* 1、当前存在事务 */
@@ -395,7 +395,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 
 	/**
 	 * Start a new transaction.
-	 */
+	 */  // transaction = DataSourceTransactionObject
 	private TransactionStatus startTransaction(TransactionDefinition definition, Object transaction,
 			boolean debugEnabled, @Nullable SuspendedResourcesHolder suspendedResources) {
 
