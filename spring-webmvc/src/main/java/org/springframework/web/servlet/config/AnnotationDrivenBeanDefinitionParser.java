@@ -201,7 +201,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 
 		RuntimeBeanReference contentNegotiationManager = getContentNegotiationManager(element, source, context);
 
-		RootBeanDefinition handlerMappingDef = new RootBeanDefinition(RequestMappingHandlerMapping.class); /* 注入@RequestMapping解析器 */
+		RootBeanDefinition handlerMappingDef = new RootBeanDefinition(RequestMappingHandlerMapping.class); /* 注入 @RequestMapping 解析器 */
 		handlerMappingDef.setSource(source);
 		handlerMappingDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		handlerMappingDef.getPropertyValues().add("order", 0);
@@ -237,7 +237,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 		ManagedList<?> callableInterceptors = getInterceptors(element, source, context, "callable-interceptors");
 		ManagedList<?> deferredResultInterceptors = getInterceptors(element, source, context, "deferred-result-interceptors");
 
-		RootBeanDefinition handlerAdapterDef = new RootBeanDefinition(RequestMappingHandlerAdapter.class);
+		RootBeanDefinition handlerAdapterDef = new RootBeanDefinition(RequestMappingHandlerAdapter.class); /* @RequestMapping Handler 调用适配器 */
 		handlerAdapterDef.setSource(source);
 		handlerAdapterDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		handlerAdapterDef.getPropertyValues().add("contentNegotiationManager", contentNegotiationManager);
@@ -285,7 +285,7 @@ class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 		mappedInterceptorDef.getConstructorArgumentValues().addIndexedArgumentValue(1, csInterceptorDef);
 		String mappedInterceptorName = readerContext.registerWithGeneratedName(mappedInterceptorDef);
 
-		RootBeanDefinition methodExceptionResolver = new RootBeanDefinition(ExceptionHandlerExceptionResolver.class);/* 注入全局异常处理器 - 解析@ExceptionHandler */
+		RootBeanDefinition methodExceptionResolver = new RootBeanDefinition(ExceptionHandlerExceptionResolver.class);/* 注入全局异常处理器 - 解析 @ExceptionHandler */
 		methodExceptionResolver.setSource(source);
 		methodExceptionResolver.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		methodExceptionResolver.getPropertyValues().add("contentNegotiationManager", contentNegotiationManager);

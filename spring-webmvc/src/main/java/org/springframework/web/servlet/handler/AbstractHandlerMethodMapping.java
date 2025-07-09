@@ -280,7 +280,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 		if (handlerType != null) {
 			Class<?> userType = ClassUtils.getUserClass(handlerType);
-			/* 遍历所有方法 */
+			/* 遍历所有方法, 得到 Map < Method, RequestMappingInfo > */
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
 					(MethodIntrospector.MetadataLookup<T>) method -> {
 						try {
@@ -633,9 +633,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		public void releaseReadLock() {
 			this.readWriteLock.readLock().unlock();
 		}
-
+		          // mapping = RequestMappingInfo
 		public void register(T mapping, Object handler, Method method) {
-			this.readWriteLock.writeLock().lock();
+			this.readWriteLock.writeLock().lock(); // ReentrantLock 读写锁
 			try {
 				/* 这里 handler == beanName
 				 * 创建 @RequestMapping对应的处理器方法 HandlerMethod

@@ -73,7 +73,7 @@ public class ExceptionHandlerMethodResolver {
 	 * @param handlerType the type to introspect
 	 */
 	public ExceptionHandlerMethodResolver(Class<?> handlerType) {
-		for (Method method : MethodIntrospector.selectMethods(handlerType, EXCEPTION_HANDLER_METHODS)) {/* 添加了@ExceptionHandler注解的方法 */
+		for (Method method : MethodIntrospector.selectMethods(handlerType, EXCEPTION_HANDLER_METHODS)) {/* 添加了 @ExceptionHandler 注解的方法 */
 			for (Class<? extends Throwable> exceptionType : detectExceptionMappings(method)) {
 				addExceptionMapping(exceptionType, method);/* 保存异常Exception - Method映射关系 */
 			}

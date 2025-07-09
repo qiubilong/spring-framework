@@ -39,12 +39,12 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
  * @author Rossen Stoyanchev
  * @since 3.1
  */
-@Configuration(proxyBeanMethods = false)
+@Configuration(proxyBeanMethods = false)   /* 父类 @Bean 定义 webMvc相关Bean -- HandlerMapping +  HandlerAdapter + HandlerException   */
 public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
 
 	private final WebMvcConfigurerComposite configurers = new WebMvcConfigurerComposite();
 
-
+    /* 依赖注入容器中所有的 自定义 WebMvcConfigurer */
 	@Autowired(required = false)
 	public void setConfigurers(List<WebMvcConfigurer> configurers) {
 		if (!CollectionUtils.isEmpty(configurers)) {

@@ -14,7 +14,7 @@
 	<context:component-scan base-package="com.experiment.web"/>
 
 
-	<!-- 注入MVC依赖bean，包含 DispatcherServlet.properties中定义的bean，搜索标签 <mvc:annotation-driven 定位解析代码 -->
+	<!-- 注入MVC依赖bean，等同 DispatcherServlet.properties 中定义的bean，搜索标签 <mvc:annotation-driven 定位解析代码 -->
 	<mvc:annotation-driven conversion-service="conversionService">
 	</mvc:annotation-driven>
 
