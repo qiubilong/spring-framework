@@ -58,7 +58,7 @@ final class ConfigurationClass {
 
 	private final Set<ConfigurationClass> importedBy = new LinkedHashSet<>(1);
 
-	private final Set<BeanMethod> beanMethods = new LinkedHashSet<>();
+	private final Set<BeanMethod> beanMethods = new LinkedHashSet<>(); /* 扫描的@Bean */
 
 	private final Map<String, Class<? extends BeanDefinitionReader>> importedResources =
 			new LinkedHashMap<>();
