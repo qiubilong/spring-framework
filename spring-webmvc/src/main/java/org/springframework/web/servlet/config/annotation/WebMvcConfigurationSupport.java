@@ -299,7 +299,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	 * requests to annotated controllers.
 	 */
 	@Bean
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation") /* springboot中 子类 EnableWebMvcConfiguration @Bean定义 */
 	public RequestMappingHandlerMapping requestMappingHandlerMapping(
 			@Qualifier("mvcContentNegotiationManager") ContentNegotiationManager contentNegotiationManager,
 			@Qualifier("mvcConversionService") FormattingConversionService conversionService,

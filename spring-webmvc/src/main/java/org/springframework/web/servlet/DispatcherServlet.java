@@ -325,15 +325,15 @@ public class DispatcherServlet extends FrameworkServlet {
 
 	/** List of HandlerMappings used by this servlet. */
 	@Nullable
-	private List<HandlerMapping> handlerMappings;
+	private List<HandlerMapping> handlerMappings;      /* Handler - 匹配解析 */
 
 	/** List of HandlerAdapters used by this servlet. */
 	@Nullable
-	private List<HandlerAdapter> handlerAdapters;
+	private List<HandlerAdapter> handlerAdapters;     /* Handler - 调用适配 */
 
 	/** List of HandlerExceptionResolvers used by this servlet. */
 	@Nullable
-	private List<HandlerExceptionResolver> handlerExceptionResolvers;
+	private List<HandlerExceptionResolver> handlerExceptionResolvers; /* Handler - 异常处理 */
 
 	/** RequestToViewNameTranslator used by this servlet. */
 	@Nullable

@@ -222,7 +222,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 	/** WebApplicationContext for this servlet. */
 	@Nullable
-	private WebApplicationContext webApplicationContext; /* SpringMVC 容器 */
+	private WebApplicationContext webApplicationContext; /* SpringMVC容器  - springboot中是 AnnotationConfigServletWebServerApplicationContext  */
 
 	/** If the WebApplicationContext was injected via {@link #setApplicationContext}. */
 	private boolean webApplicationContextInjected = false;
@@ -534,7 +534,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		long startTime = System.currentTimeMillis();
 
 		try {
-			/* 创建初始化WebApplicationContext容器 */
+			/* 检查 创建初始化WebApplicationContext容器 */
 			this.webApplicationContext = initWebApplicationContext();
 			initFrameworkServlet();
 		}
@@ -564,10 +564,10 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #FrameworkServlet(WebApplicationContext)
 	 * @see #setContextClass
 	 * @see #setContextConfigLocation
-	 */
+	 */ /* 在springboot中已经配置了AnnotationConfigServletWebServerApplicationContext，因此这个方法不需要多做什么  */
 	protected WebApplicationContext initWebApplicationContext() {
 		/* 父子容器，父容器 */
-		WebApplicationContext rootContext =
+		WebApplicationContext rootContext =   /* springboot在这里时返回 AnnotationConfigServletWebServerApplicationContext  */
 				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		WebApplicationContext wac = null;
 
@@ -582,7 +582,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 					// the root application context (if any; may be null) as the parent
 					cwac.setParent(rootContext);
 				}
-				configureAndRefreshWebApplicationContext(cwac);/* 直接初始化手动赋值的容器对象 */
+				configureAndRefreshWebApplicationContext(cwac);
 			}
 		}
 		if (wac == null) {
@@ -594,7 +594,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		}
 		if (wac == null) {
 			// No context instance is defined for this servlet -> create a local one
-			/* 创建WebApplicationContext容器 */
+			/* web.xml方式部署项目 - 创建 XmlWebApplicationContext 容器 */
 			wac = createWebApplicationContext(rootContext);
 		}
 
@@ -603,7 +603,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			// support or the context injected at construction time had already been
 			// refreshed -> trigger initial onRefresh manually here.
 			synchronized (this.onRefreshMonitor) {
-				onRefresh(wac);
+				onRefresh(wac); /* springboot执行路径 - initStrategies(context) - 获取Handler mapping/adapter/except处理器 */
 			}
 		}
 
@@ -725,7 +725,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #createWebApplicationContext(ApplicationContext)
 	 */
 	protected WebApplicationContext createWebApplicationContext(@Nullable WebApplicationContext parent) {
-		/* 创建WebApplicationContext容器 */
+		/* 创建 XmlWebApplicationContext 容器 */
 		return createWebApplicationContext((ApplicationContext) parent);
 	}
 
