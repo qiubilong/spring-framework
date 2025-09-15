@@ -37,7 +37,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
  */
 class WebMvcConfigurerComposite implements WebMvcConfigurer {
 
-	private final List<WebMvcConfigurer> delegates = new ArrayList<>();
+	private final List<WebMvcConfigurer> delegates = new ArrayList<>(); /* webmvc 配置器 */
 
 
 	public void addWebMvcConfigurers(List<WebMvcConfigurer> configurers) {
@@ -83,7 +83,7 @@ class WebMvcConfigurerComposite implements WebMvcConfigurer {
 	}
 
 	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
+	public void addInterceptors(InterceptorRegistry registry) { /* 添加拦截器 */
 		for (WebMvcConfigurer delegate : this.delegates) {
 			delegate.addInterceptors(registry);
 		}

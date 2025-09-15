@@ -37,12 +37,12 @@ import org.springframework.web.util.pattern.PathPattern;
  * @author Keith Donald
  * @since 3.1
  */
-public class InterceptorRegistration {
+public class InterceptorRegistration { /* 拦截器注册器 */
 
-	private final HandlerInterceptor interceptor;
+	private final HandlerInterceptor interceptor; /* 拦截器 */
 
 	@Nullable
-	private List<String> includePatterns;
+	private List<String> includePatterns; /* 匹配路径 */
 
 	@Nullable
 	private List<String> excludePatterns;
