@@ -162,7 +162,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/** Map from scope identifier String to corresponding Scope. */
 	private final Map<String, Scope> scopes = new LinkedHashMap<>(8);
 
-	/** Map from bean name to merged RootBeanDefinition. */   /* 所有BeanDefinition, beanName <--> BeanDefinition */
+	/** Map from bean name to merged RootBeanDefinition. */   /* 所有BeanDefinition,    beanName <--> BeanDefinition */
 	private final Map<String, RootBeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>(256);
 
 	/** Names of beans that have already been created at least once. */

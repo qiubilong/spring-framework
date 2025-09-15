@@ -50,7 +50,7 @@ import org.springframework.util.Assert;
  * @author Mark Fisher
  * @author Juergen Hoeller
  * @since 3.0
- */
+ */   /* ApplicationContext 生命周期处理器 */
 public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactoryAware {
 
 	private final Log logger = LogFactory.getLog(getClass());
@@ -139,20 +139,20 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 	// Internal helpers
 
 	private void startBeans(boolean autoStartupOnly) {
-		Map<String, Lifecycle> lifecycleBeans = getLifecycleBeans();
+		Map<String, Lifecycle> lifecycleBeans = getLifecycleBeans();/* 找出所有 Lifecycle 对象 */
 		Map<Integer, LifecycleGroup> phases = new TreeMap<>();
 
 		lifecycleBeans.forEach((beanName, bean) -> {
 			if (!autoStartupOnly || (bean instanceof SmartLifecycle smartLifecycle && smartLifecycle.isAutoStartup())) {
 				int phase = getPhase(bean);
-				phases.computeIfAbsent(
+				phases.computeIfAbsent( //分组 ，默认 phase=0
 						phase,
 						p -> new LifecycleGroup(phase, this.timeoutPerShutdownPhase, lifecycleBeans, autoStartupOnly)
 				).add(beanName, bean);
 			}
 		});
 		if (!phases.isEmpty()) {
-			phases.values().forEach(LifecycleGroup::start);
+			phases.values().forEach(LifecycleGroup::start);/* 调用 Lifecycle.start() */
 		}
 	}
 
@@ -271,7 +271,7 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 	 * as well as all SmartLifecycle beans (even if they are marked as lazy-init).
 	 * @return the Map of applicable beans, with bean names as keys and bean instances as values
 	 */
-	protected Map<String, Lifecycle> getLifecycleBeans() {
+	protected Map<String, Lifecycle> getLifecycleBeans() { /* 找出所有 Lifecycle 对象 */
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 		Map<String, Lifecycle> beans = new LinkedHashMap<>();
 		String[] beanNames = beanFactory.getBeanNamesForType(Lifecycle.class, false, false);

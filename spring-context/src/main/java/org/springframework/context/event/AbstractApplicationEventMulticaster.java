@@ -484,7 +484,7 @@ public abstract class AbstractApplicationEventMulticaster
 	 */
 	private class DefaultListenerRetriever {
 
-		public final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<>();
+		public final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<>(); /* 事件监听器集合 */
 
 		public final Set<String> applicationListenerBeans = new LinkedHashSet<>();
 

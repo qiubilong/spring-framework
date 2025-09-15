@@ -851,7 +851,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 		}
 		else {
-			DefaultLifecycleProcessor defaultProcessor = new DefaultLifecycleProcessor(); /* 生命周期处理器 */
+			DefaultLifecycleProcessor defaultProcessor = new DefaultLifecycleProcessor(); /* ApplicationContext - 生命周期处理器 */
 			defaultProcessor.setBeanFactory(beanFactory);
 			this.lifecycleProcessor = defaultProcessor;
 			beanFactory.registerSingleton(LIFECYCLE_PROCESSOR_BEAN_NAME, this.lifecycleProcessor);
@@ -948,13 +948,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		clearResourceCaches();
 
 		// Initialize lifecycle processor for this context.
-		initLifecycleProcessor();/* DefaultLifecycleProcessor */
+		initLifecycleProcessor();/* ApplicationContext 生命周期处理器 - DefaultLifecycleProcessor */
 
 		// Propagate refresh to lifecycle processor first.
 		getLifecycleProcessor().onRefresh(); /*  start() 所有的 SmartLifecycle对象 */
 
 		// Publish the final event.
-		publishEvent(new ContextRefreshedEvent(this));/* 发布 - 启动完成事件 */
+		publishEvent(new ContextRefreshedEvent(this));/* 发布 - ApplicationContext启动完成事件 */
 	}
 
 	/**
