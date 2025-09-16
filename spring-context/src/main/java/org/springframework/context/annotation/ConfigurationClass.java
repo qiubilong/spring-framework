@@ -56,7 +56,7 @@ final class ConfigurationClass {
 	@Nullable
 	private String beanName;
 
-	private final Set<ConfigurationClass> importedBy = new LinkedHashSet<>(1);
+	private final Set<ConfigurationClass> importedBy = new LinkedHashSet<>(1);//被哪个类导入
 
 	private final Set<BeanMethod> beanMethods = new LinkedHashSet<>(); /* 扫描的@Bean */
 

@@ -102,7 +102,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 
 
 	/** The configuration used to configure this proxy. */
-	protected final AdvisedSupport advised;
+	protected final AdvisedSupport advised; /* ProxyFactory 对象  */
 
 	@Nullable
 	protected Object[] constructorArgs;

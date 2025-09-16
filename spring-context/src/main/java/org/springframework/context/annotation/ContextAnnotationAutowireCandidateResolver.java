@@ -132,7 +132,7 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 			public void releaseTarget(Object target) {
 			}
 		};
-
+        /* 生成代理对象 */
 		ProxyFactory pf = new ProxyFactory();
 		pf.setTargetSource(ts);
 		Class<?> dependencyType = descriptor.getDependencyType();

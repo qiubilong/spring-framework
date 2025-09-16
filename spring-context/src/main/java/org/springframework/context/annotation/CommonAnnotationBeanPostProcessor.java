@@ -275,7 +275,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
 		super.postProcessMergedBeanDefinition(beanDefinition, beanType, beanName); /* 寻找@PostConstruct注入配置 */
 		InjectionMetadata metadata = findResourceMetadata(beanName, beanType, null);/* 寻找@Resource注入配置 */
-		metadata.checkConfigMembers(beanDefinition);
+		metadata.checkConfigMembers(beanDefinition);/* 保证属性只初始化一次 */
 	}
 
 	@Override
@@ -295,11 +295,11 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
-		/* 寻找@Resource注入点  */
+		/* 寻找 @Resource 注入点  */
 		InjectionMetadata metadata = findResourceMetadata(beanName, bean.getClass(), pvs);
 		try {
 			/* 反射设置field或调用methodXXX  */
-			metadata.inject(bean, beanName, pvs);
+			metadata.inject(bean, beanName, pvs);  /* @Resource根据名字查找（无名字用字段名） > 不指定名字根据Class查找 */
 		}
 		catch (Throwable ex) {
 			throw new BeanCreationException(beanName, "Injection of resource dependencies failed", ex);
@@ -312,7 +312,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		// Fall back to class name as cache key, for backwards compatibility with custom callers.
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
 		// Quick check on the concurrent map first, with minimal locking.
-		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
+		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);//postProcessMergedBeanDefinition中 已经 提前生成
 		if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 			synchronized (this.injectionMetadataCache) {
 				metadata = this.injectionMetadataCache.get(cacheKey);
@@ -391,7 +391,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			});
 
 			elements.addAll(0, currElements);
-			targetClass = targetClass.getSuperclass();
+			targetClass = targetClass.getSuperclass();/* 递归解析父类 */
 		}
 		while (targetClass != null && targetClass != Object.class);
 
@@ -468,7 +468,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			throw new NoSuchBeanDefinitionException(element.lookupType,
 					"No resource factory configured - specify the 'resourceFactory' property");
 		}
-		return autowireResource(this.resourceFactory, element, requestingBeanName);/* 获取 @Resource对象*/
+		return autowireResource(this.resourceFactory, element, requestingBeanName);/* 获取 @Resource注入 对象*/
 	}
 
 	/**
@@ -490,7 +490,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		if (factory instanceof AutowireCapableBeanFactory autowireCapableBeanFactory) {
 			DependencyDescriptor descriptor = element.getDependencyDescriptor();
 			if (this.fallbackToDefaultTypeMatch && element.isDefaultName && !factory.containsBean(name)) {
-				autowiredBeanNames = new LinkedHashSet<>(); /* name对应的bean不存在，byClass获取Bean 注入@Resource */
+				autowiredBeanNames = new LinkedHashSet<>(); /* @Resource 未指定名字，name=字段名 的bean不存在，byClass获取Bean 注入@Resource */
 				resource = autowireCapableBeanFactory.resolveDependency(descriptor, requestingBeanName, autowiredBeanNames, null);
 				if (resource == null) {
 					throw new NoSuchBeanDefinitionException(element.getLookupType(), "No resolvable resource object");
@@ -514,7 +514,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			}
 		}
 
-		return resource;
+		return resource; /* 没有找到依赖对象，返回 null */
 	}
 
 
@@ -539,7 +539,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 		protected String name = "";
 
-		protected boolean isDefaultName = false;
+		protected boolean isDefaultName = false; /* @Resource 未指定名字 */
 
 		protected Class<?> lookupType = Object.class;
 
@@ -612,7 +612,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			this.lookupType = resourceType;
 			String lookupValue = resource.lookup();
 			this.mappedName = (StringUtils.hasLength(lookupValue) ? lookupValue : resource.mappedName());
-			Lazy lazy = ae.getAnnotation(Lazy.class);
+			Lazy lazy = ae.getAnnotation(Lazy.class);//懒加载
 			this.lazyLookup = (lazy != null && lazy.value());
 		}
 

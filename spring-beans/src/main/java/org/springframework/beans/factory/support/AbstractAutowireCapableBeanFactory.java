@@ -586,7 +586,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		synchronized (mbd.postProcessingLock) {
 			if (!mbd.postProcessed) {
 				try {
-					/* new Bean后，属性未赋值前，BeanDefinitionPostProcessor拓展点，扫描注解点(@Value、@Autowired)，可添加PropertyValues定义其属性  */
+					// new Bean后，属性未赋值前，BeanDefinitionPostProcessor拓展点，扫描注解点(@Value、@Autowired)，可添加PropertyValues定义其属性
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
 				catch (Throwable ex) {
@@ -1430,7 +1430,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				}
 			}
 		}
-		/* BeanDefinition 指定了依赖注入方式 AutowireMode (Autowire.BY_TYPE 或者Autowire.BY_NAME) --> setXXX  --> 注入依赖
+		/* 1、BeanDefinition 指定了依赖注入方式 AutowireMode (Autowire.BY_TYPE 或者Autowire.BY_NAME) --> setXXX  --> 注入依赖
 		*  spring已经废弃这种注入方式，推荐使用@Autowired来注入依赖，开发者更加清晰地看到依赖关系，增加代码可读性和维护性
 		*  */
 		PropertyValues pvs = (mbd.hasPropertyValues() ? mbd.getPropertyValues() : null);
@@ -1450,13 +1450,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			pvs = newPvs;
 		}
 
-		/* 执行注解依赖注入 @Resource、@Value、@Autowired（@Qualifier） */
+		/* 2、执行注解依赖注入 @Resource、@Value、@Autowired（@Qualifier） */
 		if (hasInstantiationAwareBeanPostProcessors()) {
 			if (pvs == null) {
 				pvs = mbd.getPropertyValues();
 			}
 			/* 属性注入阶段 - ProcessProperties
-			   CommonAnnotationBeanPostProcessor --> 解析注解 @Resource
+			   CommonAnnotationBeanPostProcessor    --> 解析注解 @Resource
 			   AutowiredAnnotationBeanPostProcessor -->  解析注解 @Value、@Autowired（@Qualifier）
 			  */
 			for (InstantiationAwareBeanPostProcessor bp : getBeanPostProcessorCache().instantiationAware) {
@@ -1473,7 +1473,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			PropertyDescriptor[] filteredPds = filterPropertyDescriptorsForDependencyCheck(bw, mbd.allowCaching);
 			checkDependencies(beanName, mbd, filteredPds, pvs);
 		}
-		/* 最后的BeanDefinition自定义属性赋值，可能会覆盖前面的@Autowired等注入 */
+		/* 3、最后的BeanDefinition自定义属性赋值，可能会覆盖前面的@Autowired等注入 */
 		if (pvs != null) {
 			applyPropertyValues(beanName, mbd, bw, pvs);
 		}
@@ -1822,8 +1822,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		if (mbd == null || !mbd.isSynthetic()) {
 			/*  bean实例化和初始化后 - 最后阶段 - AfterInitialization
 			 *  AnnotationAwareAspectJAutoProxyCreator --> AbstractAutoProxyCreator --> 动态代理 --> 切面、事务
-			 *  AsyncAnnotationBeanPostProcessor   --> 异步
-			 *  ScheduledAnnotationBeanPostProcessor --> 定时器
+			 *  AsyncAnnotationBeanPostProcessor       --> 异步
+			 *  ScheduledAnnotationBeanPostProcessor   --> 定时器
 			 * */
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
@@ -1868,11 +1868,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			if (logger.isTraceEnabled()) {
 				logger.trace("Invoking afterPropertiesSet() on bean with name '" + beanName + "'");
 			}
-			((InitializingBean) bean).afterPropertiesSet();
+			((InitializingBean) bean).afterPropertiesSet();/* 执行 afterPropertiesSet() */
 		}
 
 		if (mbd != null && bean.getClass() != NullBean.class) {
-			String[] initMethodNames = mbd.getInitMethodNames();
+			String[] initMethodNames = mbd.getInitMethodNames();/* 执行 自定义初始化方法() */
 			if (initMethodNames != null) {
 				for (String initMethodName : initMethodNames) {
 					if (StringUtils.hasLength(initMethodName) &&

@@ -72,7 +72,7 @@ public class InjectionMetadata {
 	private final Collection<InjectedElement> injectedElements;
 
 	@Nullable
-	private volatile Set<InjectedElement> checkedElements;
+	private volatile Set<InjectedElement> checkedElements; /* 最终注入点 */
 
 
 	/**

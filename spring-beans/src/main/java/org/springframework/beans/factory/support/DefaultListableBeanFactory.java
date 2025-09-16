@@ -1494,7 +1494,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			return result;
 		}
-		else if (Collection.class.isAssignableFrom(type) && type.isInterface()) {
+		else if (Collection.class.isAssignableFrom(type) && type.isInterface()) { /* List 注入 */
 			Class<?> elementType = descriptor.getResolvableType().asCollection().resolveGeneric();
 			if (elementType == null) {
 				return null;
@@ -1709,7 +1709,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		for (Map.Entry<String, Object> entry : candidates.entrySet()) {
 			String candidateBeanName = entry.getKey();
 			Object beanInstance = entry.getValue();
-			if (isPrimary(candidateBeanName, beanInstance)) {
+			if (isPrimary(candidateBeanName, beanInstance)) {/* @Primary优先 */
 				if (primaryBeanName != null) {
 					boolean candidateLocal = containsBeanDefinition(candidateBeanName);
 					boolean primaryLocal = containsBeanDefinition(primaryBeanName);

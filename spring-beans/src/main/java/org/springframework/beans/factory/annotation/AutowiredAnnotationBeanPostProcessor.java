@@ -603,7 +603,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	@Nullable
 	private MergedAnnotation<?> findAutowiredAnnotation(AccessibleObject ao) {
 		MergedAnnotations annotations = MergedAnnotations.from(ao);
-		for (Class<? extends Annotation> type : this.autowiredAnnotationTypes) {
+		for (Class<? extends Annotation> type : this.autowiredAnnotationTypes) { /* @Autowired 、 @Value */
 			MergedAnnotation<?> annotation = annotations.get(type);
 			if (annotation.isPresent()) {
 				return annotation;
