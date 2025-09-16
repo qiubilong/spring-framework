@@ -389,7 +389,7 @@ class ConfigurationClassParser {
 	 * Register default methods on interfaces implemented by the configuration class.
 	 */
 	private void processInterfaces(ConfigurationClass configClass, SourceClass sourceClass) throws IOException {
-		for (SourceClass ifc : sourceClass.getInterfaces()) {
+		for (SourceClass ifc : sourceClass.getInterfaces()) { /* 遍历 接口中的 @Bean方法  */
 			Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(ifc);
 			for (MethodMetadata methodMetadata : beanMethods) {
 				if (!methodMetadata.isAbstract()) {
@@ -414,7 +414,7 @@ class ConfigurationClassParser {
 			try {
 				AnnotationMetadata asm =
 						this.metadataReaderFactory.getMetadataReader(original.getClassName()).getAnnotationMetadata();
-				Set<MethodMetadata> asmMethods = asm.getAnnotatedMethods(Bean.class.getName());
+				Set<MethodMetadata> asmMethods = asm.getAnnotatedMethods(Bean.class.getName()); /* 找到所有 @Bean方法 */
 				if (asmMethods.size() >= beanMethods.size()) {
 					Set<MethodMetadata> selectedMethods = new LinkedHashSet<>(asmMethods.size());
 					for (MethodMetadata asmMethod : asmMethods) {

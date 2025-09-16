@@ -276,7 +276,7 @@ public abstract class AnnotationConfigUtils {
 			}
 		}
 
-		if (metadata.isAnnotated(Primary.class.getName())) {
+		if (metadata.isAnnotated(Primary.class.getName())) { /* 类相同时最高优先级 */
 			abd.setPrimary(true);
 		}
 		AnnotationAttributes dependsOn = attributesFor(metadata, DependsOn.class);

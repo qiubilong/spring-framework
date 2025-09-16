@@ -58,12 +58,12 @@ final class ConfigurationClass {
 
 	private final Set<ConfigurationClass> importedBy = new LinkedHashSet<>(1);//被哪个类导入
 
-	private final Set<BeanMethod> beanMethods = new LinkedHashSet<>(); /* 扫描的@Bean */
+	private final Set<BeanMethod> beanMethods = new LinkedHashSet<>(); /* 扫描的 @Bean */
 
-	private final Map<String, Class<? extends BeanDefinitionReader>> importedResources =
+	private final Map<String, Class<? extends BeanDefinitionReader>> importedResources =  /* 延迟加载 @ImportResource */
 			new LinkedHashMap<>();
 
-	private final Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> importBeanDefinitionRegistrars = /* ImportBeanDefinitionRegistrar <-->  声明注解的配置类信息  */
+	private final Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> importBeanDefinitionRegistrars = /* ImportBeanDefinitionRegistrar <-->  声明注解的配置类信息  ------组件常用 */
 			new LinkedHashMap<>();
 
 	final Set<String> skippedBeanMethods = new HashSet<>();
