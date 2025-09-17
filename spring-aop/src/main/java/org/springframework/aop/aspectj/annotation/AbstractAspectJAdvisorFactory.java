@@ -202,7 +202,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 		}
 
 		private String resolvePointcutExpression(Annotation annotation) {
-			for (String attributeName : EXPRESSION_ATTRIBUTES) {
+			for (String attributeName : EXPRESSION_ATTRIBUTES) { /* {"pointcut", "value"} */
 				Object val = AnnotationUtils.getValue(annotation, attributeName);
 				if (val instanceof String str && !str.isEmpty()) {
 					return str;
