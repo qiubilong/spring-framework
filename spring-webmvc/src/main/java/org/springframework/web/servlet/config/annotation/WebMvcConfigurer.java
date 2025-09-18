@@ -92,7 +92,7 @@ public interface WebMvcConfigurer {
 	 * Interceptors can be registered to apply to all requests or be limited
 	 * to a subset of URL patterns.
 	 */
-	default void addInterceptors(InterceptorRegistry registry) {
+	default void addInterceptors(InterceptorRegistry registry) { /* 自定义 - 拦截器 */
 	}
 
 	/**
@@ -117,7 +117,7 @@ public interface WebMvcConfigurer {
 	 * @see CorsRegistry
 	 * @see CorsConfiguration#combine(CorsConfiguration)
 	 */
-	default void addCorsMappings(CorsRegistry registry) {
+	default void addCorsMappings(CorsRegistry registry) {  /* 自定义 - 跨域 */
 	}
 
 	/**
@@ -147,7 +147,7 @@ public interface WebMvcConfigurer {
 	 * resolution, configure {@link RequestMappingHandlerAdapter} directly.
 	 * @param resolvers initially an empty list
 	 */
-	default void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+	default void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {/* 自定义 - 参数解析器 */
 	}
 
 	/**
@@ -157,7 +157,7 @@ public interface WebMvcConfigurer {
 	 * values, configure RequestMappingHandlerAdapter directly.
 	 * @param handlers initially an empty list
 	 */
-	default void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
+	default void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {/* 自定义 - 返回值处理器 */
 	}
 
 	/**

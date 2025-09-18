@@ -308,7 +308,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 		RequestMappingHandlerMapping mapping = createRequestMappingHandlerMapping();
 		mapping.setOrder(0);
 		mapping.setContentNegotiationManager(contentNegotiationManager);
-
+		/* 自定义 - 拦截器 + 跨域  */
 		initHandlerMapping(mapping, conversionService, resourceUrlProvider);
 
 		PathMatchConfigurer pathConfig = getPathMatchConfigurer();
@@ -508,8 +508,8 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 		else if (pathConfig.getPatternParser() != null) {
 			mapping.setPatternParser(pathConfig.getPatternParser());
 		}
-		mapping.setInterceptors(getInterceptors(conversionService, resourceUrlProvider));
-		mapping.setCorsConfigurations(getCorsConfigurations());
+		mapping.setInterceptors(getInterceptors(conversionService, resourceUrlProvider)); /* 自定义 - 拦截器 */
+		mapping.setCorsConfigurations(getCorsConfigurations()); /* 自定义 - 跨域 */
 	}
 
 	/**

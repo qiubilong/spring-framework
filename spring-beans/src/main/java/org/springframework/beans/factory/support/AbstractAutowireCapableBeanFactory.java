@@ -1812,7 +1812,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
-			/* 执行InitializingBean.afterPropertiesSet() */
+			/* 执行InitializingBean.afterPropertiesSet()  ---   Mvc @RequestMapping 解析点 - RequestMappingHandlerMapping  */
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {

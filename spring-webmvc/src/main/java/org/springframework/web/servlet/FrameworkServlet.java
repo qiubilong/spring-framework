@@ -513,7 +513,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @since 4.0
 	 */
 	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) {
+	public void setApplicationContext(ApplicationContext applicationContext) { /* ApplicationContextAware 回调 */
 		if (this.webApplicationContext == null && applicationContext instanceof WebApplicationContext wac) {
 			this.webApplicationContext = wac;
 			this.webApplicationContextInjected = true;
@@ -526,7 +526,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * have been set. Creates this servlet's WebApplicationContext.
 	 */
 	@Override
-	protected final void initServletBean() throws ServletException {
+	protected final void initServletBean() throws ServletException { /* http第一次调用时初始化 */
 		getServletContext().log("Initializing Spring " + getClass().getSimpleName() + " '" + getServletName() + "'");
 		if (logger.isInfoEnabled()) {
 			logger.info("Initializing Servlet '" + getServletName() + "'");
@@ -565,7 +565,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #setContextClass
 	 * @see #setContextConfigLocation
 	 */ /* 在springboot中已经配置了AnnotationConfigServletWebServerApplicationContext，因此这个方法不需要多做什么  */
-	protected WebApplicationContext initWebApplicationContext() {
+	protected WebApplicationContext initWebApplicationContext() { /* http第一次调用时初始化 */
 		/* 父子容器，父容器 */
 		WebApplicationContext rootContext =   /* springboot在这里时返回 AnnotationConfigServletWebServerApplicationContext  */
 				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -603,7 +603,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			// support or the context injected at construction time had already been
 			// refreshed -> trigger initial onRefresh manually here.
 			synchronized (this.onRefreshMonitor) {
-				onRefresh(wac); /* springboot执行路径 - initStrategies(context) - 获取Handler mapping/adapter/except处理器 */
+				onRefresh(wac); /* springboot执行路径 - initStrategies(context) - 获取Handler mapping/adapter/except 处理器Bean对象列表 */
 			}
 		}
 

@@ -44,7 +44,7 @@ public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
 
 	private final WebMvcConfigurerComposite configurers = new WebMvcConfigurerComposite();
 
-    /* 依赖注入容器中所有的 自定义 WebMvcConfigurer */
+    /* 依赖注入容器中所有的 -  自定义mvc配置  -  WebMvcConfigurer */
 	@Autowired(required = false)
 	public void setConfigurers(List<WebMvcConfigurer> configurers) {
 		if (!CollectionUtils.isEmpty(configurers)) {
@@ -79,7 +79,7 @@ public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
 	}
 
 	@Override
-	protected void addInterceptors(InterceptorRegistry registry) {
+	protected void addInterceptors(InterceptorRegistry registry) { /* 自定义 - 拦截器 */
 		this.configurers.addInterceptors(registry);
 	}
 
