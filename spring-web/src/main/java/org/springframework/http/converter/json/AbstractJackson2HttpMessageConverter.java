@@ -373,7 +373,7 @@ public abstract class AbstractJackson2HttpMessageConverter extends AbstractGener
 				"UTF-16".equals(charset.name()) ||
 				"UTF-32".equals(charset.name());
 		try {
-			InputStream inputStream = StreamUtils.nonClosing(inputMessage.getBody());
+			InputStream inputStream = StreamUtils.nonClosing(inputMessage.getBody()); /* 读取body内容，利用json解析成java对象 */
 			if (inputMessage instanceof MappingJacksonInputMessage mappingJacksonInputMessage) {
 				Class<?> deserializationView = mappingJacksonInputMessage.getDeserializationView();
 				if (deserializationView != null) {

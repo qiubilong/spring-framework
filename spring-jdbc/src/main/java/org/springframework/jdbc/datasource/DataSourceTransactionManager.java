@@ -243,7 +243,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		DataSourceTransactionObject txObject = new DataSourceTransactionObject();
 		txObject.setSavepointAllowed(isNestedTransactionAllowed());
 		ConnectionHolder conHolder =
-				(ConnectionHolder) TransactionSynchronizationManager.getResource(obtainDataSource());
+				(ConnectionHolder) TransactionSynchronizationManager.getResource(obtainDataSource());/* 获取当前线程ThreadLocal中的数据库连接 */
 		txObject.setConnectionHolder(conHolder, false);
 		return txObject;
 	}

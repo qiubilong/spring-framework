@@ -1398,7 +1398,7 @@ org.springframework.web.servlet.HandlerAdapter=
 			}
 		}
 		if (exMv != null) {
-			if (exMv.isEmpty()) {
+			if (exMv.isEmpty()) { /* @HandlerException  -  @ResponseBody 处理成功 */
 				request.setAttribute(EXCEPTION_ATTRIBUTE, ex);
 				return null;
 			}

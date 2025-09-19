@@ -367,7 +367,7 @@ public abstract class MimeTypeUtils {
 		bubbleSort(mimeTypes, MimeType::isLessSpecific);
 	}
 
-	static <T> void bubbleSort(List<T> list, BiPredicate<? super T, ? super T> swap) {
+	static <T> void bubbleSort(List<T> list, BiPredicate<? super T, ? super T> swap) { /* 冒泡排序 */
 		int len = list.size();
 		for (int i = 0; i < len; i++) {
 			for (int j = 1; j < len - i ; j++) {

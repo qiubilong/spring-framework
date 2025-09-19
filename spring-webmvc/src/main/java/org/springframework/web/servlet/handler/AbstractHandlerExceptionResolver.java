@@ -136,7 +136,7 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 	public ModelAndView resolveException(
 			HttpServletRequest request, HttpServletResponse response, @Nullable Object handler, Exception ex) {
 
-		if (shouldApplyTo(request, handler)) {
+		if (shouldApplyTo(request, handler)) {/* 默认true */
 			prepareResponse(ex, response);
 			ModelAndView result = doResolveException(request, response, handler, ex);/* @HandlerException 异常处理 */
 			if (result != null) {
@@ -180,7 +180,7 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 				}
 			}
 		}
-		return !hasHandlerMappings();
+		return !hasHandlerMappings(); /* true */
 	}
 
 	/**

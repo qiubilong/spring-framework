@@ -545,7 +545,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter /
 	public void afterPropertiesSet() {
 		// Do this first, it may add ResponseBody advice beans
 		initControllerAdviceCache();/* @ControllerAdvice 处理 */
-		initMessageConverters(); /* 初始化Http数据类型转换器 - HttpMessageConverter */
+		initMessageConverters(); /* 初始化Http数据类型转换器 - HttpMessageConverter - 根据请求的 Content-Type/Accept 转换 http和java对象 */
 
 		if (this.argumentResolvers == null) {
 			/* 参数解析器 */

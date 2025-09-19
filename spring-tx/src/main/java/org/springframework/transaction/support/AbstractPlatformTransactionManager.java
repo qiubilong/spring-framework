@@ -396,7 +396,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	/**
 	 * Start a new transaction.
 	 */  // transaction = DataSourceTransactionObject
-	private TransactionStatus startTransaction(TransactionDefinition definition, Object transaction,
+	private TransactionStatus startTransaction(TransactionDefinition definition, Object transaction,//DataSourceTransactionObject
 			boolean debugEnabled, @Nullable SuspendedResourcesHolder suspendedResources) {
 
 		boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);

@@ -619,7 +619,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 				}
 			}
 		}
-		return prepareTransactionInfo(tm, txAttr, joinpointIdentification, status);
+		return prepareTransactionInfo(tm, txAttr, joinpointIdentification, status); //创建 事务信息
 	}
 
 	/**

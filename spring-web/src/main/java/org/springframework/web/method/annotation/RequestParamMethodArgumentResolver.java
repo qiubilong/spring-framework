@@ -180,7 +180,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			}
 		}
 		if (arg == null) {
-			/* 获取参数 --> org.apache.catalina.connector.Request.getParameterValues(name) --> url参数、表单参数  */
+			/* 获取参数 --> org.apache.catalina.connector.Request.getParameterValues(name) --> url参数、表单参数 multipart/form-data、(Post) x-www-form-urlencoded  */
 			String[] paramValues = request.getParameterValues(name);
 			if (paramValues != null) {
 				arg = (paramValues.length == 1 ? paramValues[0] : paramValues);//支持参数多个值

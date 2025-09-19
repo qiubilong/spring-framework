@@ -133,7 +133,7 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
 		parameter = parameter.nestedIfOptional();
-		/* 读取RequestBody内容 --> 转换参数  */
+		/* 读取RequestBody内容 --> 根据contentType 转换 java对象参数  */
 		Object arg = readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType());
 		String name = Conventions.getVariableNameForParameter(parameter);
 
@@ -161,7 +161,7 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 		Assert.state(servletRequest != null, "No HttpServletRequest");
 		ServletServerHttpRequest inputMessage = new ServletServerHttpRequest(servletRequest);
 
-		Object arg = readWithMessageConverters(inputMessage, parameter, paramType);/* 读取RequestBody内容 --> 转换参数  */
+		Object arg = readWithMessageConverters(inputMessage, parameter, paramType);/* 读取RequestBody内容 --> 根据contentType 转换 java对象参数  */
 		if (arg == null && checkRequired(parameter)) {
 			throw new HttpMessageNotReadableException("Required request body is missing: " +
 					parameter.getExecutable().toGenericString(), inputMessage);
@@ -192,7 +192,7 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 		}
 
 		// Try even with null return value. ResponseBodyAdvice could get involved.
-		writeWithMessageConverters(returnValue, returnType, inputMessage, outputMessage);/* @RequestBody处理 */
+		writeWithMessageConverters(returnValue, returnType, inputMessage, outputMessage);/* 根据客户端期望的ContentType，返回匹配的格式 & 数据 */
 	}
 
 }

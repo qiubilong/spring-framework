@@ -290,7 +290,7 @@ public abstract class AsyncExecutionAspectSupport implements BeanFactoryAware {
 		else if (Future.class.isAssignableFrom(returnType)) {
 			return executor.submit(task);
 		}
-		else if (void.class == returnType) {
+		else if (void.class == returnType) { /* 异步接口方法要么返回void，要么返回Future对象 */
 			executor.submit(task);
 			return null;
 		}

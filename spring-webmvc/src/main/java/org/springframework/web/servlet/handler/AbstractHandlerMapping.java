@@ -96,7 +96,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 
 	private final List<Object> interceptors = new ArrayList<>();
 
-	private final List<HandlerInterceptor> adaptedInterceptors = new ArrayList<>();
+	private final List<HandlerInterceptor> adaptedInterceptors = new ArrayList<>(); /* 拦截器链 */
 
 	@Nullable
 	private CorsConfigurationSource corsConfigurationSource;
@@ -620,7 +620,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 		HandlerExecutionChain chain = (handler instanceof HandlerExecutionChain handlerExecutionChain ?
 				handlerExecutionChain : new HandlerExecutionChain(handler));
 
-		for (HandlerInterceptor interceptor : this.adaptedInterceptors) {
+		for (HandlerInterceptor interceptor : this.adaptedInterceptors) { /* 遍历拦截器链 */
 			if (interceptor instanceof MappedInterceptor mappedInterceptor) {
 				if (mappedInterceptor.matches(request)) {
 					chain.addInterceptor(mappedInterceptor.getInterceptor());

@@ -159,7 +159,7 @@ public @interface Transactional {
 	 * <p>Defaults to {@link Propagation#REQUIRED}.
 	 * @see org.springframework.transaction.interceptor.TransactionAttribute#getPropagationBehavior()
 	 */
-	Propagation propagation() default Propagation.REQUIRED;
+	Propagation propagation() default Propagation.REQUIRED; /* 不存在就创建新事务 ---  默认 */
 
 	/**
 	 * The transaction isolation level.
@@ -228,7 +228,7 @@ public @interface Transactional {
 	 * @see org.springframework.transaction.interceptor.RollbackRuleAttribute#RollbackRuleAttribute(Class)
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#rollbackOn(Throwable)
 	 */
-	Class<? extends Throwable>[] rollbackFor() default {};
+	Class<? extends Throwable>[] rollbackFor() default {};/* 默认 -- RuntimeException & Error  ------ 个人建议checked exceptions (business exceptions)也要加上   */
 
 	/**
 	 * Defines zero (0) or more exception name patterns (for exceptions which must be a

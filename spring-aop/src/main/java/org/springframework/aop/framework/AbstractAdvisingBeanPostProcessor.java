@@ -96,7 +96,7 @@ public abstract class AbstractAdvisingBeanPostProcessor extends ProxyProcessorSu
 			if (!advised.isFrozen() && isEligible(AopUtils.getTargetClass(bean))) {
 				// Add our local Advisor to the existing proxy's Advisor chain.
 				if (this.beforeExistingAdvisors) {
-					advised.addAdvisor(0, this.advisor); /* 直接添加新的Advisor到ProxyFactory.advisors最前面 */
+					advised.addAdvisor(0, this.advisor); /* 直接添加新的Advisor到ProxyFactory.advisors最前面, 所以@Async 在事务前面 */
 				}
 				else if (advised.getTargetSource() == AdvisedSupport.EMPTY_TARGET_SOURCE &&
 						advised.getAdvisorCount() > 0) {

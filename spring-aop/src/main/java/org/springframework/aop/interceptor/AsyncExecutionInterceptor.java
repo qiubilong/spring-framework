@@ -114,7 +114,7 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport imple
 			try {
 				Object result = invocation.proceed();/* 继续执行 ReflectiveMethodInvocation 下个方法 -->最后执行目标方法 */
 				if (result instanceof Future<?> future) {
-					return future.get();
+					return future.get();//等待执行结果
 				}
 			}
 			catch (ExecutionException ex) {

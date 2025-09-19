@@ -60,7 +60,7 @@ public class MappingJackson2HttpMessageConverter extends AbstractJackson2HttpMes
 	 * provided by {@link Jackson2ObjectMapperBuilder}.
 	 */
 	public MappingJackson2HttpMessageConverter() {
-		this(Jackson2ObjectMapperBuilder.json().build());
+		this(Jackson2ObjectMapperBuilder.json().build());/* new ObjectMapper() */
 	}
 
 	/**

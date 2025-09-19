@@ -40,7 +40,7 @@ import org.springframework.util.StreamUtils;
  * @author Arjen Poutsma
  * @author Juergen Hoeller
  * @since 3.0
- */
+ */   /* 输入参数、返回对象 都是String */
 public class StringHttpMessageConverter extends AbstractHttpMessageConverter<String> {
 
 	private static final MediaType APPLICATION_PLUS_JSON = new MediaType("application", "*+json");
