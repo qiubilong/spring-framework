@@ -1,10 +1,10 @@
 pluginManagement {
-	repositories {
-		gradlePluginPortal()
+    repositories {
+        gradlePluginPortal()
 //		maven { url 'https://repo.spring.io/plugins-release' }
         maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
         maven { url "https://maven.aliyun.com/repository/public" }
-	}
+    }
 }
 apply from: "$rootDir/gradle/build-cache-settings.gradle"
 
@@ -35,9 +35,11 @@ include "framework-bom"
 include "integration-tests"
 
 rootProject.name = "spring"
-rootProject.children.each {project ->
-	project.buildFileName = "${project.name}.gradle"
+rootProject.children.each { project ->
+    project.buildFileName = "${project.name}.gradle"
 }
 
 include 'do-experiment'
 include 'do-experiment-web'
+
+include 'do-spring-boot-sample'

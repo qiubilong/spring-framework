@@ -1,0 +1,108 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.experiment'
+version = '5.2.4.RELEASE'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+// 在所有配置开始前就排除 Kotlin
+configurations {
+    compileClasspath {
+        exclude group: 'org.jetbrains.kotlin'
+        exclude group: 'org.jetbrains.kotlinx'
+    }
+    runtimeClasspath {
+        exclude group: 'org.jetbrains.kotlin'
+        exclude group: 'org.jetbrains.kotlinx'
+    }
+}
+
+// 全局排除所有测试相关的传递依赖
+configurations.all {
+    exclude group: 'org.junit.jupiter'
+    exclude group: 'org.junit.platform'
+    exclude group: 'org.junit.vintage'
+    exclude group: 'junit'
+    exclude group: 'org.jetbrains.kotlin'
+    exclude group: 'org.jetbrains.kotlinx'
+    resolutionStrategy {
+        // 强制使用非 Kotlin 版本
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'org.jetbrains.kotlinx') {
+                details.useTarget("org.jetbrains.kotlinx:${details.requested.name}:none")
+                details.because("Exclude Kotlin coroutines")
+            }
+        }
+    }
+}
+
+// 依赖管理，用于导入Spring Boot的BOM
+//dependencyManagement {
+//    imports {
+//        mavenBom "org.springframework.boot:spring-boot-dependencies:2.2.5.RELEASE"
+//    }
+//}
+
+// 不使用 dependencyManagement
+dependencies {
+    // 使用 jar 而不是 project，确保使用打包后的版本
+    compile(project(path: ":spring-core", configuration: "default"))
+    compile(project(path: ":spring-context", configuration: "default"))
+    compile(project(path: ":spring-webmvc", configuration: "default"))
+    compile(project(path: ":spring-beans", configuration: "default"))
+    compile(project(path: ":spring-aop", configuration: "default"))
+    compile(project(path: ":spring-expression", configuration: "default"))
+    compile(project(path: ":spring-web", configuration: "default"))
+
+    // Spring Boot 依赖
+    compile("org.springframework.boot:spring-boot:2.2.5.RELEASE")
+    compile("org.springframework.boot:spring-boot-autoconfigure:2.2.5.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter:2.2.5.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-web:2.2.5.RELEASE") {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-test'
+        exclude group: 'org.jetbrains.kotlin'
+        exclude group: 'org.jetbrains.kotlinx'
+    }
+    compile("org.springframework.boot:spring-boot-starter-tomcat:2.2.5.RELEASE") {
+        exclude group: 'org.jetbrains.kotlin'
+        exclude group: 'org.jetbrains.kotlinx'
+    }
+
+    // Web 容器
+    compile("javax.servlet:javax.servlet-api:4.0.1")
+    compile("org.apache.tomcat.embed:tomcat-embed-core:9.0.31")
+    compile("org.apache.tomcat.embed:tomcat-embed-el:9.0.31")
+    compile("org.apache.tomcat.embed:tomcat-embed-websocket:9.0.31")
+
+    // JSON 处理
+    compile("com.fasterxml.jackson.core:jackson-databind:2.10.4")
+    compile("com.fasterxml.jackson.core:jackson-core:2.10.4")
+    compile("com.fasterxml.jackson.core:jackson-annotations:2.10.4")
+
+    // Bean Validation
+    compile("org.hibernate.validator:hibernate-validator:6.0.18.Final")
+    compile("javax.validation:validation-api:2.0.1.Final")
+}
+
+// 禁用所有测试任务
+tasks.withType(Test) {
+    enabled = false
+}
+// 或者完全禁用 test 任务
+test {
+    enabled = false
+}
+
+
+// 关键修复：禁用依赖管理插件的排除功能
+dependencyManagement {
+    applyMavenExclusions = false
+}
+// 配置 Java 版本
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
