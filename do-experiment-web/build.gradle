@@ -1,0 +1,37 @@
+plugins {
+    id 'war'
+    id 'java'
+    id 'java-library'
+}
+
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.11'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    compileOnly("jakarta.servlet:jakarta.servlet-api")
+
+
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8' /*自动注入 MappingJackson2HttpMessageConverter */
+
+    implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final") /* SPI机制注入validator */
+    implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+
+    api(project(":spring-webmvc"))
+
+    implementation 'org.mybatis:mybatis-spring:2.0.8-my-SNAPSHOT'
+
+}
+
+test {
+    useJUnitPlatform()
+}

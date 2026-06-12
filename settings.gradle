@@ -40,3 +40,4 @@ rootProject.children.each {project ->
 }
 
 include 'do-experiment'
+include 'do-experiment-web'

@@ -1,0 +1,18 @@
+
+
+-- wait等待
+ synchronized(lock){
+    while(条件不满足){
+        lock.wait()
+    }
+
+    //处理业务
+ }
+
+
+
+ --notify通知
+ synchronized(lock) {
+     //改变条件
+     lock.notify()
+ }
