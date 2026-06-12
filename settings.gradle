@@ -1,7 +1,9 @@
 pluginManagement {
 	repositories {
 		gradlePluginPortal()
-		maven { url 'https://repo.spring.io/plugins-release' }
+//		maven { url 'https://repo.spring.io/plugins-release' }
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+        maven { url "https://maven.aliyun.com/repository/public" }
 	}
 }
 apply from: "$rootDir/gradle/build-cache-settings.gradle"
@@ -36,3 +38,5 @@ rootProject.name = "spring"
 rootProject.children.each {project ->
 	project.buildFileName = "${project.name}.gradle"
 }
+
+include 'do-experiment'
