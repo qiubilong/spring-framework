@@ -364,7 +364,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		request.setAttribute(LOOKUP_PATH, lookupPath);
 		this.mappingRegistry.acquireReadLock();
 		try {
-			HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);
+			HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);  /* 查找匹配处理方法 */
 			return (handlerMethod != null ? handlerMethod.createWithResolvedBean() : null);
 		}
 		finally {
@@ -384,13 +384,13 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	@Nullable
 	protected HandlerMethod lookupHandlerMethod(String lookupPath, HttpServletRequest request) throws Exception {
 		List<Match> matches = new ArrayList<>();
-		List<T> directPathMatches = this.mappingRegistry.getMappingsByUrl(lookupPath);
+		List<T> directPathMatches = this.mappingRegistry.getMappingsByUrl(lookupPath); /* 直接路径完全匹配 */
 		if (directPathMatches != null) {
-			addMatchingMappings(directPathMatches, matches, request);
+			addMatchingMappings(directPathMatches, matches, request); /* 检查额外匹配条件 */
 		}
 		if (matches.isEmpty()) {
 			// No choice but to go through all mappings...
-			addMatchingMappings(this.mappingRegistry.getMappings().keySet(), matches, request);
+			addMatchingMappings(this.mappingRegistry.getMappings().keySet(), matches, request); /* 规则匹配，比如 /byPath/{id} */
 		}
 
 		if (!matches.isEmpty()) {
@@ -414,7 +414,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				}
 			}
 			request.setAttribute(BEST_MATCHING_HANDLER_ATTRIBUTE, bestMatch.handlerMethod);
-			handleMatch(bestMatch.mapping, lookupPath, request);
+			handleMatch(bestMatch.mapping, lookupPath, request); /* 解析路径参数 */
 			return bestMatch.handlerMethod;
 		}
 		else {
@@ -529,11 +529,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 */
 	class MappingRegistry {
 
-		private final Map<T, MappingRegistration<T>> registry = new HashMap<>();
+		private final Map<T, MappingRegistration<T>> registry = new HashMap<>();                /* @RequestMapping --> HandlerMethod */
 
 		private final Map<T, HandlerMethod> mappingLookup = new LinkedHashMap<>();
 
-		private final MultiValueMap<String, T> urlLookup = new LinkedMultiValueMap<>();
+		private final MultiValueMap<String, T> urlLookup = new LinkedMultiValueMap<>();         /* path --> 多个 @RequestMapping */
 
 		private final Map<String, List<HandlerMethod>> nameLookup = new ConcurrentHashMap<>();
 

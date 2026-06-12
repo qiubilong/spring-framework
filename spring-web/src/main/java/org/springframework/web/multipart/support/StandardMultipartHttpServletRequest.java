@@ -85,11 +85,11 @@ public class StandardMultipartHttpServletRequest extends AbstractMultipartHttpSe
 
 		super(request);
 		if (!lazyParsing) {
-			parseRequest(request);
+			parseRequest(request);/* 解析 多种格式数据表单 <-- Content-Type: multipart/form-data; boundary=WebAppBoundary*/
 		}
 	}
 
-
+    /* 格式参考： spring-web/src/main/java/org/springframework/web/multipart/support/StandardMultipartHttp示例.md */
 	private void parseRequest(HttpServletRequest request) {
 		try {
 			Collection<Part> parts = request.getParts();
@@ -99,13 +99,13 @@ public class StandardMultipartHttpServletRequest extends AbstractMultipartHttpSe
 				String headerValue = part.getHeader(HttpHeaders.CONTENT_DISPOSITION);
 				ContentDisposition disposition = ContentDisposition.parse(headerValue);
 				String filename = disposition.getFilename();
-				if (filename != null) {
+				if (filename != null) {   /* 文件参数 */
 					if (filename.startsWith("=?") && filename.endsWith("?=")) {
 						filename = MimeDelegate.decode(filename);
 					}
 					files.add(part.getName(), new StandardMultipartFile(part, filename));
 				}
-				else {
+				else {                 /* 文本参数 */
 					this.multipartParameterNames.add(part.getName());
 				}
 			}

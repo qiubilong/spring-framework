@@ -286,7 +286,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		// by application developers.
 		try {
 			ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH, DispatcherServlet.class);
-			defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);
+			defaultStrategies = PropertiesLoaderUtils.loadProperties(resource); /* 加载配置文件 - DispatcherServlet.properties */
 		}
 		catch (IOException ex) {
 			throw new IllegalStateException("Could not load '" + DEFAULT_STRATEGIES_PATH + "': " + ex.getMessage());
@@ -325,15 +325,15 @@ public class DispatcherServlet extends FrameworkServlet {
 
 	/** List of HandlerMappings used by this servlet. */
 	@Nullable
-	private List<HandlerMapping> handlerMappings;
+	private List<HandlerMapping> handlerMappings;                      /* Handler - 匹配解析 */
 
 	/** List of HandlerAdapters used by this servlet. */
 	@Nullable
-	private List<HandlerAdapter> handlerAdapters;
+	private List<HandlerAdapter> handlerAdapters;                      /* Handler - 调用适配 */
 
 	/** List of HandlerExceptionResolvers used by this servlet. */
 	@Nullable
-	private List<HandlerExceptionResolver> handlerExceptionResolvers;
+	private List<HandlerExceptionResolver> handlerExceptionResolvers;   /* Handler - 异常处理 */
 
 	/** RequestToViewNameTranslator used by this servlet. */
 	@Nullable
@@ -492,7 +492,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	@Override
 	protected void onRefresh(ApplicationContext context) {
-		initStrategies(context);
+		initStrategies(context); /* 容器初始化完成监听器 - 加载DispatcherServlet.properties文件中bean */
 	}
 
 	/**
@@ -503,9 +503,9 @@ public class DispatcherServlet extends FrameworkServlet {
 		initMultipartResolver(context);
 		initLocaleResolver(context);
 		initThemeResolver(context);
-		initHandlerMappings(context);
-		initHandlerAdapters(context);
-		initHandlerExceptionResolvers(context);
+		initHandlerMappings(context);              /* 寻找请求处理器Handler，并保存处理路径 path 和 Handler 的映射关系 */
+		initHandlerAdapters(context);              /* 初始化HandlerAdapter，用于封装不同Handler的执行细节 */
+		initHandlerExceptionResolvers(context);    /* 初始化@HandlerException异常处理器 */
 		initRequestToViewNameTranslator(context);
 		initViewResolvers(context);
 		initFlashMapManager(context);
@@ -592,7 +592,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	private void initHandlerMappings(ApplicationContext context) {
 		this.handlerMappings = null;
-
+		/* 如果配置文件xml声明了标签 <mvc:annotation-driven/>，则容器中会注入DispatcherServlet.properties包含的bean，因此这里不需要再加载DispatcherServlet.properties */
 		if (this.detectAllHandlerMappings) {
 			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
 			Map<String, HandlerMapping> matchingBeans =
@@ -612,11 +612,11 @@ public class DispatcherServlet extends FrameworkServlet {
 				// Ignore, we'll add a default HandlerMapping later.
 			}
 		}
-
+        /*  HandlerMapping负责去寻找Handler，并保存路径和Handler的映射关系;    [ RequestMappingHandlerMapping= @GET(/"") ],[ BeanNameUrlHandlerMapping= 负责寻找实现了Controller接口的bean对象]                    */
 		// Ensure we have at least one HandlerMapping, by registering
 		// a default HandlerMapping if no other mappings are found.
 		if (this.handlerMappings == null) {
-			this.handlerMappings = getDefaultStrategies(context, HandlerMapping.class);
+			this.handlerMappings = getDefaultStrategies(context, HandlerMapping.class); /* 加载 DispatcherServlet.properties中定义的请求处理器映射器HandlerMapping */
 			if (logger.isTraceEnabled()) {
 				logger.trace("No HandlerMappings declared for servlet '" + getServletName() +
 						"': using default strategies from DispatcherServlet.properties");
@@ -651,11 +651,11 @@ public class DispatcherServlet extends FrameworkServlet {
 				// Ignore, we'll add a default HandlerAdapter later.
 			}
 		}
-
+         /* 【 RequestMappingHandlerAdapter = @RequestMapping() 】  、 【SimpleControllerHandlerAdapter=实现接口Controller】  */
 		// Ensure we have at least some HandlerAdapters, by registering
 		// default HandlerAdapters if no other adapters are found.
 		if (this.handlerAdapters == null) {
-			this.handlerAdapters = getDefaultStrategies(context, HandlerAdapter.class);
+			this.handlerAdapters = getDefaultStrategies(context, HandlerAdapter.class); /* /* 加载 DispatcherServlet.properties 中定义默认 HandlerAdapter */
 			if (logger.isTraceEnabled()) {
 				logger.trace("No HandlerAdapters declared for servlet '" + getServletName() +
 						"': using default strategies from DispatcherServlet.properties");
@@ -667,7 +667,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * Initialize the HandlerExceptionResolver used by this class.
 	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
 	 * we default to no exception resolver.
-	 */
+	 */   /* 如果程序员定义了 HandlerExceptionResolver 类型的bean，那么就不再加载DispatcherServlet.properties中默认 HandlerExceptionResolver */
 	private void initHandlerExceptionResolvers(ApplicationContext context) {
 		this.handlerExceptionResolvers = null;
 
@@ -866,7 +866,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			for (String className : classNames) {
 				try {
 					Class<?> clazz = ClassUtils.forName(className, DispatcherServlet.class.getClassLoader());
-					Object strategy = createDefaultStrategy(context, clazz);
+					Object strategy = createDefaultStrategy(context, clazz); /* 调用ApplicationContext实例化策略组件，使组件经过完整的bean生命周期 */
 					strategies.add((T) strategy);
 				}
 				catch (ClassNotFoundException ex) {
@@ -940,7 +940,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		try {
-			doDispatch(request, response);
+			doDispatch(request, response);/* http请求处总入口 */
 		}
 		finally {
 			if (!WebAsyncUtils.getAsyncManager(request).isConcurrentHandlingStarted()) {
@@ -996,7 +996,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @param request current HTTP request
 	 * @param response current HTTP response
 	 * @throws Exception in case of any kind of processing failure
-	 */
+	 */  /* http请求派发总入口 --> HandlerMapping匹配请求处理器Handler -->  HandlerAdapter调用Handler处理逻辑 */
 	protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpServletRequest processedRequest = request;
 		HandlerExecutionChain mappedHandler = null;
@@ -1009,18 +1009,18 @@ public class DispatcherServlet extends FrameworkServlet {
 			Exception dispatchException = null;
 
 			try {
-				processedRequest = checkMultipart(request);
+				processedRequest = checkMultipart(request);  /*文件上传 */ //Content-Type: multipart/form-data; boundary=WebAppBoundary
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request.
-				mappedHandler = getHandler(processedRequest);
+				mappedHandler = getHandler(processedRequest); /* ## 1、 匹配当前请求的处理器，HandlerExecutionChain = Handler + interceptorList   */
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
 					return;
 				}
 
 				// Determine handler adapter for the current request.
-				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
+				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());  /* ## 2、匹配Handler的HandlerAdapter，用于封装不同Handler的执行细节 */
 
 				// Process last-modified header, if supported by the handler.
 				String method = request.getMethod();
@@ -1031,13 +1031,13 @@ public class DispatcherServlet extends FrameworkServlet {
 						return;
 					}
 				}
-
+				/* 拦截器 - 处理器handler执行前 - 例如跨域处理 CorsInterceptor */
 				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
 					return;
 				}
 
 				// Actually invoke the handler.
-				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
+				mv = ha.handle(processedRequest, response, mappedHandler.getHandler()); /* ## 3、 执行Handler */
 
 				if (asyncManager.isConcurrentHandlingStarted()) {
 					return;
@@ -1054,7 +1054,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				// making them available for @ExceptionHandler methods and other scenarios.
 				dispatchException = new NestedServletException("Handler dispatch failed", err);
 			}
-			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
+			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException); /* ## 4、处理返回结果，（渲染页面） */
 		}
 		catch (Exception ex) {
 			triggerAfterCompletion(processedRequest, response, mappedHandler, ex);
@@ -1161,7 +1161,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @param request current HTTP request
 	 * @return the processed request (multipart wrapper if necessary)
 	 * @see MultipartResolver#resolveMultipart
-	 */
+	 */ /* Content-Type: multipart/form-data; boundary=WebAppBoundary --> 多种格式数据表单*/
 	protected HttpServletRequest checkMultipart(HttpServletRequest request) throws MultipartException {
 		if (this.multipartResolver != null && this.multipartResolver.isMultipart(request)) {
 			if (WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class) != null) {
@@ -1175,7 +1175,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 			else {
 				try {
-					return this.multipartResolver.resolveMultipart(request);
+					return this.multipartResolver.resolveMultipart(request);/*  解析multipart/form-data报文 */
 				}
 				catch (MultipartException ex) {
 					if (request.getAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE) != null) {
@@ -1226,11 +1226,11 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * <p>Tries all handler mappings in order.
 	 * @param request current HTTP request
 	 * @return the HandlerExecutionChain, or {@code null} if no handler could be found
-	 */
+	 */  /* handlerMappings == BeanNameUrlHandlerMapping、RequestMappingHandlerMapping、RouterFunctionMapping  */
 	@Nullable
 	protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
 		if (this.handlerMappings != null) {
-			for (HandlerMapping mapping : this.handlerMappings) {
+			for (HandlerMapping mapping : this.handlerMappings) { /* 匹配当前请求的Handler */
 				HandlerExecutionChain handler = mapping.getHandler(request);
 				if (handler != null) {
 					return handler;

@@ -499,7 +499,7 @@ public class CorsConfiguration {
 			return null;
 		}
 
-		boolean allowAnyHeader = this.allowedHeaders.contains(ALL);
+		boolean allowAnyHeader = this.allowedHeaders.contains(ALL);  /* 最好配置为 * */
 		List<String> result = new ArrayList<>(requestHeaders.size());
 		for (String requestHeader : requestHeaders) {
 			if (StringUtils.hasText(requestHeader)) {

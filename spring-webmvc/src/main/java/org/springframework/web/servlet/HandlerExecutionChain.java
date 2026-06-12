@@ -37,17 +37,17 @@ import org.springframework.util.ObjectUtils;
  * @since 20.06.2003
  * @see HandlerInterceptor
  */
-public class HandlerExecutionChain {
+public class HandlerExecutionChain {  /* Handler处理器执行链 == handler +  interceptorList */
 
 	private static final Log logger = LogFactory.getLog(HandlerExecutionChain.class);
 
 	private final Object handler;
 
 	@Nullable
-	private HandlerInterceptor[] interceptors;
+	private HandlerInterceptor[] interceptors;                 /* 请求处理器Handler */
 
 	@Nullable
-	private List<HandlerInterceptor> interceptorList;
+	private List<HandlerInterceptor> interceptorList;         /* Handler拦截器 */
 
 	private int interceptorIndex = -1;
 

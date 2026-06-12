@@ -390,9 +390,9 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	 * @see #getHandlerInternal
 	 */
 	@Override
-	@Nullable
+	@Nullable  /* 返回Handler处理执行器， HandlerExecutionChain = Handler + interceptorList */
 	public final HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
-		Object handler = getHandlerInternal(request);
+		Object handler = getHandlerInternal(request); /* 查找匹配的处理方法 HandlerMethod */
 		if (handler == null) {
 			handler = getDefaultHandler();
 		}
@@ -404,7 +404,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 			String handlerName = (String) handler;
 			handler = obtainApplicationContext().getBean(handlerName);
 		}
-
+		/* 返回Handler处理执行器， HandlerExecutionChain = Handler + interceptorList */
 		HandlerExecutionChain executionChain = getHandlerExecutionChain(handler, request);
 
 		if (logger.isTraceEnabled()) {
@@ -413,12 +413,12 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 		else if (logger.isDebugEnabled() && !request.getDispatcherType().equals(DispatcherType.ASYNC)) {
 			logger.debug("Mapped to " + executionChain.getHandler());
 		}
-
+		/* 跨域处理 */
 		if (hasCorsConfigurationSource(handler) || CorsUtils.isPreFlightRequest(request)) {
-			CorsConfiguration config = (this.corsConfigurationSource != null ? this.corsConfigurationSource.getCorsConfiguration(request) : null);
+			CorsConfiguration config = (this.corsConfigurationSource != null ? this.corsConfigurationSource.getCorsConfiguration(request) : null);/* 全局跨域配置 */
 			CorsConfiguration handlerConfig = getCorsConfiguration(handler, request);
 			config = (config != null ? config.combine(handlerConfig) : handlerConfig);
-			executionChain = getCorsHandlerExecutionChain(request, executionChain, config);
+			executionChain = getCorsHandlerExecutionChain(request, executionChain, config);/* 跨域请求处理 */
 		}
 
 		return executionChain;
@@ -468,7 +468,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 				(HandlerExecutionChain) handler : new HandlerExecutionChain(handler));
 
 		String lookupPath = this.urlPathHelper.getLookupPathForRequest(request, LOOKUP_PATH);
-		for (HandlerInterceptor interceptor : this.adaptedInterceptors) {
+		for (HandlerInterceptor interceptor : this.adaptedInterceptors) {  /* 遍历拦截器链 */
 			if (interceptor instanceof MappedInterceptor) {
 				MappedInterceptor mappedInterceptor = (MappedInterceptor) interceptor;
 				if (mappedInterceptor.matches(lookupPath, this.pathMatcher)) {
@@ -527,12 +527,12 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	protected HandlerExecutionChain getCorsHandlerExecutionChain(HttpServletRequest request,
 			HandlerExecutionChain chain, @Nullable CorsConfiguration config) {
 
-		if (CorsUtils.isPreFlightRequest(request)) {
+		if (CorsUtils.isPreFlightRequest(request)) {/* OPTIONS请求拦截器  -- 预请求  */
 			HandlerInterceptor[] interceptors = chain.getInterceptors();
 			chain = new HandlerExecutionChain(new PreFlightHandler(config), interceptors);
 		}
 		else {
-			chain.addInterceptor(0, new CorsInterceptor(config));
+			chain.addInterceptor(0, new CorsInterceptor(config));/* 跨域拦截器 */
 		}
 		return chain;
 	}
@@ -546,7 +546,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 		public PreFlightHandler(@Nullable CorsConfiguration config) {
 			this.config = config;
 		}
-
+		/* OPTIONS跨域请求处理 */
 		@Override
 		public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			corsProcessor.processRequest(this.config, request, response);
@@ -578,7 +578,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 			if (asyncManager.hasConcurrentResult()) {
 				return true;
 			}
-
+			/* 跨域请求处理- DefaultCorsProcessor */
 			return corsProcessor.processRequest(this.config, request, response);
 		}
 

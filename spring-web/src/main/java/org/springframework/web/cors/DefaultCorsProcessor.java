@@ -73,14 +73,14 @@ public class DefaultCorsProcessor implements CorsProcessor {
 			return true;
 		}
 
-		boolean preFlightRequest = CorsUtils.isPreFlightRequest(request);
+		boolean preFlightRequest = CorsUtils.isPreFlightRequest(request);/* OPTIONS 请求 */
 		if (config == null) {
 			if (preFlightRequest) {
 				rejectRequest(new ServletServerHttpResponse(response));
 				return false;
 			}
 			else {
-				return true;
+				return true; /* 不是OPTIONS请求，没配置跨域，直接放行 */
 			}
 		}
 
@@ -100,12 +100,12 @@ public class DefaultCorsProcessor implements CorsProcessor {
 
 	/**
 	 * Handle the given request.
-	 */
+	 */  /*             跨域匹配           */
 	protected boolean handleInternal(ServerHttpRequest request, ServerHttpResponse response,
 			CorsConfiguration config, boolean preFlightRequest) throws IOException {
 
 		String requestOrigin = request.getHeaders().getOrigin();
-		String allowOrigin = checkOrigin(config, requestOrigin);
+		String allowOrigin = checkOrigin(config, requestOrigin);/* 匹配请求源域名 */
 		HttpHeaders responseHeaders = response.getHeaders();
 
 		if (allowOrigin == null) {
@@ -114,7 +114,7 @@ public class DefaultCorsProcessor implements CorsProcessor {
 			return false;
 		}
 
-		HttpMethod requestMethod = getMethodToUse(request, preFlightRequest);
+		HttpMethod requestMethod = getMethodToUse(request, preFlightRequest);/* 匹配请求类型（get、post） */
 		List<HttpMethod> allowMethods = checkMethods(config, requestMethod);
 		if (allowMethods == null) {
 			logger.debug("Reject: HTTP '" + requestMethod + "' is not allowed");
@@ -122,7 +122,7 @@ public class DefaultCorsProcessor implements CorsProcessor {
 			return false;
 		}
 
-		List<String> requestHeaders = getHeadersToUse(request, preFlightRequest);
+		List<String> requestHeaders = getHeadersToUse(request, preFlightRequest);/* 匹配请求头 */
 		List<String> allowHeaders = checkHeaders(config, requestHeaders);
 		if (preFlightRequest && allowHeaders == null) {
 			logger.debug("Reject: headers '" + requestHeaders + "' are not allowed");
@@ -130,21 +130,21 @@ public class DefaultCorsProcessor implements CorsProcessor {
 			return false;
 		}
 
-		responseHeaders.setAccessControlAllowOrigin(allowOrigin);
+		responseHeaders.setAccessControlAllowOrigin(allowOrigin);        /* 设置跨域 - 允许源地址 */
 
 		if (preFlightRequest) {
-			responseHeaders.setAccessControlAllowMethods(allowMethods);
+			responseHeaders.setAccessControlAllowMethods(allowMethods);  /* 设置跨域 - 允许http请求类型 */
 		}
 
 		if (preFlightRequest && !allowHeaders.isEmpty()) {
-			responseHeaders.setAccessControlAllowHeaders(allowHeaders);
+			responseHeaders.setAccessControlAllowHeaders(allowHeaders);  /* 设置跨域 - 允许http请求头 */
 		}
 
 		if (!CollectionUtils.isEmpty(config.getExposedHeaders())) {
 			responseHeaders.setAccessControlExposeHeaders(config.getExposedHeaders());
 		}
 
-		if (Boolean.TRUE.equals(config.getAllowCredentials())) {
+		if (Boolean.TRUE.equals(config.getAllowCredentials())) {       /* 设置跨域 - 允许http请求cookie */
 			responseHeaders.setAccessControlAllowCredentials(true);
 		}
 

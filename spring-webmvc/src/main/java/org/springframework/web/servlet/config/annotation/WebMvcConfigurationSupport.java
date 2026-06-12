@@ -275,7 +275,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	 * requests to annotated controllers.
 	 */
 	@Bean
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")  /* springboot中 子类 EnableWebMvcConfiguration @Bean定义 */
 	public RequestMappingHandlerMapping requestMappingHandlerMapping(
 			@Qualifier("mvcContentNegotiationManager") ContentNegotiationManager contentNegotiationManager,
 			@Qualifier("mvcConversionService") FormattingConversionService conversionService,
@@ -283,9 +283,9 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 
 		RequestMappingHandlerMapping mapping = createRequestMappingHandlerMapping();
 		mapping.setOrder(0);
-		mapping.setInterceptors(getInterceptors(conversionService, resourceUrlProvider));
+		mapping.setInterceptors(getInterceptors(conversionService, resourceUrlProvider));/* 自定义 - 拦截器 */
 		mapping.setContentNegotiationManager(contentNegotiationManager);
-		mapping.setCorsConfigurations(getCorsConfigurations());
+		mapping.setCorsConfigurations(getCorsConfigurations());/* 自定义 - 跨域 */
 
 		PathMatchConfigurer configurer = getPathMatchConfigurer();
 
