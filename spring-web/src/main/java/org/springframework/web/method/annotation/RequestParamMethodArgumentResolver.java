@@ -163,7 +163,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 		HttpServletRequest servletRequest = request.getNativeRequest(HttpServletRequest.class);
 
 		if (servletRequest != null) {
-			Object mpArg = MultipartResolutionDelegate.resolveMultipartArgument(name, parameter, servletRequest);
+			Object mpArg = MultipartResolutionDelegate.resolveMultipartArgument(name, parameter, servletRequest); /* 文件上传 */
 			if (mpArg != MultipartResolutionDelegate.UNRESOLVABLE) {
 				return mpArg;
 			}
@@ -178,7 +178,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 			}
 		}
 		if (arg == null) {
-			String[] paramValues = request.getParameterValues(name);
+			String[] paramValues = request.getParameterValues(name); /* 获取参数 --> org.apache.catalina.connector.Request.getParameterValues(name) --> url参数、表单参数 multipart/form-data、(Post) x-www-form-urlencoded  */
 			if (paramValues != null) {
 				arg = (paramValues.length == 1 ? paramValues[0] : paramValues);
 			}
@@ -264,7 +264,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 	private static class RequestParamNamedValueInfo extends NamedValueInfo {
 
 		public RequestParamNamedValueInfo() {
-			super("", false, ValueConstants.DEFAULT_NONE);
+			super("", false, ValueConstants.DEFAULT_NONE); /* 默认非必须 */
 		}
 
 		public RequestParamNamedValueInfo(RequestParam annotation) {

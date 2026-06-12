@@ -1255,7 +1255,7 @@ public class DispatcherServlet extends FrameworkServlet {
 					new ServletServerHttpRequest(request).getHeaders());
 		}
 		else {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND); /* 未匹配到【处理器】返回404 */
 		}
 	}
 
@@ -1266,8 +1266,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	protected HandlerAdapter getHandlerAdapter(Object handler) throws ServletException {
 		if (this.handlerAdapters != null) {
-			for (HandlerAdapter adapter : this.handlerAdapters) {
-				if (adapter.supports(handler)) {
+			for (HandlerAdapter adapter : this.handlerAdapters) {    /* - SimpleControllerHandlerAdapter = 负责执行实现了Controller接口的Handler     */
+				if (adapter.supports(handler)) {                     /* - RequestMappingHandlerAdapter = 负责执行【@RequestMapping】注解的方法     */
 					return adapter;
 				}
 			}

@@ -96,9 +96,9 @@ public final class MultipartResolutionDelegate {
 
 		MultipartHttpServletRequest multipartRequest =
 				WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
-		boolean isMultipart = (multipartRequest != null || isMultipartContent(request));
+		boolean isMultipart = (multipartRequest != null || isMultipartContent(request));  /* 表单 - multipart */
 
-		if (MultipartFile.class == parameter.getNestedParameterType()) {
+		if (MultipartFile.class == parameter.getNestedParameterType()) { /* MultipartFile - 单个 */
 			if (multipartRequest == null && isMultipart) {
 				multipartRequest = new StandardMultipartHttpServletRequest(request);
 			}
