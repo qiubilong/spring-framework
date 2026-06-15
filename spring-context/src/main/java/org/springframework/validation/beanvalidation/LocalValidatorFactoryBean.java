@@ -240,7 +240,7 @@ public class LocalValidatorFactoryBean extends SpringValidatorAdapter
 
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void afterPropertiesSet() {
+	public void afterPropertiesSet() { /* ServiceLoader 加载 Validator */
 		Configuration<?> configuration;
 		if (this.providerClass != null) {
 			ProviderSpecificBootstrap bootstrap = Validation.byProvider(this.providerClass);
@@ -254,7 +254,7 @@ public class LocalValidatorFactoryBean extends SpringValidatorAdapter
 			if (this.validationProviderResolver != null) {
 				bootstrap = bootstrap.providerResolver(this.validationProviderResolver);
 			}
-			configuration = bootstrap.configure();
+			configuration = bootstrap.configure(); /* HibernateValidatorConfiguration */
 		}
 
 		// Try Hibernate Validator 5.2's externalClassLoader(ClassLoader) method
@@ -307,8 +307,8 @@ public class LocalValidatorFactoryBean extends SpringValidatorAdapter
 		// Allow for custom post-processing before we actually build the ValidatorFactory.
 		postProcessConfiguration(configuration);
 
-		this.validatorFactory = configuration.buildValidatorFactory();
-		setTargetValidator(this.validatorFactory.getValidator());
+		this.validatorFactory = configuration.buildValidatorFactory(); /* HibernateValidatorFactory */
+		setTargetValidator(this.validatorFactory.getValidator()); /* 创建校验器 - org.hibernate.validator.internal.engine.ValidatorImpl */
 	}
 
 	private void configureParameterNameProvider(ParameterNameDiscoverer discoverer, Configuration<?> configuration) {

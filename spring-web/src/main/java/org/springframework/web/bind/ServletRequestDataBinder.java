@@ -98,13 +98,13 @@ public class ServletRequestDataBinder extends WebDataBinder {
 	 * @see #bind(org.springframework.beans.PropertyValues)
 	 */
 	public void bind(ServletRequest request) {
-		MutablePropertyValues mpvs = new ServletRequestParameterPropertyValues(request);
+		MutablePropertyValues mpvs = new ServletRequestParameterPropertyValues(request);  /* 获取参数 - request.getParameterNames() */
 		MultipartRequest multipartRequest = WebUtils.getNativeRequest(request, MultipartRequest.class);
 		if (multipartRequest != null) {
-			bindMultipart(multipartRequest.getMultiFileMap(), mpvs);
+			bindMultipart(multipartRequest.getMultiFileMap(), mpvs); /* 表单上传 - multipart/form-data，覆盖request.getParameter()解析到的String值参数 */
 		}
 		addBindValues(mpvs, request);
-		doBind(mpvs);
+		doBind(mpvs); /* 参数vo属性赋值  */
 	}
 
 	/**

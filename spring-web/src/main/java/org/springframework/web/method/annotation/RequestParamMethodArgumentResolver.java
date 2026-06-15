@@ -125,7 +125,7 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 	 */
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		if (parameter.hasParameterAnnotation(RequestParam.class)) {
+		if (parameter.hasParameterAnnotation(RequestParam.class)) {/* @RequestParam  - 单个值*/
 			if (Map.class.isAssignableFrom(parameter.nestedIfOptional().getNestedParameterType())) {
 				RequestParam requestParam = parameter.getParameterAnnotation(RequestParam.class);
 				return (requestParam != null && StringUtils.hasText(requestParam.name()));
@@ -139,11 +139,11 @@ public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethod
 				return false;
 			}
 			parameter = parameter.nestedIfOptional();
-			if (MultipartResolutionDelegate.isMultipartArgument(parameter)) {
+			if (MultipartResolutionDelegate.isMultipartArgument(parameter)) {/* MultipartFile文件上传 */
 				return true;
 			}
-			else if (this.useDefaultResolution) {
-				return BeanUtils.isSimpleProperty(parameter.getNestedParameterType());
+			else if (this.useDefaultResolution) {/* 无参数注解时，最后判断默认参数解析器 */
+				return BeanUtils.isSimpleProperty(parameter.getNestedParameterType());/* 基本数据类型 */
 			}
 			else {
 				return false;

@@ -42,7 +42,7 @@ import org.springframework.util.StreamUtils;
  * @author Kazuki Shimizu
  * @since 3.0.2
  */
-public class ResourceHttpMessageConverter extends AbstractHttpMessageConverter<Resource> {
+public class ResourceHttpMessageConverter extends AbstractHttpMessageConverter<Resource> { /*  下载 文件 */
 
 	private final boolean supportsReadStreaming;
 

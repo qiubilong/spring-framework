@@ -70,7 +70,7 @@ public class ModelAndViewContainer {
 
 	private final SessionStatus sessionStatus = new SimpleSessionStatus();
 
-	private boolean requestHandled = false;
+	private boolean requestHandled = false; /* 请求处理完毕标记 */
 
 
 	/**

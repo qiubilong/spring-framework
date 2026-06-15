@@ -74,7 +74,7 @@ public class SpringValidatorAdapter implements SmartValidator, javax.validation.
 	}
 
 	@Nullable
-	private javax.validation.Validator targetValidator;
+	private javax.validation.Validator targetValidator; /* 校验器 - org.hibernate.validator.internal.engine.ValidatorImpl */
 
 
 	/**
@@ -106,7 +106,7 @@ public class SpringValidatorAdapter implements SmartValidator, javax.validation.
 	@Override
 	public void validate(Object target, Errors errors) {
 		if (this.targetValidator != null) {
-			processConstraintViolations(this.targetValidator.validate(target), errors);
+			processConstraintViolations(this.targetValidator.validate(target), errors);/* 执行Valid ,收集错误 */
 		}
 	}
 
@@ -151,7 +151,7 @@ public class SpringValidatorAdapter implements SmartValidator, javax.validation.
 	 */
 	@SuppressWarnings("serial")
 	protected void processConstraintViolations(Set<ConstraintViolation<Object>> violations, Errors errors) {
-		for (ConstraintViolation<Object> violation : violations) {
+		for (ConstraintViolation<Object> violation : violations) {/* 遍历校验失败字段 */
 			String field = determineField(violation);
 			FieldError fieldError = errors.getFieldError(field);
 			if (fieldError == null || !fieldError.isBindingFailure()) {
@@ -175,7 +175,7 @@ public class SpringValidatorAdapter implements SmartValidator, javax.validation.
 							String[] errorCodes = bindingResult.resolveMessageCodes(errorCode, field);
 							FieldError error = new ViolationFieldError(errors.getObjectName(), nestedField,
 									rejectedValue, errorCodes, errorArgs, violation, this);
-							bindingResult.addError(error);
+							bindingResult.addError(error);/* 添加校验失败字段到BindingResult */
 						}
 					}
 					else {

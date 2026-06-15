@@ -66,7 +66,7 @@ public class RequestParamMapMethodArgumentResolver implements HandlerMethodArgum
 		return (requestParam != null && Map.class.isAssignableFrom(parameter.getParameterType()) &&
 				!StringUtils.hasText(requestParam.name()));
 	}
-
+	/* @RequestMapping Map<,> 参数解析 */
 	@Override
 	public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
@@ -93,7 +93,7 @@ public class RequestParamMapMethodArgumentResolver implements HandlerMethodArgum
 				return new LinkedMultiValueMap<>(0);
 			}
 			else {
-				Map<String, String[]> parameterMap = webRequest.getParameterMap();
+				Map<String, String[]> parameterMap = webRequest.getParameterMap();  	/* @RequestMapping Map<,> 参数解析 */
 				MultiValueMap<String, String> result = new LinkedMultiValueMap<>(parameterMap.size());
 				parameterMap.forEach((key, values) -> {
 					for (String value : values) {

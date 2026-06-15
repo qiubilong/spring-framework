@@ -107,13 +107,13 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 
 
 	@Override
-	public boolean supportsParameter(MethodParameter parameter) {
+	public boolean supportsParameter(MethodParameter parameter) {      /* @RequestBody 参数 */
 		return parameter.hasParameterAnnotation(RequestBody.class);
 	}
 
 	@Override
 	public boolean supportsReturnType(MethodParameter returnType) {
-		return (AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), ResponseBody.class) ||
+		return (AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), ResponseBody.class) ||     /* 类中存在 @RequestBody 或者 当前方法存在 @RequestBody  */
 				returnType.hasMethodAnnotation(ResponseBody.class));
 	}
 
@@ -128,19 +128,19 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
 		parameter = parameter.nestedIfOptional();
-		Object arg = readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType());
+		Object arg = readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType()); /* 读取RequestBody内容 --> 根据contentType 转换 java对象参数  */
 		String name = Conventions.getVariableNameForParameter(parameter);
 
 		if (binderFactory != null) {
 			WebDataBinder binder = binderFactory.createBinder(webRequest, arg, name);
 			if (arg != null) {
-				validateIfApplicable(binder, parameter);
+				validateIfApplicable(binder, parameter);/* @Valid校验 */
 				if (binder.getBindingResult().hasErrors() && isBindExceptionRequired(binder, parameter)) {
-					throw new MethodArgumentNotValidException(parameter, binder.getBindingResult());
+					throw new MethodArgumentNotValidException(parameter, binder.getBindingResult()); /* 最后一个参数不是 BindingResult 时，直接抛出 Valid异常 */
 				}
 			}
 			if (mavContainer != null) {
-				mavContainer.addAttribute(BindingResult.MODEL_KEY_PREFIX + name, binder.getBindingResult());
+				mavContainer.addAttribute(BindingResult.MODEL_KEY_PREFIX + name, binder.getBindingResult()); // 将BindingResult存入上下文 --> ErrorsMethodArgumentResolver 解析
 			}
 		}
 
@@ -155,9 +155,9 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 		Assert.state(servletRequest != null, "No HttpServletRequest");
 		ServletServerHttpRequest inputMessage = new ServletServerHttpRequest(servletRequest);
 
-		Object arg = readWithMessageConverters(inputMessage, parameter, paramType);
+		Object arg = readWithMessageConverters(inputMessage, parameter, paramType);/* 读取RequestBody内容 --> 根据contentType 转换 java对象参数  */
 		if (arg == null && checkRequired(parameter)) {
-			throw new HttpMessageNotReadableException("Required request body is missing: " +
+			throw new HttpMessageNotReadableException("Required request body is missing: " +  /* 当参数为 null & required=true 时 抛出异常 */
 					parameter.getExecutable().toGenericString(), inputMessage);
 		}
 		return arg;
@@ -173,12 +173,12 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 			ModelAndViewContainer mavContainer, NativeWebRequest webRequest)
 			throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
 
-		mavContainer.setRequestHandled(true);
+		mavContainer.setRequestHandled(true);/* 请求处理完毕标记 */
 		ServletServerHttpRequest inputMessage = createInputMessage(webRequest);
 		ServletServerHttpResponse outputMessage = createOutputMessage(webRequest);
 
 		// Try even with null return value. ResponseBodyAdvice could get involved.
-		writeWithMessageConverters(returnValue, returnType, inputMessage, outputMessage);
+		writeWithMessageConverters(returnValue, returnType, inputMessage, outputMessage);/* 根据客户端期望的AcceptType，返回匹配的格式 & 数据 */
 	}
 
 }

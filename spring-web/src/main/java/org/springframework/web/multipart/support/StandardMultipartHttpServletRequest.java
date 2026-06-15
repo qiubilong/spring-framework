@@ -56,7 +56,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @since 3.1
  * @see StandardServletMultipartResolver
  */
-public class StandardMultipartHttpServletRequest extends AbstractMultipartHttpServletRequest {
+public class StandardMultipartHttpServletRequest extends AbstractMultipartHttpServletRequest { /* 同时支持 文件上传 和 参数 */
 
 	@Nullable
 	private Set<String> multipartParameterNames;

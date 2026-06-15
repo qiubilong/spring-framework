@@ -58,7 +58,7 @@ public abstract class AbstractHandlerMethodExceptionResolver extends AbstractHan
 	protected final ModelAndView doResolveException(
 			HttpServletRequest request, HttpServletResponse response, @Nullable Object handler, Exception ex) {
 
-		return doResolveHandlerMethodException(request, response, (HandlerMethod) handler, ex);
+		return doResolveHandlerMethodException(request, response, (HandlerMethod) handler, ex);/* @ExceptionHandler处理 */
 	}
 
 	/**

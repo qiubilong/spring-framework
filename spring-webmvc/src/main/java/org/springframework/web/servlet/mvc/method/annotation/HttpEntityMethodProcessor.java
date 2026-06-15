@@ -113,10 +113,10 @@ public class HttpEntityMethodProcessor extends AbstractMessageConverterMethodPro
 
 		super(converters, manager, requestResponseBodyAdvice);
 	}
-
-
+    // public User createUser(HttpEntity<User> httpEntity) {
+    // User user = httpEntity.getBody();     HttpHeaders headers = httpEntity.getHeaders();
 	@Override
-	public boolean supportsParameter(MethodParameter parameter) {
+	public boolean supportsParameter(MethodParameter parameter) { /* 将 HTTP消息的头部和 body作为一个整体来处理 */
 		return (HttpEntity.class == parameter.getParameterType() ||
 				RequestEntity.class == parameter.getParameterType());
 	}

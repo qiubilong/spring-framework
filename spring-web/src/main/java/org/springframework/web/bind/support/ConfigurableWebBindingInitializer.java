@@ -51,7 +51,7 @@ public class ConfigurableWebBindingInitializer implements WebBindingInitializer 
 	private BindingErrorProcessor bindingErrorProcessor;
 
 	@Nullable
-	private Validator validator;
+	private Validator validator;   /* 参数校验器 */
 
 	@Nullable
 	private ConversionService conversionService;
@@ -205,10 +205,10 @@ public class ConfigurableWebBindingInitializer implements WebBindingInitializer 
 		}
 		if (this.validator != null && binder.getTarget() != null &&
 				this.validator.supports(binder.getTarget().getClass())) {
-			binder.setValidator(this.validator);
+			binder.setValidator(this.validator); /* 参数校验器 */
 		}
 		if (this.conversionService != null) {
-			binder.setConversionService(this.conversionService);
+			binder.setConversionService(this.conversionService);/* 设置默认类型转换器 ， DefaultFormattingConversionService */
 		}
 		if (this.propertyEditorRegistrars != null) {
 			for (PropertyEditorRegistrar propertyEditorRegistrar : this.propertyEditorRegistrars) {

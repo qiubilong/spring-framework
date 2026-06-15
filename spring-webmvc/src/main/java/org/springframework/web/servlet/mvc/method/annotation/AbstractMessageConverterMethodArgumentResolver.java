@@ -169,7 +169,7 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 		MediaType contentType;
 		boolean noContentType = false;
 		try {
-			contentType = inputMessage.getHeaders().getContentType();
+			contentType = inputMessage.getHeaders().getContentType();/* 获得Content-Type */
 		}
 		catch (InvalidMediaTypeException ex) {
 			throw new HttpMediaTypeNotSupportedException(ex.getMessage());
@@ -180,34 +180,34 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 		}
 
 		Class<?> contextClass = parameter.getContainingClass();
-		Class<T> targetClass = (targetType instanceof Class ? (Class<T>) targetType : null);
+		Class<T> targetClass = (targetType instanceof Class ? (Class<T>) targetType : null);/* 参数class 类型 */
 		if (targetClass == null) {
 			ResolvableType resolvableType = ResolvableType.forMethodParameter(parameter);
 			targetClass = (Class<T>) resolvableType.resolve();
 		}
 
-		HttpMethod httpMethod = (inputMessage instanceof HttpRequest ? ((HttpRequest) inputMessage).getMethod() : null);
-		Object body = NO_VALUE;
+		HttpMethod httpMethod = (inputMessage instanceof HttpRequest ? ((HttpRequest) inputMessage).getMethod() : null);/* GET、POST等 */
+		Object body = NO_VALUE; // 默认  new Object()
 
 		EmptyBodyCheckingHttpInputMessage message;
 		try {
-			message = new EmptyBodyCheckingHttpInputMessage(inputMessage);
-
-			for (HttpMessageConverter<?> converter : this.messageConverters) {
+			message = new EmptyBodyCheckingHttpInputMessage(inputMessage);         /* StringHttpMessageConverter --> Content-Type == text/plain、ALL -- > 参数是String*/
+			                                                                       /* AllEncompassingFormHttpMessageConverter --> Content-Type == text/plain、ALL -- > 参数是MultiValueMap */
+			for (HttpMessageConverter<?> converter : this.messageConverters) {     /* MappingJackson2HttpMessageConverter --> Content-Type == application/json -- > 参数是java对象 */
 				Class<HttpMessageConverter<?>> converterType = (Class<HttpMessageConverter<?>>) converter.getClass();
 				GenericHttpMessageConverter<?> genericConverter =
 						(converter instanceof GenericHttpMessageConverter ? (GenericHttpMessageConverter<?>) converter : null);
-				if (genericConverter != null ? genericConverter.canRead(targetType, contextClass, contentType) :
+				if (genericConverter != null ? genericConverter.canRead(targetType, contextClass, contentType) :/* Content-Type匹配 */
 						(targetClass != null && converter.canRead(targetClass, contentType))) {
 					if (message.hasBody()) {
 						HttpInputMessage msgToUse =
 								getAdvice().beforeBodyRead(message, parameter, targetType, converterType);
-						body = (genericConverter != null ? genericConverter.read(targetType, contextClass, msgToUse) :
+						body = (genericConverter != null ? genericConverter.read(targetType, contextClass, msgToUse) :/* 读取消息 - 类型转换 */
 								((HttpMessageConverter<T>) converter).read(targetClass, msgToUse));
 						body = getAdvice().afterBodyRead(body, msgToUse, parameter, targetType, converterType);
 					}
 					else {
-						body = getAdvice().handleEmptyBody(null, message, parameter, targetType, converterType);
+						body = getAdvice().handleEmptyBody(null, message, parameter, targetType, converterType);/* body没内容时返回 null */
 					}
 					break;
 				}
@@ -218,7 +218,7 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 		}
 
 		if (body == NO_VALUE) {
-			if (httpMethod == null || !SUPPORTED_METHODS.contains(httpMethod) ||
+			if (httpMethod == null || !SUPPORTED_METHODS.contains(httpMethod) || /* body没内容时，返回 null */
 					(noContentType && !message.hasBody())) {
 				return null;
 			}
@@ -260,10 +260,10 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 		Annotation[] annotations = parameter.getParameterAnnotations();
 		for (Annotation ann : annotations) {
 			Validated validatedAnn = AnnotationUtils.getAnnotation(ann, Validated.class);
-			if (validatedAnn != null || ann.annotationType().getSimpleName().startsWith("Valid")) {
+			if (validatedAnn != null || ann.annotationType().getSimpleName().startsWith("Valid")) { /* @Validated 或者 @ Valid */
 				Object hints = (validatedAnn != null ? validatedAnn.value() : AnnotationUtils.getValue(ann));
 				Object[] validationHints = (hints instanceof Object[] ? (Object[]) hints : new Object[] {hints});
-				binder.validate(validationHints);
+				binder.validate(validationHints);/* 执行Valid ,收集错误 */
 				break;
 			}
 		}
@@ -279,7 +279,7 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 	protected boolean isBindExceptionRequired(WebDataBinder binder, MethodParameter parameter) {
 		int i = parameter.getParameterIndex();
 		Class<?>[] paramTypes = parameter.getExecutable().getParameterTypes();
-		boolean hasBindingResult = (paramTypes.length > (i + 1) && Errors.class.isAssignableFrom(paramTypes[i + 1]));
+		boolean hasBindingResult = (paramTypes.length > (i + 1) && Errors.class.isAssignableFrom(paramTypes[i + 1])); /* 最后一个参数是不是 BindingResult  */
 		return !hasBindingResult;
 	}
 

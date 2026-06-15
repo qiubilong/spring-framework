@@ -142,7 +142,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 		if (sourceType == null) {
 			return true;
 		}
-		GenericConverter converter = getConverter(sourceType, targetType);
+		GenericConverter converter = getConverter(sourceType, targetType);/* 查找类型转换器 */
 		return (converter != null);
 	}
 
@@ -257,9 +257,9 @@ public class GenericConversionService implements ConfigurableConversionService {
 			return (converter != NO_MATCH ? converter : null);
 		}
 
-		converter = this.converters.find(sourceType, targetType);
+		converter = this.converters.find(sourceType, targetType);  /* 查找类型转换器 */
 		if (converter == null) {
-			converter = getDefaultConverter(sourceType, targetType);
+			converter = getDefaultConverter(sourceType, targetType);/* 参数值类型和 参数类型一样时，返回空转换器 NoOpConverter */
 		}
 
 		if (converter != null) {
@@ -542,7 +542,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 			for (Class<?> sourceCandidate : sourceCandidates) {
 				for (Class<?> targetCandidate : targetCandidates) {
 					ConvertiblePair convertiblePair = new ConvertiblePair(sourceCandidate, targetCandidate);
-					GenericConverter converter = getRegisteredConverter(sourceType, targetType, convertiblePair);
+					GenericConverter converter = getRegisteredConverter(sourceType, targetType, convertiblePair);/* 子类父类遍历匹配类型转换器 */
 					if (converter != null) {
 						return converter;
 					}
@@ -556,7 +556,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 				TypeDescriptor targetType, ConvertiblePair convertiblePair) {
 
 			// Check specifically registered converters
-			ConvertersForPair convertersForPair = this.converters.get(convertiblePair);
+			ConvertersForPair convertersForPair = this.converters.get(convertiblePair);//匹配类型转换器
 			if (convertersForPair != null) {
 				GenericConverter converter = convertersForPair.getConverter(sourceType, targetType);
 				if (converter != null) {

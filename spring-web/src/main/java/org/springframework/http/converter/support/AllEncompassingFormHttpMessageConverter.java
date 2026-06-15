@@ -73,7 +73,7 @@ public class AllEncompassingFormHttpMessageConverter extends FormHttpMessageConv
 		}
 
 		if (jackson2Present) {
-			addPartConverter(new MappingJackson2HttpMessageConverter());
+			addPartConverter(new MappingJackson2HttpMessageConverter()); /* 添加 -Http消息转换器 -  MappingJackson2HttpMessageConverter */
 		}
 		else if (gsonPresent) {
 			addPartConverter(new GsonHttpMessageConverter());

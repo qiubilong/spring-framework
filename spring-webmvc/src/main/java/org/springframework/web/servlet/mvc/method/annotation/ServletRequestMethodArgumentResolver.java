@@ -82,7 +82,7 @@ public class ServletRequestMethodArgumentResolver implements HandlerMethodArgume
 
 
 	@Override
-	public boolean supportsParameter(MethodParameter parameter) {
+	public boolean supportsParameter(MethodParameter parameter) { /* 支持 HttpServletRequest && 属性注入  */
 		Class<?> paramType = parameter.getParameterType();
 		return (WebRequest.class.isAssignableFrom(paramType) ||
 				ServletRequest.class.isAssignableFrom(paramType) ||

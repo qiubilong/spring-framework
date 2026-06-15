@@ -253,7 +253,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 			String propertyName = pv.getName();
 			AbstractNestablePropertyAccessor nestedPa;
 			try {
-				nestedPa = getPropertyAccessorForPropertyPath(propertyName);
+				nestedPa = getPropertyAccessorForPropertyPath(propertyName); /* 属性访问器 */
 			}
 			catch (NotReadablePropertyException ex) {
 				throw new NotWritablePropertyException(getRootClass(), this.nestedPath + propertyName,
@@ -263,7 +263,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 			if (nestedPa == this) {
 				pv.getOriginalPropertyValue().resolvedTokens = tokens;
 			}
-			nestedPa.setPropertyValue(tokens, pv);
+			nestedPa.setPropertyValue(tokens, pv);/*属性赋值 */
 		}
 		else {
 			setPropertyValue(tokens, pv);

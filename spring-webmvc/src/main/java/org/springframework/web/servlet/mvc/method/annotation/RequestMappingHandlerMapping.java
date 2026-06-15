@@ -178,7 +178,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void afterPropertiesSet() {
+	public void afterPropertiesSet() {      /* Bean初始化回调 <-- BeforeInitialization后，AfterInitialization前 */
 		this.config = new RequestMappingInfo.BuilderConfiguration();
 		this.config.setUrlPathHelper(getUrlPathHelper());
 		this.config.setPathMatcher(getPathMatcher());
@@ -187,7 +187,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 		this.config.setRegisteredSuffixPatternMatch(useRegisteredSuffixPatternMatch());
 		this.config.setContentNegotiationManager(getContentNegotiationManager());
 
-		super.afterPropertiesSet();
+		super.afterPropertiesSet();   	/* 寻找@RequestMapping的请求处理器Handler,并保存映射关系 */
 	}
 
 
@@ -253,11 +253,11 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	@Override
 	@Nullable
 	protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
-		RequestMappingInfo info = createRequestMappingInfo(method);
+		RequestMappingInfo info = createRequestMappingInfo(method); /* 解析method注解 @RequestMapping - 包括重写的父类和接口 */
 		if (info != null) {
-			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType);
+			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType); /* 解析class注解@RequestMapping - - 包括重写的父类和接口 */
 			if (typeInfo != null) {
-				info = typeInfo.combine(info);
+				info = typeInfo.combine(info);/* 合并 */
 			}
 			String prefix = getPathPrefix(handlerType);
 			if (prefix != null) {
@@ -289,11 +289,11 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	 * @see #getCustomMethodCondition(Method)
 	 */
 	@Nullable
-	private RequestMappingInfo createRequestMappingInfo(AnnotatedElement element) {
+	private RequestMappingInfo createRequestMappingInfo(AnnotatedElement element) { /* 搜索当前 Method/Class（包括重写的接口和父类） 是否存在注解 @RequestMapping  */
 		RequestMapping requestMapping = AnnotatedElementUtils.findMergedAnnotation(element, RequestMapping.class);
 		RequestCondition<?> condition = (element instanceof Class ?
 				getCustomTypeCondition((Class<?>) element) : getCustomMethodCondition((Method) element));
-		return (requestMapping != null ? createRequestMappingInfo(requestMapping, condition) : null);
+		return (requestMapping != null ? createRequestMappingInfo(requestMapping, condition) : null);/* 创建注解信息对象 RequestMappingInfo */
 	}
 
 	/**
@@ -338,12 +338,12 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 			RequestMapping requestMapping, @Nullable RequestCondition<?> customCondition) {
 
 		RequestMappingInfo.Builder builder = RequestMappingInfo
-				.paths(resolveEmbeddedValuesInPatterns(requestMapping.path()))
-				.methods(requestMapping.method())
-				.params(requestMapping.params())
-				.headers(requestMapping.headers())
-				.consumes(requestMapping.consumes())
-				.produces(requestMapping.produces())
+				.paths(resolveEmbeddedValuesInPatterns(requestMapping.path())) /* http请求路径path */
+				.methods(requestMapping.method())     /* http请求方式，get、 post等 */
+				.params(requestMapping.params())      /* 必须包含哪些参数 */
+				.headers(requestMapping.headers())    /* 必须包含哪些头部 */
+				.consumes(requestMapping.consumes())  /* http请求的数据格式，如 consumes = "application/json" */
+				.produces(requestMapping.produces()) /* http响应的数据格式，如 produces = { "application/json", "application/xml" } */
 				.mappingName(requestMapping.name());
 		if (customCondition != null) {
 			builder.customCondition(customCondition);
@@ -425,7 +425,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 				config.addAllowedMethod(allowedMethod.name());
 			}
 		}
-		return config.applyPermitDefaultValues();
+		return config.applyPermitDefaultValues(); /* 补充默认 *匹配 */
 	}
 
 	private void updateCorsConfig(CorsConfiguration config, @Nullable CrossOrigin annotation) {

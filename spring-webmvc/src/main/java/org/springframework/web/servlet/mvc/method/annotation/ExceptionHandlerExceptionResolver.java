@@ -377,7 +377,7 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 	@Nullable
 	protected ModelAndView doResolveHandlerMethodException(HttpServletRequest request,
 			HttpServletResponse response, @Nullable HandlerMethod handlerMethod, Exception exception) {
-
+		/* @ExceptionHandler异常对应方法 Method封装 */
 		ServletInvocableHandlerMethod exceptionHandlerMethod = getExceptionHandlerMethod(handlerMethod, exception);
 		if (exceptionHandlerMethod == null) {
 			return null;
@@ -400,7 +400,7 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 			Throwable cause = exception.getCause();
 			if (cause != null) {
 				// Expose cause as provided argument as well
-				exceptionHandlerMethod.invokeAndHandle(webRequest, mavContainer, exception, cause, handlerMethod);
+				exceptionHandlerMethod.invokeAndHandle(webRequest, mavContainer, exception, cause, handlerMethod); /* 执行异常处理方法 @ExceptionHandler  */
 			}
 			else {
 				// Otherwise, just the given exception as-is
@@ -455,7 +455,7 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 		if (handlerMethod != null) {
 			// Local exception handler methods on the controller class itself.
 			// To be invoked through the proxy, even in case of an interface-based proxy.
-			handlerType = handlerMethod.getBeanType();
+			handlerType = handlerMethod.getBeanType();/* 首先解析Controller本身的 @ExceptionHandler */
 			ExceptionHandlerMethodResolver resolver = this.exceptionHandlerCache.get(handlerType);
 			if (resolver == null) {
 				resolver = new ExceptionHandlerMethodResolver(handlerType);
@@ -471,12 +471,12 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 				handlerType = AopUtils.getTargetClass(handlerMethod.getBean());
 			}
 		}
-
+		/* 全局异常处理器 - @ExceptionHandler */
 		for (Map.Entry<ControllerAdviceBean, ExceptionHandlerMethodResolver> entry : this.exceptionHandlerAdviceCache.entrySet()) {
 			ControllerAdviceBean advice = entry.getKey();
-			if (advice.isApplicableToBeanType(handlerType)) {
+			if (advice.isApplicableToBeanType(handlerType)) {      /* ControllerAdvice匹配规则 */
 				ExceptionHandlerMethodResolver resolver = entry.getValue();
-				Method method = resolver.resolveMethod(exception);
+				Method method = resolver.resolveMethod(exception); /* 异常对应方法 */
 				if (method != null) {
 					return new ServletInvocableHandlerMethod(advice.resolveBean(), method);
 				}

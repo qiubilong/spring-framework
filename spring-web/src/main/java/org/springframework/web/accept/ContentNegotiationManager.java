@@ -46,7 +46,7 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @author Rossen Stoyanchev
  * @author Juergen Hoeller
  * @since 3.2
- */
+ */  /*  http请求响应 - 内容类型 - 返回客户端期望的 ContentType , 例 request.getHeaderValues(HttpHeaders.ACCEPT) */
 public class ContentNegotiationManager implements ContentNegotiationStrategy, MediaTypeFileExtensionResolver {
 
 	private final List<ContentNegotiationStrategy> strategies = new ArrayList<>();
@@ -124,7 +124,7 @@ public class ContentNegotiationManager implements ContentNegotiationStrategy, Me
 
 	@Override
 	public List<MediaType> resolveMediaTypes(NativeWebRequest request) throws HttpMediaTypeNotAcceptableException {
-		for (ContentNegotiationStrategy strategy : this.strategies) {
+		for (ContentNegotiationStrategy strategy : this.strategies) {  /* 客户端期望的数据响应格式 - HeaderContentNegotiationStrategy  */
 			List<MediaType> mediaTypes = strategy.resolveMediaTypes(request);
 			if (mediaTypes.equals(MEDIA_TYPE_ALL_LIST)) {
 				continue;

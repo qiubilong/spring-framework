@@ -45,7 +45,7 @@ import org.springframework.util.StringValueResolver;
  * @author Juergen Hoeller
  * @since 3.1
  */
-public class DefaultFormattingConversionService extends FormattingConversionService {
+public class DefaultFormattingConversionService extends FormattingConversionService {  /* 注入默认Java类型转换器 */
 
 	private static final boolean jsr354Present;
 
@@ -93,7 +93,7 @@ public class DefaultFormattingConversionService extends FormattingConversionServ
 		if (embeddedValueResolver != null) {
 			setEmbeddedValueResolver(embeddedValueResolver);
 		}
-		DefaultConversionService.addDefaultConverters(this);
+		DefaultConversionService.addDefaultConverters(this);/* 注入默认Java类型转换器 */
 		if (registerDefaultFormatters) {
 			addDefaultFormatters(this);
 		}

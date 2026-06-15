@@ -112,7 +112,7 @@ import org.springframework.web.util.WebUtils;
  * @see HandlerMethodArgumentResolver
  * @see HandlerMethodReturnValueHandler
  */
-public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
+public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter              /* @RequestMapping 调用 适配器 */
 		implements BeanFactoryAware, InitializingBean {
 
 	/**
@@ -192,17 +192,17 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	private final Map<ControllerAdviceBean, Set<Method>> modelAttributeAdviceCache = new LinkedHashMap<>();
 
 
-	public RequestMappingHandlerAdapter() {
+	public RequestMappingHandlerAdapter() {  /* Http消息转换器 - HttpMessageConverter */
 		this.messageConverters = new ArrayList<>(4);
-		this.messageConverters.add(new ByteArrayHttpMessageConverter());
-		this.messageConverters.add(new StringHttpMessageConverter());
+		this.messageConverters.add(new ByteArrayHttpMessageConverter());       /* 处理 byte[] */
+		this.messageConverters.add(new StringHttpMessageConverter());          /* 处理 String */
 		try {
 			this.messageConverters.add(new SourceHttpMessageConverter<>());
 		}
 		catch (Error err) {
 			// Ignore when no TransformerFactory implementation is available
 		}
-		this.messageConverters.add(new AllEncompassingFormHttpMessageConverter());
+		this.messageConverters.add(new AllEncompassingFormHttpMessageConverter());  /* 添加 -Http消息转换器 -  MappingJackson2HttpMessageConverter */
 	}
 
 
@@ -556,17 +556,17 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	@Override
 	public void afterPropertiesSet() {
 		// Do this first, it may add ResponseBody advice beans
-		initControllerAdviceCache();
+		initControllerAdviceCache(); /* 全局异常处理 - @ControllerAdvice 处理 */
 
-		if (this.argumentResolvers == null) {
+		if (this.argumentResolvers == null) {                /* 参数解析器 */
 			List<HandlerMethodArgumentResolver> resolvers = getDefaultArgumentResolvers();
 			this.argumentResolvers = new HandlerMethodArgumentResolverComposite().addResolvers(resolvers);
 		}
-		if (this.initBinderArgumentResolvers == null) {
+		if (this.initBinderArgumentResolvers == null) {     /* InitBinder参数解析器 */
 			List<HandlerMethodArgumentResolver> resolvers = getDefaultInitBinderArgumentResolvers();
 			this.initBinderArgumentResolvers = new HandlerMethodArgumentResolverComposite().addResolvers(resolvers);
 		}
-		if (this.returnValueHandlers == null) {
+		if (this.returnValueHandlers == null) {             /* 返回值解析器 */
 			List<HandlerMethodReturnValueHandler> handlers = getDefaultReturnValueHandlers();
 			this.returnValueHandlers = new HandlerMethodReturnValueHandlerComposite().addHandlers(handlers);
 		}
@@ -576,7 +576,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		if (getApplicationContext() == null) {
 			return;
 		}
-
+		/* 全局异常处理 - @ControllerAdvice  */
 		List<ControllerAdviceBean> adviceBeans = ControllerAdviceBean.findAnnotatedBeans(getApplicationContext());
 
 		List<Object> requestResponseBodyAdviceBeans = new ArrayList<>();
@@ -635,30 +635,30 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>();
 
 		// Annotation-based argument resolution
-		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));
-		resolvers.add(new RequestParamMapMethodArgumentResolver());
-		resolvers.add(new PathVariableMethodArgumentResolver());
-		resolvers.add(new PathVariableMapMethodArgumentResolver());
-		resolvers.add(new MatrixVariableMethodArgumentResolver());
-		resolvers.add(new MatrixVariableMapMethodArgumentResolver());
-		resolvers.add(new ServletModelAttributeMethodProcessor(false));
-		resolvers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
-		resolvers.add(new RequestPartMethodArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice));
-		resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));
-		resolvers.add(new RequestHeaderMapMethodArgumentResolver());
-		resolvers.add(new ServletCookieValueMethodArgumentResolver(getBeanFactory()));
-		resolvers.add(new ExpressionValueMethodArgumentResolver(getBeanFactory()));
+		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false)); /* @RequestMapping - 单个值 --包含文件上传MultipartFile */
+		resolvers.add(new RequestParamMapMethodArgumentResolver());    /* @RequestMapping - Map */
+		resolvers.add(new PathVariableMethodArgumentResolver());       /* @PathVariable - 单个值 */
+		resolvers.add(new PathVariableMapMethodArgumentResolver());    /* @PathVariable - Map */
+		resolvers.add(new MatrixVariableMethodArgumentResolver());     /** @MatrixVariable - 单个值 - 矩阵变量。例如 http://example.com/users;age=25;gender=male  */
+		resolvers.add(new MatrixVariableMapMethodArgumentResolver());  /** @MatrixVariable - Map - 矩阵变量  */
+		resolvers.add(new ServletModelAttributeMethodProcessor(false));                             /* @ModelAttribute - vo对象   --------- 对应 @RequestMapping简单类型 */
+		resolvers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice)); /* @RequestBody - vo对象 */
+		resolvers.add(new RequestPartMethodArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice));  /* @RequestPart - 处理表单或者文件上传  --  同时上传文件和 JSON 数据*/
+		resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));        /* @RequestHeader - 单个值 */
+		resolvers.add(new RequestHeaderMapMethodArgumentResolver());                     /* @RequestHeader - Map */
+		resolvers.add(new ServletCookieValueMethodArgumentResolver(getBeanFactory()));   /* @CookieValue */
+		resolvers.add(new ExpressionValueMethodArgumentResolver(getBeanFactory()));      /* @Value - 表达式参数名 */
 		resolvers.add(new SessionAttributeMethodArgumentResolver());
-		resolvers.add(new RequestAttributeMethodArgumentResolver());
+		resolvers.add(new RequestAttributeMethodArgumentResolver());                     /* RequestAttribute - 传递值 */
 
 		// Type-based argument resolution
-		resolvers.add(new ServletRequestMethodArgumentResolver());
-		resolvers.add(new ServletResponseMethodArgumentResolver());
-		resolvers.add(new HttpEntityMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
+		resolvers.add(new ServletRequestMethodArgumentResolver());                       /* 参数 - HttpServletRequest 等 */
+		resolvers.add(new ServletResponseMethodArgumentResolver());                      /* 参数 - HttpServletResponse 等 */
+		resolvers.add(new HttpEntityMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice)); /* 参数 - RequestEntity - 完整的http请求实体(HTTP消息的头部和 body) */
 		resolvers.add(new RedirectAttributesMethodArgumentResolver());
-		resolvers.add(new ModelMethodProcessor());
-		resolvers.add(new MapMethodProcessor());
-		resolvers.add(new ErrorsMethodArgumentResolver());
+		resolvers.add(new ModelMethodProcessor());                                       /** 参数 - Model就是一个Map - 视图传递数据 */
+		resolvers.add(new MapMethodProcessor());                                         /* 参数 - Map */
+		resolvers.add(new ErrorsMethodArgumentResolver());                               /* 参数 - BindingResult */
 		resolvers.add(new SessionStatusMethodArgumentResolver());
 		resolvers.add(new UriComponentsBuilderMethodArgumentResolver());
 
@@ -666,10 +666,10 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		if (getCustomArgumentResolvers() != null) {
 			resolvers.addAll(getCustomArgumentResolvers());
 		}
-
+        /* 兜底 参数解析器  */
 		// Catch-all
-		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));
-		resolvers.add(new ServletModelAttributeMethodProcessor(true));
+		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));   /* 无注解时 - 默认解析器 - 解析基本类型参数 */
+		resolvers.add(new ServletModelAttributeMethodProcessor(true));                 /* 无注解时 - 默认解析器 - 解析非基本类型参数 */
 
 		return resolvers;
 	}
@@ -711,7 +711,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	 * Return the list of return value handlers to use including built-in and
 	 * custom handlers provided via {@link #setReturnValueHandlers}.
 	 */
-	private List<HandlerMethodReturnValueHandler> getDefaultReturnValueHandlers() {
+	private List<HandlerMethodReturnValueHandler> getDefaultReturnValueHandlers() {  /* 返回值解析器 */
 		List<HandlerMethodReturnValueHandler> handlers = new ArrayList<>();
 
 		// Single-purpose return value types
@@ -726,11 +726,11 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		handlers.add(new HttpHeadersReturnValueHandler());
 		handlers.add(new CallableMethodReturnValueHandler());
 		handlers.add(new DeferredResultMethodReturnValueHandler());
-		handlers.add(new AsyncTaskMethodReturnValueHandler(this.beanFactory));
+		handlers.add(new AsyncTaskMethodReturnValueHandler(this.beanFactory));          /* 返回参数处理 - 异步web请求 */
 
 		// Annotation-based return value types
 		handlers.add(new ModelAttributeMethodProcessor(false));
-		handlers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(),
+		handlers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(),   /* 返回参数处理 - @ResponseBody */
 				this.contentNegotiationManager, this.requestResponseBodyAdvice));
 
 		// Multi-purpose return value types

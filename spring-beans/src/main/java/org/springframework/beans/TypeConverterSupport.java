@@ -42,7 +42,7 @@ public abstract class TypeConverterSupport extends PropertyEditorRegistrySupport
 	@Override
 	@Nullable
 	public <T> T convertIfNecessary(@Nullable Object value, @Nullable Class<T> requiredType) throws TypeMismatchException {
-		return convertIfNecessary(value, requiredType, TypeDescriptor.valueOf(requiredType));
+		return convertIfNecessary(value, requiredType, TypeDescriptor.valueOf(requiredType));/* 执行类型转换 */
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public abstract class TypeConverterSupport extends PropertyEditorRegistrySupport
 			@Nullable TypeDescriptor typeDescriptor) throws TypeMismatchException {
 
 		Assert.state(this.typeConverterDelegate != null, "No TypeConverterDelegate");
-		try {
+		try {       /* 执行类型转换 */
 			return this.typeConverterDelegate.convertIfNecessary(null, null, value, requiredType, typeDescriptor);
 		}
 		catch (ConverterNotFoundException | IllegalStateException ex) {

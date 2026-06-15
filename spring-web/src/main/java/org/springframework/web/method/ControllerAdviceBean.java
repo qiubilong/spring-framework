@@ -120,7 +120,7 @@ public class ControllerAdviceBean implements Ordered {
 		this.beanOrName = beanName;
 		this.isSingleton = beanFactory.isSingleton(beanName);
 		this.beanType = getBeanType(beanName, beanFactory);
-		this.beanTypePredicate = (controllerAdvice != null ? createBeanTypePredicate(controllerAdvice) :
+		this.beanTypePredicate = (controllerAdvice != null ? createBeanTypePredicate(controllerAdvice) :   /* ControllerAdvice匹配 规则 */
 				createBeanTypePredicate(this.beanType));
 		this.beanFactory = beanFactory;
 	}
@@ -267,7 +267,7 @@ public class ControllerAdviceBean implements Ordered {
 				if (controllerAdvice != null) {
 					// Use the @ControllerAdvice annotation found by findAnnotationOnBean()
 					// in order to avoid a subsequent lookup of the same annotation.
-					adviceBeans.add(new ControllerAdviceBean(name, context, controllerAdvice));
+					adviceBeans.add(new ControllerAdviceBean(name, context, controllerAdvice));/* 全局异常处理 - @ControllerAdvice  */
 				}
 			}
 		}
@@ -286,7 +286,7 @@ public class ControllerAdviceBean implements Ordered {
 				AnnotatedElementUtils.findMergedAnnotation(beanType, ControllerAdvice.class) : null);
 		return createBeanTypePredicate(controllerAdvice);
 	}
-
+    /* ControllerAdvice匹配 规则 */
 	private static HandlerTypePredicate createBeanTypePredicate(@Nullable ControllerAdvice controllerAdvice) {
 		if (controllerAdvice != null) {
 			return HandlerTypePredicate.builder()

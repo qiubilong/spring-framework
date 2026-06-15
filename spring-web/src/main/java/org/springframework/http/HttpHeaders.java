@@ -178,7 +178,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 	 * The HTTP {@code Content-Disposition} header field name.
 	 * @see <a href="https://tools.ietf.org/html/rfc6266">RFC 6266</a>
 	 */
-	public static final String CONTENT_DISPOSITION = "Content-Disposition";
+	public static final String CONTENT_DISPOSITION = "Content-Disposition"; /* 控制内容的展示方式 --> 【inline】-直接显示内容（如 PDF、图片、视频在浏览器中打开） 、【attachment】-附件下载  */
 	/**
 	 * The HTTP {@code Content-Language} header field name.
 	 * @see <a href="https://tools.ietf.org/html/rfc7231#section-3.1.3.2">Section 3.1.3.2 of RFC 7231</a>

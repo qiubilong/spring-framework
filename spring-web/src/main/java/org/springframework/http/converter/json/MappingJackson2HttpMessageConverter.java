@@ -45,7 +45,7 @@ import org.springframework.lang.Nullable;
  * @author Sebastien Deleuze
  * @since 3.1.2
  */
-public class MappingJackson2HttpMessageConverter extends AbstractJackson2HttpMessageConverter {
+public class MappingJackson2HttpMessageConverter extends AbstractJackson2HttpMessageConverter { /* 请求头 content-type  -->  json字符串 转 对象 */
 
 	@Nullable
 	private String jsonPrefix;
@@ -56,7 +56,7 @@ public class MappingJackson2HttpMessageConverter extends AbstractJackson2HttpMes
 	 * provided by {@link Jackson2ObjectMapperBuilder}.
 	 */
 	public MappingJackson2HttpMessageConverter() {
-		this(Jackson2ObjectMapperBuilder.json().build());
+		this(Jackson2ObjectMapperBuilder.json().build());/* new ObjectMapper() */
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class MappingJackson2HttpMessageConverter extends AbstractJackson2HttpMes
 	 * @see Jackson2ObjectMapperBuilder#json()
 	 */
 	public MappingJackson2HttpMessageConverter(ObjectMapper objectMapper) {
-		super(objectMapper, MediaType.APPLICATION_JSON, new MediaType("application", "*+json"));
+		super(objectMapper, MediaType.APPLICATION_JSON, new MediaType("application", "*+json"));/* 支持的 content-type */
 	}
 
 

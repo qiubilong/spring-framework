@@ -182,7 +182,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 		Class<?> valueType;
 		Type targetType;
 
-		if (value instanceof CharSequence) {
+		if (value instanceof CharSequence) {/* 返回值是String */
 			body = value.toString();
 			valueType = String.class;
 			targetType = String.class;
@@ -190,10 +190,10 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 		else {
 			body = value;
 			valueType = getReturnValueType(body, returnType);
-			targetType = GenericTypeResolver.resolveType(getGenericType(returnType), returnType.getContainingClass());
+			targetType = GenericTypeResolver.resolveType(getGenericType(returnType), returnType.getContainingClass());/* 解析泛型，例如 ServiceResult<T> */
 		}
 
-		if (isResourceType(value, returnType)) {
+		if (isResourceType(value, returnType)) {/* 文件资源 */
 			outputMessage.getHeaders().set(HttpHeaders.ACCEPT_RANGES, "bytes");
 			if (value != null && inputMessage.getHeaders().getFirst(HttpHeaders.RANGE) != null &&
 					outputMessage.getServletResponse().getStatus() == 200) {
@@ -223,8 +223,8 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 		}
 		else {
 			HttpServletRequest request = inputMessage.getServletRequest();
-			List<MediaType> acceptableTypes = getAcceptableMediaTypes(request);
-			List<MediaType> producibleTypes = getProducibleMediaTypes(request, valueType, targetType);
+			List<MediaType> acceptableTypes = getAcceptableMediaTypes(request);                         /* 客户端期望的响应格式 Accept */
+			List<MediaType> producibleTypes = getProducibleMediaTypes(request, valueType, targetType);  /* 消息转换器能生产的数据格式 */
 
 			if (body != null && producibleTypes.isEmpty()) {
 				throw new HttpMessageNotWritableException(
@@ -234,7 +234,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 			for (MediaType requestedType : acceptableTypes) {
 				for (MediaType producibleType : producibleTypes) {
 					if (requestedType.isCompatibleWith(producibleType)) {
-						mediaTypesToUse.add(getMostSpecificMediaType(requestedType, producibleType));
+						mediaTypesToUse.add(getMostSpecificMediaType(requestedType, producibleType));/* 匹配最优的数据响应格式 */
 					}
 				}
 			}
@@ -247,15 +247,15 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 				}
 				return;
 			}
-
+			/* 数据响应格式优先级排序，text/plain -> application/json -> application/*+json -> ALL  */
 			MediaType.sortBySpecificityAndQuality(mediaTypesToUse);
 
 			for (MediaType mediaType : mediaTypesToUse) {
-				if (mediaType.isConcrete()) {
+				if (mediaType.isConcrete()) {  /* 优先【非*】 */
 					selectedMediaType = mediaType;
 					break;
 				}
-				else if (mediaType.isPresentIn(ALL_APPLICATION_MEDIA_TYPES)) {
+				else if (mediaType.isPresentIn(ALL_APPLICATION_MEDIA_TYPES)) {//返回值未找到转换器时，默认流类型
 					selectedMediaType = MediaType.APPLICATION_OCTET_STREAM;
 					break;
 				}
@@ -282,9 +282,9 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 						Object theBody = body;
 						LogFormatUtils.traceDebug(logger, traceOn ->
 								"Writing [" + LogFormatUtils.formatValue(theBody, !traceOn) + "]");
-						addContentDispositionHeader(inputMessage, outputMessage);
-						if (genericConverter != null) {
-							genericConverter.write(body, targetType, selectedMediaType, outputMessage);
+						addContentDispositionHeader(inputMessage, outputMessage); /* 【Content-Disposition】控制内敛展示还是附件下载 */
+						if (genericConverter != null) {                                                     /* text/plain -- > StringHttpMessageConverter */
+							genericConverter.write(body, targetType, selectedMediaType, outputMessage);     /* application/json -- > MappingJackson2HttpMessageConverter */
 						}
 						else {
 							((HttpMessageConverter) converter).write(body, selectedMediaType, outputMessage);
@@ -448,7 +448,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 		pathParams = decodingUrlPathHelper.decodeRequestString(servletRequest, pathParams);
 		String extInPathParams = StringUtils.getFilenameExtension(pathParams);
 
-		if (!safeExtension(servletRequest, ext) || !safeExtension(servletRequest, extInPathParams)) {
+		if (!safeExtension(servletRequest, ext) || !safeExtension(servletRequest, extInPathParams)) { /* 静态资源安全防护策略 */
 			headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=f.txt");
 		}
 	}

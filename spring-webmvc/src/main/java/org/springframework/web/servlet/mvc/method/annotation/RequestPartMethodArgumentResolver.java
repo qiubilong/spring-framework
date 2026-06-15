@@ -67,7 +67,7 @@ import org.springframework.web.multipart.support.RequestPartServletServerHttpReq
  * @author Juergen Hoeller
  * @since 3.1
  */
-public class RequestPartMethodArgumentResolver extends AbstractMessageConverterMethodArgumentResolver {
+public class RequestPartMethodArgumentResolver extends AbstractMessageConverterMethodArgumentResolver {   /* 同时接收 JSON 数据和文件 ---  @RequestPart("user") User user,  // JSON 数据转成对象    @RequestPart("avatar") MultipartFile file  */
 
 	/**
 	 * Basic constructor with converters only.
@@ -125,14 +125,14 @@ public class RequestPartMethodArgumentResolver extends AbstractMessageConverterM
 		parameter = parameter.nestedIfOptional();
 		Object arg = null;
 
-		Object mpArg = MultipartResolutionDelegate.resolveMultipartArgument(name, parameter, servletRequest);
+		Object mpArg = MultipartResolutionDelegate.resolveMultipartArgument(name, parameter, servletRequest);/* MultipartFile 文件参数解析 */
 		if (mpArg != MultipartResolutionDelegate.UNRESOLVABLE) {
 			arg = mpArg;
 		}
 		else {
 			try {
 				HttpInputMessage inputMessage = new RequestPartServletServerHttpRequest(servletRequest, name);
-				arg = readWithMessageConverters(inputMessage, parameter, parameter.getNestedGenericParameterType());
+				arg = readWithMessageConverters(inputMessage, parameter, parameter.getNestedGenericParameterType()); /* 其他参数解析 -json */
 				if (binderFactory != null) {
 					WebDataBinder binder = binderFactory.createBinder(request, arg, name);
 					if (arg != null) {

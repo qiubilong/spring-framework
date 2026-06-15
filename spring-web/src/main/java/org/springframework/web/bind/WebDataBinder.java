@@ -194,7 +194,7 @@ public class WebDataBinder extends DataBinder {
 	protected void doBind(MutablePropertyValues mpvs) {
 		checkFieldDefaults(mpvs);
 		checkFieldMarkers(mpvs);
-		super.doBind(mpvs);
+		super.doBind(mpvs);/* 对象参数赋值 */
 	}
 
 	/**

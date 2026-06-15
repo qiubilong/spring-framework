@@ -281,7 +281,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 			@Qualifier("mvcConversionService") FormattingConversionService conversionService,
 			@Qualifier("mvcResourceUrlProvider") ResourceUrlProvider resourceUrlProvider) {
 
-		RequestMappingHandlerMapping mapping = createRequestMappingHandlerMapping();
+		RequestMappingHandlerMapping mapping = createRequestMappingHandlerMapping(); /* 创建 @RequestMapping解析器 */
 		mapping.setOrder(0);
 		mapping.setInterceptors(getInterceptors(conversionService, resourceUrlProvider));/* 自定义 - 拦截器 */
 		mapping.setContentNegotiationManager(contentNegotiationManager);
@@ -324,7 +324,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	 * @since 4.0
 	 */
 	protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
-		return new RequestMappingHandlerMapping();
+		return new RequestMappingHandlerMapping();/* 创建 @RequestMapping解析器 */
 	}
 
 	/**
@@ -605,15 +605,15 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	 * </ul>
 	 */
 	@Bean
-	public RequestMappingHandlerAdapter requestMappingHandlerAdapter(
+	public RequestMappingHandlerAdapter requestMappingHandlerAdapter( /* 创建 http处理器调用适配器 - HandlerAdapter */
 			@Qualifier("mvcContentNegotiationManager") ContentNegotiationManager contentNegotiationManager,
 			@Qualifier("mvcConversionService") FormattingConversionService conversionService,
 			@Qualifier("mvcValidator") Validator validator) {
 
 		RequestMappingHandlerAdapter adapter = createRequestMappingHandlerAdapter();
 		adapter.setContentNegotiationManager(contentNegotiationManager);
-		adapter.setMessageConverters(getMessageConverters());
-		adapter.setWebBindingInitializer(getConfigurableWebBindingInitializer(conversionService, validator));
+		adapter.setMessageConverters(getMessageConverters());/* 创建 http消息转对象 消息转换器，例如json转vo */
+		adapter.setWebBindingInitializer(getConfigurableWebBindingInitializer(conversionService, validator)); /* @InitBinder 、@Valid 参数校验绑定处理器 */
 		adapter.setCustomArgumentResolvers(getArgumentResolvers());
 		adapter.setCustomReturnValueHandlers(getReturnValueHandlers());
 
@@ -641,7 +641,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	 * {@link RequestMappingHandlerAdapter}.
 	 * @since 4.3
 	 */
-	protected RequestMappingHandlerAdapter createRequestMappingHandlerAdapter() {
+	protected RequestMappingHandlerAdapter createRequestMappingHandlerAdapter() { /* 创建 http处理器调用适配器 - HandlerAdapter */
 		return new RequestMappingHandlerAdapter();
 	}
 
@@ -664,7 +664,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 
 		ConfigurableWebBindingInitializer initializer = new ConfigurableWebBindingInitializer();
 		initializer.setConversionService(mvcConversionService);
-		initializer.setValidator(mvcValidator);
+		initializer.setValidator(mvcValidator); /* 指定 HibernateValidator  */
 		MessageCodesResolver messageCodesResolver = getMessageCodesResolver();
 		if (messageCodesResolver != null) {
 			initializer.setMessageCodesResolver(messageCodesResolver);
@@ -716,7 +716,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	 */
 	@Bean
 	public Validator mvcValidator() {
-		Validator validator = getValidator();
+		Validator validator = getValidator(); /* 手动指定 参数校验器 ，例如 HibernateValidator */
 		if (validator == null) {
 			if (ClassUtils.isPresent("javax.validation.Validator", getClass().getClassLoader())) {
 				Class<?> clazz;
@@ -727,7 +727,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 				catch (ClassNotFoundException | LinkageError ex) {
 					throw new BeanInitializationException("Failed to resolve default validator class", ex);
 				}
-				validator = (Validator) BeanUtils.instantiateClass(clazz);
+				validator = (Validator) BeanUtils.instantiateClass(clazz); /* 默认 OptionalValidatorFactoryBean --> afterPropertiesSet() --> ServiceLoader加载 HibernateValidator */
 			}
 			else {
 				validator = new NoOpValidator();
@@ -808,7 +808,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 			this.messageConverters = new ArrayList<>();
 			configureMessageConverters(this.messageConverters);
 			if (this.messageConverters.isEmpty()) {
-				addDefaultHttpMessageConverters(this.messageConverters);
+				addDefaultHttpMessageConverters(this.messageConverters);/** 创建 默认的 http消息转对象 消息转换器，例如json转vo */
 			}
 			extendMessageConverters(this.messageConverters);
 		}
@@ -844,7 +844,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	 */
 	protected final void addDefaultHttpMessageConverters(List<HttpMessageConverter<?>> messageConverters) {
 		messageConverters.add(new ByteArrayHttpMessageConverter());
-		messageConverters.add(new StringHttpMessageConverter());
+		messageConverters.add(new StringHttpMessageConverter());   /* 输入参数、返回对象 都是String */
 		messageConverters.add(new ResourceHttpMessageConverter());
 		messageConverters.add(new ResourceRegionHttpMessageConverter());
 		try {
@@ -853,7 +853,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 		catch (Throwable ex) {
 			// Ignore when no TransformerFactory implementation is available...
 		}
-		messageConverters.add(new AllEncompassingFormHttpMessageConverter());
+		messageConverters.add(new AllEncompassingFormHttpMessageConverter());/* 创建 默认的 http消息转对象 消息转换器，例如json转vo */
 
 		if (romePresent) {
 			messageConverters.add(new AtomFeedHttpMessageConverter());

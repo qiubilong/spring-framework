@@ -72,7 +72,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * @author Juergen Hoeller
  * @author Sebastien Deleuze
  * @since 3.1
- */
+ */                           /* 将请求中的参数（url参数、表单字段）绑定到 Java 对象  -- 【 @ModelAttribute=复杂对象 、@RequestParam=基本类型 】 */
 public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResolver, HandlerMethodReturnValueHandler {
 
 	private static final ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
@@ -101,7 +101,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 		return (parameter.hasParameterAnnotation(ModelAttribute.class) ||
-				(this.annotationNotRequired && !BeanUtils.isSimpleProperty(parameter.getParameterType())));
+				(this.annotationNotRequired && !BeanUtils.isSimpleProperty(parameter.getParameterType()))); /* 非基本类型对象 */
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 		else {
 			// Create attribute instance
 			try {
-				attribute = createAttribute(name, parameter, binderFactory, webRequest);
+				attribute = createAttribute(name, parameter, binderFactory, webRequest);  	/* 实例化对象参数 */
 			}
 			catch (BindException ex) {
 				if (isBindExceptionRequired(parameter)) {
@@ -154,14 +154,14 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 		if (bindingResult == null) {
 			// Bean property binding and validation;
 			// skipped in case of binding failure on construction.
-			WebDataBinder binder = binderFactory.createBinder(webRequest, attribute, name);
+			WebDataBinder binder = binderFactory.createBinder(webRequest, attribute, name); /* 创建数据绑定器 */
 			if (binder.getTarget() != null) {
 				if (!mavContainer.isBindingDisabled(name)) {
-					bindRequestParameters(binder, webRequest);
+					bindRequestParameters(binder, webRequest);  /* 参数对象属性赋值,ServletModelAttributeMethodProcessor.bindRequestParameters */
 				}
-				validateIfApplicable(binder, parameter);
+				validateIfApplicable(binder, parameter); /* @Valid参数校验  */
 				if (binder.getBindingResult().hasErrors() && isBindExceptionRequired(binder, parameter)) {
-					throw new BindException(binder.getBindingResult());
+					throw new BindException(binder.getBindingResult()); /* 无 BindingResult 时直接抛出异常 */
 				}
 			}
 			// Value type adaptation, also covering java.util.Optional
@@ -174,7 +174,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 		// Add resolved attribute and BindingResult at the end of the model
 		Map<String, Object> bindingResultModel = bindingResult.getModel();
 		mavContainer.removeAttributes(bindingResultModel);
-		mavContainer.addAllAttributes(bindingResultModel);
+		mavContainer.addAllAttributes(bindingResultModel);/* 添加bindingResult到 ModelMap中，接着 ErrorsMethodArgumentResolver 取出 */
 
 		return attribute;
 	}
@@ -440,7 +440,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 	protected boolean isBindExceptionRequired(MethodParameter parameter) {
 		int i = parameter.getParameterIndex();
 		Class<?>[] paramTypes = parameter.getExecutable().getParameterTypes();
-		boolean hasBindingResult = (paramTypes.length > (i + 1) && Errors.class.isAssignableFrom(paramTypes[i + 1]));
+		boolean hasBindingResult = (paramTypes.length > (i + 1) && Errors.class.isAssignableFrom(paramTypes[i + 1])); /* 最后一个参数是否是 BindingResult */
 		return !hasBindingResult;
 	}
 

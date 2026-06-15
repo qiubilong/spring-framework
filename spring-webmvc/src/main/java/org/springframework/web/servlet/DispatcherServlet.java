@@ -1108,14 +1108,14 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 			else {
 				Object handler = (mappedHandler != null ? mappedHandler.getHandler() : null);
-				mv = processHandlerException(request, response, handler, exception);
+				mv = processHandlerException(request, response, handler, exception); /* @ExceptionHandler - 全局异常处理 */
 				errorView = (mv != null);
 			}
 		}
 
 		// Did the handler return a view to render?
 		if (mv != null && !mv.wasCleared()) {
-			render(mv, request, response);
+			render(mv, request, response);/** ModelAndView不为空，创建并渲染视图页面 */
 			if (errorView) {
 				WebUtils.clearErrorRequestAttributes(request);
 			}
@@ -1295,16 +1295,16 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		// Check registered HandlerExceptionResolvers...
 		ModelAndView exMv = null;
-		if (this.handlerExceptionResolvers != null) {
-			for (HandlerExceptionResolver resolver : this.handlerExceptionResolvers) {
-				exMv = resolver.resolveException(request, response, handler, ex);
+		if (this.handlerExceptionResolvers != null) {                                     /* ExceptionHandlerExceptionResolver -->  全局异常处理 @HandlerException <-- AbstractHandlerExceptionResolver */
+			for (HandlerExceptionResolver resolver : this.handlerExceptionResolvers) {    /* ResponseStatusExceptionResolver   -->  @ResponseStatus注解的Exception */
+				exMv = resolver.resolveException(request, response, handler, ex);         /* DefaultHandlerExceptionResolver   -->  http 默认异常 */
 				if (exMv != null) {
 					break;
 				}
 			}
 		}
 		if (exMv != null) {
-			if (exMv.isEmpty()) {
+			if (exMv.isEmpty()) {   /* @HandlerException  -  @ResponseBody 处理成功 */
 				request.setAttribute(EXCEPTION_ATTRIBUTE, ex);
 				return null;
 			}

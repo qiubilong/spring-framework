@@ -202,7 +202,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 */
 	@Override
 	public void afterPropertiesSet() {
-		initHandlerMethods();
+		initHandlerMethods();/* 寻找 @RequestMapping 的请求处理器Handler,并保存映射关系 */
 	}
 
 	/**
@@ -212,9 +212,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @see #handlerMethodsInitialized
 	 */
 	protected void initHandlerMethods() {
-		for (String beanName : getCandidateBeanNames()) {
+		for (String beanName : getCandidateBeanNames()) {  /* 遍历所有Bean */
 			if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {
-				processCandidateBean(beanName);
+				processCandidateBean(beanName); /* 寻找 @RequestMapping 的请求处理器Handler,并保存映射关系 */
 			}
 		}
 		handlerMethodsInitialized(getHandlerMethods());
@@ -254,8 +254,8 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				logger.trace("Could not resolve type for bean '" + beanName + "'", ex);
 			}
 		}
-		if (beanType != null && isHandler(beanType)) {
-			detectHandlerMethods(beanName);
+		if (beanType != null && isHandler(beanType)) { /* 是否存在 @Controller 注解 */
+			detectHandlerMethods(beanName); /* 寻找 @RequestMapping 的请求处理器Handler,并保存映射关系 */
 		}
 	}
 
@@ -264,16 +264,16 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @param handler either a bean name or an actual handler instance
 	 * @see #getMappingForMethod
 	 */
-	protected void detectHandlerMethods(Object handler) {
+	protected void detectHandlerMethods(Object handler) { /* 这里handler == beanName */
 		Class<?> handlerType = (handler instanceof String ?
 				obtainApplicationContext().getType((String) handler) : handler.getClass());
 
 		if (handlerType != null) {
 			Class<?> userType = ClassUtils.getUserClass(handlerType);
-			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
+			Map<Method, T> methods = MethodIntrospector.selectMethods(userType, /* 遍历所有方法, 得到 Map < Method, RequestMappingInfo > */
 					(MethodIntrospector.MetadataLookup<T>) method -> {
 						try {
-							return getMappingForMethod(method, userType);
+							return getMappingForMethod(method, userType);/* 寻找添加了 @RequestMapping 注解的方法Method - 包括重写的父类和接口 */
 						}
 						catch (Throwable ex) {
 							throw new IllegalStateException("Invalid mapping on handler class [" +
@@ -285,7 +285,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			}
 			methods.forEach((method, mapping) -> {
 				Method invocableMethod = AopUtils.selectInvocableMethod(method, userType);
-				registerHandlerMethod(handler, invocableMethod, mapping);
+				registerHandlerMethod(handler, invocableMethod, mapping);/* 保存请求处理器映射关系 */
 			});
 		}
 	}
@@ -315,7 +315,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * under the same mapping
 	 */
 	protected void registerHandlerMethod(Object handler, Method method, T mapping) {
-		this.mappingRegistry.register(mapping, handler, method);
+		this.mappingRegistry.register(mapping, handler, method);/* 保存请求处理器映射关系 */
 	}
 
 	/**
@@ -325,7 +325,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @return the created HandlerMethod
 	 */
 	protected HandlerMethod createHandlerMethod(Object handler, Method method) {
-		if (handler instanceof String) {
+		if (handler instanceof String) {/* 创建Handler请求处理器 HandlerMethod */
 			return new HandlerMethod((String) handler,
 					obtainApplicationContext().getAutowireCapableBeanFactory(), method);
 		}
@@ -588,20 +588,20 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			this.readWriteLock.readLock().unlock();
 		}
 
-		public void register(T mapping, Object handler, Method method) {
+		public void register(T mapping, Object handler, Method method) { /* 这里 handler == beanName */
 			// Assert that the handler method is not a suspending one.
 			if (KotlinDetector.isKotlinType(method.getDeclaringClass()) && KotlinDelegate.isSuspend(method)) {
 				throw new IllegalStateException("Unsupported suspending handler method detected: " + method);
 			}
 			this.readWriteLock.writeLock().lock();
 			try {
-				HandlerMethod handlerMethod = createHandlerMethod(handler, method);
-				validateMethodMapping(handlerMethod, mapping);
+				HandlerMethod handlerMethod = createHandlerMethod(handler, method); /*  创建 @RequestMapping对应的处理器方法 HandlerMethod */
+				validateMethodMapping(handlerMethod, mapping);/** @RequestMapping相同，Method不同时报错 */
 				this.mappingLookup.put(mapping, handlerMethod);
 
 				List<String> directUrls = getDirectUrls(mapping);
 				for (String url : directUrls) {
-					this.urlLookup.add(url, mapping);
+					this.urlLookup.add(url, mapping);/* 保存路径 path -- @RequestMapping 映射关系   */
 				}
 
 				String name = null;
@@ -609,12 +609,12 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 					name = getNamingStrategy().getName(handlerMethod, mapping);
 					addMappingName(name, handlerMethod);
 				}
-
+				/* 跨域处理配置 */
 				CorsConfiguration corsConfig = initCorsConfiguration(handler, method, mapping);
 				if (corsConfig != null) {
 					this.corsLookup.put(handlerMethod, corsConfig);
 				}
-
+				/* 保存 @RequestMapping -- 请求处理器 HandlerMethod 映射关系 */
 				this.registry.put(mapping, new MappingRegistration<>(mapping, handlerMethod, directUrls, name));
 			}
 			finally {

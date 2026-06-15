@@ -104,14 +104,14 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 			throw new IllegalArgumentException(
 					"Specified name must not resolve to null: [" + namedValueInfo.name + "]");
 		}
-		/* 解析方法参数值 */
+		/* ## 解析方法 参数值  -- request.getParameterValues(name) */
 		Object arg = resolveName(resolvedName.toString(), nestedParameter, webRequest);
 		if (arg == null) {
 			if (namedValueInfo.defaultValue != null) {
-				arg = resolveStringValue(namedValueInfo.defaultValue);
+				arg = resolveStringValue(namedValueInfo.defaultValue); // 取默认值
 			}
 			else if (namedValueInfo.required && !nestedParameter.isOptional()) {
-				handleMissingValue(namedValueInfo.name, nestedParameter, webRequest);
+				handleMissingValue(namedValueInfo.name, nestedParameter, webRequest); /* null & 必填时 抛异常  */
 			}
 			arg = handleNullValue(namedValueInfo.name, arg, nestedParameter.getNestedParameterType());
 		}
@@ -119,10 +119,10 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 			arg = resolveStringValue(namedValueInfo.defaultValue);
 		}
 
-		if (binderFactory != null) {
+		if (binderFactory != null) {/* 参数类型转换，binderFactory == ServletRequestDataBinderFactory  */
 			WebDataBinder binder = binderFactory.createBinder(webRequest, null, namedValueInfo.name);
 			try {
-				arg = binder.convertIfNecessary(arg, parameter.getParameterType(), parameter);
+				arg = binder.convertIfNecessary(arg, parameter.getParameterType(), parameter);/* 参数类型转换，binder == ExtendedServletRequestDataBinder ,例如 String --> Interger */
 			}
 			catch (ConversionNotSupportedException ex) {
 				throw new MethodArgumentConversionNotSupportedException(arg, ex.getRequiredType(),

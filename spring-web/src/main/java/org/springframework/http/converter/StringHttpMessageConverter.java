@@ -41,7 +41,7 @@ import org.springframework.util.StreamUtils;
  * @author Juergen Hoeller
  * @since 3.0
  */
-public class StringHttpMessageConverter extends AbstractHttpMessageConverter<String> {
+public class StringHttpMessageConverter extends AbstractHttpMessageConverter<String> {/* 输入参数、返回对象 都是String */
 
 	/**
 	 * The default charset used by the converter.
