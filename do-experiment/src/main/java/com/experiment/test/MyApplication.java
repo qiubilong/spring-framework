@@ -32,6 +32,7 @@ public class MyApplication {
 		//aop
 		System.setProperty("jdk.proxy.ProxyGenerator.saveGeneratedFiles", "true");//保存jdk生成的代理类class文件
 		//System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, System.getProperty("user.dir")+"/jdk/proxy1"); //保存cglib生成的动态代理类class文件
+		System.setProperty("cglib.debugLocation", System.getProperty("user.dir")+"/jdk/proxy1");
 
 		for (int i = 0; i < 10; i++) {
 			System.out.println();

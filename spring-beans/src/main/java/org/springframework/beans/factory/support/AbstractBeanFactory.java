@@ -167,7 +167,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	private SecurityContextProvider securityContextProvider;
 
 	/** Map from bean name to merged RootBeanDefinition. */
-	private final Map<String, RootBeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>(256);
+	private final Map<String, RootBeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>(256);   /* 所有BeanDefinition,    beanName <--> BeanDefinition */
 
 	/** Names of beans that have already been created at least once. */
 	private final Set<String> alreadyCreated = Collections.newSetFromMap(new ConcurrentHashMap<>(256));

@@ -54,7 +54,7 @@ public class AnnotatedBeanDefinitionReader {
 
 	private ScopeMetadataResolver scopeMetadataResolver = new AnnotationScopeMetadataResolver();
 
-	private ConditionEvaluator conditionEvaluator;
+	private ConditionEvaluator conditionEvaluator;  /* @Conditional 条件解析器 */
 
 
 	/**
@@ -67,8 +67,8 @@ public class AnnotatedBeanDefinitionReader {
 	 * @see #AnnotatedBeanDefinitionReader(BeanDefinitionRegistry, Environment)
 	 * @see #setEnvironment(Environment)
 	 */
-	public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry) {
-		this(registry, getOrCreateEnvironment(registry));
+	public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry) {/* 注入 ConfigurationClassPostProcessor 、AutowiredAnnotationBeanPostProcessor、InitDestroyAnnotationBeanPostProcessor */
+		this(registry, getOrCreateEnvironment(registry));/* 创建 StandardEnvironment对象 -->加载系统环境变量、JVM环境变量 */
 	}
 
 	/**
@@ -84,8 +84,8 @@ public class AnnotatedBeanDefinitionReader {
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		Assert.notNull(environment, "Environment must not be null");
 		this.registry = registry;
-		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);
-		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
+		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);  /* @Conditional 条件解析器 */
+		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);/* 注入 ConfigurationClassPostProcessor 、AutowiredAnnotationBeanPostProcessor、InitDestroyAnnotationBeanPostProcessor */
 	}
 
 
@@ -134,7 +134,7 @@ public class AnnotatedBeanDefinitionReader {
 	 */
 	public void register(Class<?>... componentClasses) {
 		for (Class<?> componentClass : componentClasses) {
-			registerBean(componentClass);
+			registerBean(componentClass);/* 解析注册 配置类 */
 		}
 	}
 
@@ -143,7 +143,7 @@ public class AnnotatedBeanDefinitionReader {
 	 * class-declared annotations.
 	 * @param beanClass the class of the bean
 	 */
-	public void registerBean(Class<?> beanClass) {
+	public void registerBean(Class<?> beanClass) { /* 解析注册 配置类 */
 		doRegisterBean(beanClass, null, null, null, null);
 	}
 
@@ -251,7 +251,7 @@ public class AnnotatedBeanDefinitionReader {
 			@Nullable BeanDefinitionCustomizer[] customizers) {
 
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
-		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
+		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {/* 检查注解 @Conditional - 条件匹配 */
 			return;
 		}
 
@@ -259,7 +259,7 @@ public class AnnotatedBeanDefinitionReader {
 		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd);
 		abd.setScope(scopeMetadata.getScopeName());
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
-
+		/* 解析Bean定义注解，@Primary、@Lazy、@DependsOn等 */
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
 		if (qualifiers != null) {
 			for (Class<? extends Annotation> qualifier : qualifiers) {
@@ -279,7 +279,7 @@ public class AnnotatedBeanDefinitionReader {
 				customizer.customize(abd);
 			}
 		}
-
+		/* 生成并注册 BeanDefinition*/
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry);
@@ -292,8 +292,8 @@ public class AnnotatedBeanDefinitionReader {
 	 */
 	private static Environment getOrCreateEnvironment(BeanDefinitionRegistry registry) {
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
-		if (registry instanceof EnvironmentCapable) {
-			return ((EnvironmentCapable) registry).getEnvironment();
+		if (registry instanceof EnvironmentCapable) {/*  不存在则创建StandardEnvironment  */
+			return ((EnvironmentCapable) registry).getEnvironment(); /* 创建 StandardEnvironment对象 -->加载系统环境变量、JVM环境变量 */
 		}
 		return new StandardEnvironment();
 	}

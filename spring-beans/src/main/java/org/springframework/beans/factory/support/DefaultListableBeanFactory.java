@@ -120,7 +120,7 @@ import org.springframework.util.StringUtils;
  * @see #resolveDependency
  */
 @SuppressWarnings("serial")
-public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
+public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory     /*  DefaultSingletonBeanRegistry  -->  singletonObjects【bean对象单例池】   */
 		implements ConfigurableListableBeanFactory, BeanDefinitionRegistry, Serializable {
 
 	@Nullable
@@ -160,10 +160,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private AutowireCandidateResolver autowireCandidateResolver = new SimpleAutowireCandidateResolver();
 
 	/** Map from dependency type to corresponding autowired value. */
-	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
+	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);     /* spring 内部 bean对象 ， 例如 ApplicationContext */
 
 	/** Map of bean definition objects, keyed by bean name. */
-	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
+	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);   /* BeanDefinition 集合 */
 
 	/** Map of singleton and non-singleton bean names, keyed by dependency type. */
 	private final Map<Class<?>, String[]> allBeanNamesByType = new ConcurrentHashMap<>(64);
@@ -172,7 +172,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private final Map<Class<?>, String[]> singletonBeanNamesByType = new ConcurrentHashMap<>(64);
 
 	/** List of bean definition names, in registration order. */
-	private volatile List<String> beanDefinitionNames = new ArrayList<>(256);
+	private volatile List<String> beanDefinitionNames = new ArrayList<>(256);                      /* 所有bean名字 */
 
 	/** List of names of manually registered singletons, in registration order. */
 	private volatile Set<String> manualSingletonNames = new LinkedHashSet<>(16);
@@ -905,7 +905,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	//---------------------------------------------------------------------
 
 	@Override
-	public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)
+	public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) /* 注册  beanDefinition */
 			throws BeanDefinitionStoreException {
 
 		Assert.hasText(beanName, "Bean name must not be empty");
@@ -948,7 +948,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 							"] with [" + beanDefinition + "]");
 				}
 			}
-			this.beanDefinitionMap.put(beanName, beanDefinition);
+			this.beanDefinitionMap.put(beanName, beanDefinition); /* 注册  beanDefinition */
 		}
 		else {
 			if (hasBeanCreationStarted()) {

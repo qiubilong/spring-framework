@@ -81,7 +81,7 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 			}
 		}
 		// Fallback: generate a unique default bean name.
-		return buildDefaultBeanName(definition, registry);
+		return buildDefaultBeanName(definition, registry); /* 生成 Bean名字 */
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 	 * @return the default bean name (never {@code null})
 	 */
 	protected String buildDefaultBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
-		return buildDefaultBeanName(definition);
+		return buildDefaultBeanName(definition);/* 生成 Bean名字 */
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 		String beanClassName = definition.getBeanClassName();
 		Assert.state(beanClassName != null, "No bean class name set");
 		String shortClassName = ClassUtils.getShortName(beanClassName);
-		return Introspector.decapitalize(shortClassName);
+		return Introspector.decapitalize(shortClassName);/* 生成 Bean名字 - chars[0] = Character.toLowerCase(chars[0]); */
 	}
 
 }

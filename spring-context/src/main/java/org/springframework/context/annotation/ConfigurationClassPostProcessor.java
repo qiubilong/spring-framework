@@ -233,7 +233,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		}
 		this.registriesPostProcessed.add(registryId);
 
-		processConfigBeanDefinitions(registry);
+		processConfigBeanDefinitions(registry); /* ## ConfigurationClassPostProcessor 寻找配置类 --> 扫描注册BeanDefinition  */
 	}
 
 	/**
@@ -262,9 +262,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * Build and validate a configuration model based on the registry of
 	 * {@link Configuration} classes.
 	 */
-	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
+	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {  /* 扫描配置类 Bean */
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
-		String[] candidateNames = registry.getBeanDefinitionNames();
+		String[] candidateNames = registry.getBeanDefinitionNames();/* 所有配置类 Bean */
 
 		for (String beanName : candidateNames) {
 			BeanDefinition beanDef = registry.getBeanDefinition(beanName);
@@ -272,7 +272,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				if (logger.isDebugEnabled()) {
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
 				}
-			}
+			}        /* 检查是否配置类 --> @Configuration、@Component、@ComponentScan、@Import、@ImportResource -->  配置类  */
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
 				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
@@ -312,14 +312,14 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		ConfigurationClassParser parser = new ConfigurationClassParser(
 				this.metadataReaderFactory, this.problemReporter, this.environment,
 				this.resourceLoader, this.componentScanBeanNameGenerator, registry);
-
+		/* 循环解析配置类，因为配置类可能会导入了新的配置类 */
 		Set<BeanDefinitionHolder> candidates = new LinkedHashSet<>(configCandidates);
 		Set<ConfigurationClass> alreadyParsed = new HashSet<>(configCandidates.size());
 		do {
-			parser.parse(candidates);
+			parser.parse(candidates);/* 解析配置类 -->  @Component、@ComponentScan（ -->BeanDefinition ）、@Bean、@Import（class）、@ImportResource（xml文件）@PropertyResource */
 			parser.validate();
 
-			Set<ConfigurationClass> configClasses = new LinkedHashSet<>(parser.getConfigurationClasses());
+			Set<ConfigurationClass> configClasses = new LinkedHashSet<>(parser.getConfigurationClasses());/* 解析到的新的配置类 */
 			configClasses.removeAll(alreadyParsed);
 
 			// Read the model and create bean definitions based on its content
@@ -328,7 +328,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
-			this.reader.loadBeanDefinitions(configClasses);
+			this.reader.loadBeanDefinitions(configClasses); /* 处理配置类解析得到的ConfigurationClass --> @Import、@ImportResource、@Bean --> 生成注册BeanDefinition */
 			alreadyParsed.addAll(configClasses);
 
 			candidates.clear();
@@ -344,7 +344,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						BeanDefinition bd = registry.getBeanDefinition(candidateName);
 						if (ConfigurationClassUtils.checkConfigurationClassCandidate(bd, this.metadataReaderFactory) &&
 								!alreadyParsedClasses.contains(bd.getBeanClassName())) {
-							candidates.add(new BeanDefinitionHolder(bd, candidateName));
+							candidates.add(new BeanDefinitionHolder(bd, candidateName));	/* 继续解析新的配置类 */
 						}
 					}
 				}
@@ -355,7 +355,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 		// Register the ImportRegistry as a bean in order to support ImportAware @Configuration classes
 		if (sbr != null && !sbr.containsSingleton(IMPORT_REGISTRY_BEAN_NAME)) {
-			sbr.registerSingleton(IMPORT_REGISTRY_BEAN_NAME, parser.getImportRegistry());
+			sbr.registerSingleton(IMPORT_REGISTRY_BEAN_NAME, parser.getImportRegistry());/* 配置类映射关系--ImportAwareBeanPostProcessor.beforeInitialization时回调 */
 		}
 
 		if (this.metadataReaderFactory instanceof CachingMetadataReaderFactory) {

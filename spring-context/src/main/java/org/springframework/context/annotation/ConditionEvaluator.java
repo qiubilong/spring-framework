@@ -78,7 +78,7 @@ class ConditionEvaluator {
 	 * @return if the item should be skipped
 	 */
 	public boolean shouldSkip(@Nullable AnnotatedTypeMetadata metadata, @Nullable ConfigurationPhase phase) {
-		if (metadata == null || !metadata.isAnnotated(Conditional.class.getName())) {
+		if (metadata == null || !metadata.isAnnotated(Conditional.class.getName())) {/* 不存在注解@Conditional,则不用跳过 */
 			return false;
 		}
 
@@ -99,14 +99,14 @@ class ConditionEvaluator {
 		}
 
 		AnnotationAwareOrderComparator.sort(conditions);
-
+		/* 加载注解 @Conditional 配置的 Class */
 		for (Condition condition : conditions) {
 			ConfigurationPhase requiredPhase = null;
 			if (condition instanceof ConfigurationCondition) {
 				requiredPhase = ((ConfigurationCondition) condition).getConfigurationPhase();
 			}
 			if ((requiredPhase == null || requiredPhase == phase) && !condition.matches(this.context, metadata)) {
-				return true;
+				return true; 	/* 条件不匹配，则跳过 */
 			}
 		}
 

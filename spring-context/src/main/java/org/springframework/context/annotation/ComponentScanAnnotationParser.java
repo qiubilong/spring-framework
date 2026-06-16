@@ -74,7 +74,7 @@ class ComponentScanAnnotationParser {
 
 
 	public Set<BeanDefinitionHolder> parse(AnnotationAttributes componentScan, final String declaringClass) {
-		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(this.registry,
+		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(this.registry,   /* ClassPathBean 扫描器  --> 匹配 @Component */
 				componentScan.getBoolean("useDefaultFilters"), this.environment, this.resourceLoader);
 
 		Class<? extends BeanNameGenerator> generatorClass = componentScan.getClass("nameGenerator");
@@ -108,7 +108,7 @@ class ComponentScanAnnotationParser {
 		if (lazyInit) {
 			scanner.getBeanDefinitionDefaults().setLazyInit(true);
 		}
-
+		/* 扫描路径 */
 		Set<String> basePackages = new LinkedHashSet<>();
 		String[] basePackagesArray = componentScan.getStringArray("basePackages");
 		for (String pkg : basePackagesArray) {
@@ -119,7 +119,7 @@ class ComponentScanAnnotationParser {
 		for (Class<?> clazz : componentScan.getClassArray("basePackageClasses")) {
 			basePackages.add(ClassUtils.getPackageName(clazz));
 		}
-		if (basePackages.isEmpty()) {
+		if (basePackages.isEmpty()) {   /* ComponentScan如果没有指定basePackages，则使用当前类的包路径，springboot就是这样 */
 			basePackages.add(ClassUtils.getPackageName(declaringClass));
 		}
 
@@ -127,9 +127,9 @@ class ComponentScanAnnotationParser {
 			@Override
 			protected boolean matchClassName(String className) {
 				return declaringClass.equals(className);
-			}
+			}  /* 排除自己 */
 		});
-		return scanner.doScan(StringUtils.toStringArray(basePackages));
+		return scanner.doScan(StringUtils.toStringArray(basePackages)); /* 扫描路径 --> 注册BeanDefinition */
 	}
 
 	private List<TypeFilter> typeFiltersFor(AnnotationAttributes filterAttributes) {

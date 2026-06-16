@@ -85,7 +85,7 @@ abstract class ConfigurationClassUtils {
 			BeanDefinition beanDef, MetadataReaderFactory metadataReaderFactory) {
 
 		String className = beanDef.getBeanClassName();
-		if (className == null || beanDef.getFactoryMethodName() != null) {
+		if (className == null || beanDef.getFactoryMethodName() != null) { /* @Bean得到的BeanDefinition不允许当做配置类 */
 			return false;
 		}
 
@@ -123,9 +123,9 @@ abstract class ConfigurationClassUtils {
 
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
-			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
+			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL); /* 存在注解 @Configuration --> 需要生成配置类增强子类 --> 拦截生成bean的方法 --> 保证bean的单例 */
 		}
-		else if (config != null || isConfigurationCandidate(metadata)) {
+		else if (config != null || isConfigurationCandidate(metadata)) {                 /* 是否配置类 --> 存在  @Configuration、@Component、@ComponentScan、@Import、@ImportSource、@Bean --> 配置类 */
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		}
 		else {
@@ -155,7 +155,7 @@ abstract class ConfigurationClassUtils {
 		}
 
 		// Any of the typical annotations found?
-		for (String indicator : candidateIndicators) {
+		for (String indicator : candidateIndicators) { /* 	@Component 、@ComponentScan 、@Import 、@ImportResource   */
 			if (metadata.isAnnotated(indicator)) {
 				return true;
 			}
@@ -163,7 +163,7 @@ abstract class ConfigurationClassUtils {
 
 		// Finally, let's look for @Bean methods...
 		try {
-			return metadata.hasAnnotatedMethods(Bean.class.getName());
+			return metadata.hasAnnotatedMethods(Bean.class.getName());/* class上没有注解配置，检查是否存在@Bean方法，手动register、@Import导入、@Component内部类 的Bean 存在这种情况 */
 		}
 		catch (Throwable ex) {
 			if (logger.isDebugEnabled()) {

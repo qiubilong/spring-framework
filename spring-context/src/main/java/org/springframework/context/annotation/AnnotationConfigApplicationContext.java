@@ -53,18 +53,18 @@ import org.springframework.util.Assert;
  */
 public class AnnotationConfigApplicationContext extends GenericApplicationContext implements AnnotationConfigRegistry {
 
-	private final AnnotatedBeanDefinitionReader reader;
+	private final AnnotatedBeanDefinitionReader reader;          /* 注解 - 解析器 */
 
-	private final ClassPathBeanDefinitionScanner scanner;
+	private final ClassPathBeanDefinitionScanner scanner;       /* BeanDefinition 类扫描器 */
 
 
 	/**
 	 * Create a new AnnotationConfigApplicationContext that needs to be populated
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
 	 */
-	public AnnotationConfigApplicationContext() {
-		this.reader = new AnnotatedBeanDefinitionReader(this);
-		this.scanner = new ClassPathBeanDefinitionScanner(this);
+	public AnnotationConfigApplicationContext() {   /*  super(); //默认调用父类无参构造方法,  beanFactory = new DefaultListableBeanFactory();  */
+		this.reader = new AnnotatedBeanDefinitionReader(this); /* 注入 ConfigurationClassPostProcessor 、AutowiredAnnotationBeanPostProcessor、StandardEnvironment对象 */
+		this.scanner = new ClassPathBeanDefinitionScanner(this);/* 创建 ClassPath 扫描器 */
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	@Override
 	public void register(Class<?>... componentClasses) {
 		Assert.notEmpty(componentClasses, "At least one component class must be specified");
-		this.reader.register(componentClasses);
+		this.reader.register(componentClasses);/* 解析注册 配置类 */
 	}
 
 	/**

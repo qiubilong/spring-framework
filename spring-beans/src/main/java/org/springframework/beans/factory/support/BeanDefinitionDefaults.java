@@ -31,7 +31,7 @@ public class BeanDefinitionDefaults {
 	@Nullable
 	private Boolean lazyInit;
 
-	private int autowireMode = AbstractBeanDefinition.AUTOWIRE_NO;
+	private int autowireMode = AbstractBeanDefinition.AUTOWIRE_NO; /* 不自动装配，你需要显式地在 XML 或通过注解（如 @Autowired、@Resource、@Inject）来手动指定依赖关系 */
 
 	private int dependencyCheck = AbstractBeanDefinition.DEPENDENCY_CHECK_NONE;
 

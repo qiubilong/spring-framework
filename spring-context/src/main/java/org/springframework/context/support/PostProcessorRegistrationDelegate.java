@@ -80,10 +80,10 @@ final class PostProcessorRegistrationDelegate {
 			// Separate between BeanDefinitionRegistryPostProcessors that implement
 			// PriorityOrdered, Ordered, and the rest.
 			List<BeanDefinitionRegistryPostProcessor> currentRegistryProcessors = new ArrayList<>();
-
+			/* ## 第一步 - 寻找 BeanDefinitionRegistryPostProcessor --> 是PriorityOrder子类 --> 实例化 --> invoke - postProcessBeanDefinitionRegistry   */
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
 			String[] postProcessorNames =
-					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
+					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false); /* 其实就是找到 ConfigurationClassPostProcessor   */
 			for (String ppName : postProcessorNames) {
 				if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
 					currentRegistryProcessors.add(beanFactory.getBean(ppName, BeanDefinitionRegistryPostProcessor.class));
@@ -92,7 +92,7 @@ final class PostProcessorRegistrationDelegate {
 			}
 			sortPostProcessors(currentRegistryProcessors, beanFactory);
 			registryProcessors.addAll(currentRegistryProcessors);
-			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);
+			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry); /* ## 调用当前BeanDefinitionRegistryPostProcessor -> 其实就是调用ConfigurationClassPostProcessor --> 扫描注册BeanDefinition */
 			currentRegistryProcessors.clear();
 
 			// Next, invoke the BeanDefinitionRegistryPostProcessors that implement Ordered.
@@ -272,7 +272,7 @@ final class PostProcessorRegistrationDelegate {
 			Collection<? extends BeanDefinitionRegistryPostProcessor> postProcessors, BeanDefinitionRegistry registry) {
 
 		for (BeanDefinitionRegistryPostProcessor postProcessor : postProcessors) {
-			postProcessor.postProcessBeanDefinitionRegistry(registry);
+			postProcessor.postProcessBeanDefinitionRegistry(registry);  /* ConfigurationClassPostProcessor 扫描配置类 */
 		}
 	}
 

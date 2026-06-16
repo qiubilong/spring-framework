@@ -93,7 +93,7 @@ import org.springframework.util.Assert;
  */
 public class GenericApplicationContext extends AbstractApplicationContext implements BeanDefinitionRegistry {
 
-	private final DefaultListableBeanFactory beanFactory;
+	private final DefaultListableBeanFactory beanFactory;  /* Bean管理工厂 */
 
 	@Nullable
 	private ResourceLoader resourceLoader;
@@ -109,7 +109,7 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 	 * @see #refresh
 	 */
 	public GenericApplicationContext() {
-		this.beanFactory = new DefaultListableBeanFactory();
+		this.beanFactory = new DefaultListableBeanFactory(); /* 父类默认实例化 - Bean管理工厂 */
 	}
 
 	/**

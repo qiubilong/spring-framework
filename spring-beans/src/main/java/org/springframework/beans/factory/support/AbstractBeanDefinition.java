@@ -69,25 +69,25 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Constant that indicates no external autowiring at all.
 	 * @see #setAutowireMode
 	 */
-	public static final int AUTOWIRE_NO = AutowireCapableBeanFactory.AUTOWIRE_NO;
+	public static final int AUTOWIRE_NO = AutowireCapableBeanFactory.AUTOWIRE_NO;                /* 不自动装配，你需要显式地在 XML 或通过注解（如 @Autowired、@Resource、@Inject）来手动指定依赖关系 */
 
 	/**
 	 * Constant that indicates autowiring bean properties by name.
 	 * @see #setAutowireMode
 	 */
-	public static final int AUTOWIRE_BY_NAME = AutowireCapableBeanFactory.AUTOWIRE_BY_NAME;
+	public static final int AUTOWIRE_BY_NAME = AutowireCapableBeanFactory.AUTOWIRE_BY_NAME;        /* 按名称自动装配 */
 
 	/**
 	 * Constant that indicates autowiring bean properties by type.
 	 * @see #setAutowireMode
 	 */
-	public static final int AUTOWIRE_BY_TYPE = AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
+	public static final int AUTOWIRE_BY_TYPE = AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;          /* 按类型自动装配 */
 
 	/**
 	 * Constant that indicates autowiring a constructor.
 	 * @see #setAutowireMode
 	 */
-	public static final int AUTOWIRE_CONSTRUCTOR = AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR;
+	public static final int AUTOWIRE_CONSTRUCTOR = AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR;   /* 使用构造函数注入依赖关系 */
 
 	/**
 	 * Constant that indicates determining an appropriate autowire strategy
@@ -173,7 +173,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	private String factoryBeanName;
 
 	@Nullable
-	private String factoryMethodName;
+	private String factoryMethodName;   /* @Bean对应的方法名 */
 
 	@Nullable
 	private ConstructorArgumentValues constructorArgumentValues;

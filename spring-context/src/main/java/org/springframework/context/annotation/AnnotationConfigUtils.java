@@ -134,7 +134,7 @@ public abstract class AnnotationConfigUtils {
 	 * @param registry the registry to operate on
 	 */
 	public static void registerAnnotationConfigProcessors(BeanDefinitionRegistry registry) {
-		registerAnnotationConfigProcessors(registry, null);
+		registerAnnotationConfigProcessors(registry, null);/* 注入 ConfigurationClassPostProcessor 、AutowiredAnnotationBeanPostProcessor、InitDestroyAnnotationBeanPostProcessor */
 	}
 
 	/**
@@ -159,26 +159,26 @@ public abstract class AnnotationConfigUtils {
 		}
 
 		Set<BeanDefinitionHolder> beanDefs = new LinkedHashSet<>(8);
-
+		/* ## 注册BeanDefinition - BeanFactoryBeanProcessor - ConfigurationClassPostProcessor  --> 扫描用户指定的classpath生成BeanDefinition */
 		if (!registry.containsBeanDefinition(CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(ConfigurationClassPostProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-
+		/* ## 注册BeanDefinition - BeanPostProcessor - AutowiredAnnotationBeanPostProcessor --> 解析依赖注入@Value,@Autowired,@Qualifier  */
 		if (!registry.containsBeanDefinition(AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(AutowiredAnnotationBeanPostProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-
+		/* 添加- BeanPostProcessor - CommonAnnotationBeanPostProcessor  --> 解析依赖注入 @Resource */
 		// Check for JSR-250 support, and if present add the CommonAnnotationBeanPostProcessor.
 		if (jsr250Present && !registry.containsBeanDefinition(COMMON_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(CommonAnnotationBeanPostProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, COMMON_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-
+		/* ## 添加- BeanPostProcessor - InitDestroyAnnotationBeanPostProcessor  --> 解析注解 @PostConstruct,@PreDestroy */
 		// Check for JPA support, and if present add the PersistenceAnnotationBeanPostProcessor.
 		if (jpaPresent && !registry.containsBeanDefinition(PERSISTENCE_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition();
@@ -193,13 +193,13 @@ public abstract class AnnotationConfigUtils {
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, PERSISTENCE_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-
+		/* 注册BeanDefinition - Bean工厂处理器BeanFactoryPostProcessor - EventListenerMethodProcessor  ->解析 @EventListener  */
 		if (!registry.containsBeanDefinition(EVENT_LISTENER_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(EventListenerMethodProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, EVENT_LISTENER_PROCESSOR_BEAN_NAME));
 		}
-
+		/* 注册BeanDefinition，用于将注解了@EventListener的方法生成ApplicationListener适配器对象 */
 		if (!registry.containsBeanDefinition(EVENT_LISTENER_FACTORY_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(DefaultEventListenerFactory.class);
 			def.setSource(source);
@@ -235,7 +235,7 @@ public abstract class AnnotationConfigUtils {
 	}
 
 	static void processCommonDefinitionAnnotations(AnnotatedBeanDefinition abd, AnnotatedTypeMetadata metadata) {
-		AnnotationAttributes lazy = attributesFor(metadata, Lazy.class);
+		AnnotationAttributes lazy = attributesFor(metadata, Lazy.class); /* 是否 懒加载 */
 		if (lazy != null) {
 			abd.setLazyInit(lazy.getBoolean("value"));
 		}
@@ -246,7 +246,7 @@ public abstract class AnnotationConfigUtils {
 			}
 		}
 
-		if (metadata.isAnnotated(Primary.class.getName())) {
+		if (metadata.isAnnotated(Primary.class.getName())) {/* 类相同时最高优先级 */
 			abd.setPrimary(true);
 		}
 		AnnotationAttributes dependsOn = attributesFor(metadata, DependsOn.class);

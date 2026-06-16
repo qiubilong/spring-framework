@@ -71,13 +71,13 @@ import org.springframework.util.StringUtils;
 public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements SingletonBeanRegistry {
 
 	/** Cache of singleton objects: bean name to bean instance. */
-	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
+	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);    /* bean对象单例池 -完全初始化的bean对象， beanName <--> Bean对象 */
 
 	/** Cache of singleton factories: bean name to ObjectFactory. */
-	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
+	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);   /* 早期对象工厂，生成提前曝光的早期对象 */
 
 	/** Cache of early singleton objects: bean name to bean instance. */
-	private final Map<String, Object> earlySingletonObjects = new HashMap<>(16);
+	private final Map<String, Object> earlySingletonObjects = new HashMap<>(16);          /* 早期对象，缓存对象工厂的结果 */
 
 	/** Set of registered singletons, containing the bean names in registration order. */
 	private final Set<String> registeredSingletons = new LinkedHashSet<>(256);
@@ -104,7 +104,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	private final Map<String, Set<String>> containedBeanMap = new ConcurrentHashMap<>(16);
 
 	/** Map between dependent bean names: bean name to Set of dependent bean names. */
-	private final Map<String, Set<String>> dependentBeanMap = new ConcurrentHashMap<>(64);
+	private final Map<String, Set<String>> dependentBeanMap = new ConcurrentHashMap<>(64); /* 被依赖集合 */
 
 	/** Map between depending bean names: bean name to Set of bean names for the bean's dependencies. */
 	private final Map<String, Set<String>> dependenciesForBeanMap = new ConcurrentHashMap<>(64);

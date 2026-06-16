@@ -116,7 +116,7 @@ class ConfigurationClassBeanDefinitionReader {
 	 */
 	public void loadBeanDefinitions(Set<ConfigurationClass> configurationModel) {
 		TrackedConditionEvaluator trackedConditionEvaluator = new TrackedConditionEvaluator();
-		for (ConfigurationClass configClass : configurationModel) {
+		for (ConfigurationClass configClass : configurationModel) { /* 处理配置类解析得到的bean --> @Import、@ImportReSource、@Bean --> 生成注册BeanDefinition */
 			loadBeanDefinitionsForConfigurationClass(configClass, trackedConditionEvaluator);
 		}
 	}
@@ -136,16 +136,16 @@ class ConfigurationClassBeanDefinitionReader {
 			this.importRegistry.removeImportingClass(configClass.getMetadata().getClassName());
 			return;
 		}
-
+		  /* 被导入 （ @Import）  --> BeanDefinition    */
 		if (configClass.isImported()) {
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
-		}
+		} /* @Bean    --> BeanDefinition    */
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
 
-		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
-		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
+		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());        /* @ImportResources --> 加载解析XML  --> BeanDefinition  */
+		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars()); /* ImportBeanDefinitionRegistrar  --> BeanDefinition */
 	}
 
 	/**
@@ -158,11 +158,11 @@ class ConfigurationClassBeanDefinitionReader {
 		ScopeMetadata scopeMetadata = scopeMetadataResolver.resolveScopeMetadata(configBeanDef);
 		configBeanDef.setScope(scopeMetadata.getScopeName());
 		String configBeanName = this.importBeanNameGenerator.generateBeanName(configBeanDef, this.registry);
-		AnnotationConfigUtils.processCommonDefinitionAnnotations(configBeanDef, metadata);
+		AnnotationConfigUtils.processCommonDefinitionAnnotations(configBeanDef, metadata); /* 解析注解 @Lazy、 @Primary、 @DependsOn等*/
 
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(configBeanDef, configBeanName);
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
-		this.registry.registerBeanDefinition(definitionHolder.getBeanName(), definitionHolder.getBeanDefinition());
+		this.registry.registerBeanDefinition(definitionHolder.getBeanName(), definitionHolder.getBeanDefinition());  /* 注册BeanDefinition */
 		configClass.setBeanName(configBeanName);
 
 		if (logger.isTraceEnabled()) {
@@ -215,27 +215,27 @@ class ConfigurationClassBeanDefinitionReader {
 		beanDef.setResource(configClass.getResource());
 		beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
 
-		if (metadata.isStatic()) {
+		if (metadata.isStatic()) {  /* 静态方法 @Bean */
 			// static @Bean method
 			if (configClass.getMetadata() instanceof StandardAnnotationMetadata) {
-				beanDef.setBeanClass(((StandardAnnotationMetadata) configClass.getMetadata()).getIntrospectedClass());
+				beanDef.setBeanClass(((StandardAnnotationMetadata) configClass.getMetadata()).getIntrospectedClass());//具体实现类
 			}
 			else {
-				beanDef.setBeanClassName(configClass.getMetadata().getClassName());
+				beanDef.setBeanClassName(configClass.getMetadata().getClassName());/* @Bean对应的方法 --> factoryMethodName -->实例化Bean */
 			}
 			beanDef.setUniqueFactoryMethodName(methodName);
 		}
-		else {
+		else {                     /* 非静态方法@Bean，beanClass为空 */
 			// instance @Bean method
-			beanDef.setFactoryBeanName(configClass.getBeanName());
-			beanDef.setUniqueFactoryMethodName(methodName);
+			beanDef.setFactoryBeanName(configClass.getBeanName()); /* 方法对应的beanName --> 实时获取Bean对象（猜测方便实现代理增强类逻辑） */
+			beanDef.setUniqueFactoryMethodName(methodName);/* @Bean对应的方法 --> factoryMethodName --> 实例化Bean */
 		}
 
 		if (metadata instanceof StandardMethodMetadata) {
-			beanDef.setResolvedFactoryMethod(((StandardMethodMetadata) metadata).getIntrospectedMethod());
+			beanDef.setResolvedFactoryMethod(((StandardMethodMetadata) metadata).getIntrospectedMethod()); /* @Bean对应方法 --factoryMethodToIntrospect  */
 		}
 
-		beanDef.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
+		beanDef.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR); /* 使用构造函数注入依赖关系 */
 		beanDef.setAttribute(org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor.
 				SKIP_REQUIRED_CHECK_ATTRIBUTE, Boolean.TRUE);
 
@@ -382,7 +382,7 @@ class ConfigurationClassBeanDefinitionReader {
 
 	private void loadBeanDefinitionsFromRegistrars(Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> registrars) {
 		registrars.forEach((registrar, metadata) ->
-				registrar.registerBeanDefinitions(metadata, this.registry, this.importBeanNameGenerator));
+				registrar.registerBeanDefinitions(metadata, this.registry, this.importBeanNameGenerator));/* 回调ImportBeanDefinitionRegistrar.registerBeanDefinitions(注解配置信息，BeanFactory) */
 	}
 
 
