@@ -174,7 +174,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			ejbRefClass = null;
 		}
 
-		resourceAnnotationTypes.add(Resource.class);
+		resourceAnnotationTypes.add(Resource.class);  /* @Resource 注入 */
 		if (webServiceRefClass != null) {
 			resourceAnnotationTypes.add(webServiceRefClass);
 		}
@@ -308,8 +308,8 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
 		super.postProcessMergedBeanDefinition(beanDefinition, beanType, beanName);
-		InjectionMetadata metadata = findResourceMetadata(beanName, beanType, null);
-		metadata.checkConfigMembers(beanDefinition);
+		InjectionMetadata metadata = findResourceMetadata(beanName, beanType, null); /* 寻找 @Resource 注入点 */
+		metadata.checkConfigMembers(beanDefinition);/* 依赖注入标记 -- 防止重复注入 */
 	}
 
 	@Override
@@ -329,9 +329,9 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
-		InjectionMetadata metadata = findResourceMetadata(beanName, bean.getClass(), pvs);
-		try {
-			metadata.inject(bean, beanName, pvs);
+		InjectionMetadata metadata = findResourceMetadata(beanName, bean.getClass(), pvs);/* postProcessMergedBeanDefinition阶段 已经扫描  */
+		try { /* 反射设置field或调用methodXXX  */
+			metadata.inject(bean, beanName, pvs);/* @Resource根据名字查找（无名字用字段名） > 不指定名字根据Class查找 */
 		}
 		catch (Throwable ex) {
 			throw new BeanCreationException(beanName, "Injection of resource dependencies failed", ex);
@@ -360,7 +360,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
-					metadata = buildResourceMetadata(clazz);
+					metadata = buildResourceMetadata(clazz);/* 寻找@Resource注入点  */
 					this.injectionMetadataCache.put(cacheKey, metadata);
 				}
 			}
@@ -392,7 +392,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 					}
 					currElements.add(new EjbRefElement(field, field, null));
 				}
-				else if (field.isAnnotationPresent(Resource.class)) {
+				else if (field.isAnnotationPresent(Resource.class)) {/* 解析field @Resource */
 					if (Modifier.isStatic(field.getModifiers())) {
 						throw new IllegalStateException("@Resource annotation is not supported on static fields");
 					}
@@ -510,7 +510,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			throw new NoSuchBeanDefinitionException(element.lookupType,
 					"No resource factory configured - specify the 'resourceFactory' property");
 		}
-		return autowireResource(this.resourceFactory, element, requestingBeanName);
+		return autowireResource(this.resourceFactory, element, requestingBeanName);/* 获取 @Resource注入 对象*/
 	}
 
 	/**
@@ -533,14 +533,14 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			AutowireCapableBeanFactory beanFactory = (AutowireCapableBeanFactory) factory;
 			DependencyDescriptor descriptor = element.getDependencyDescriptor();
 			if (this.fallbackToDefaultTypeMatch && element.isDefaultName && !factory.containsBean(name)) {
-				autowiredBeanNames = new LinkedHashSet<>();
+				autowiredBeanNames = new LinkedHashSet<>(); /* @Resource 未指定名字，name=字段名 的bean不存在，byClass获取Bean 注入@Resource */
 				resource = beanFactory.resolveDependency(descriptor, requestingBeanName, autowiredBeanNames, null);
 				if (resource == null) {
 					throw new NoSuchBeanDefinitionException(element.getLookupType(), "No resolvable resource object");
 				}
 			}
 			else {
-				resource = beanFactory.resolveBeanByName(name, descriptor);
+				resource = beanFactory.resolveBeanByName(name, descriptor);/* byName获取Bean注入@Resource */
 				autowiredBeanNames = Collections.singleton(name);
 			}
 		}
@@ -624,7 +624,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			Class<?> resourceType = resource.type();
 			this.isDefaultName = !StringUtils.hasLength(resourceName);
 			if (this.isDefaultName) {
-				resourceName = this.member.getName();
+				resourceName = this.member.getName();/* 未指定注入名字，就使用属性名字 */
 				if (this.member instanceof Method && resourceName.startsWith("set") && resourceName.length() > 3) {
 					resourceName = Introspector.decapitalize(resourceName.substring(3));
 				}
@@ -650,7 +650,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		@Override
 		protected Object getResourceToInject(Object target, @Nullable String requestingBeanName) {
 			return (this.lazyLookup ? buildLazyResourceProxy(this, requestingBeanName) :
-					getResource(this, requestingBeanName));
+					getResource(this, requestingBeanName));/* 获取@Resource依赖bean */
 		}
 	}
 

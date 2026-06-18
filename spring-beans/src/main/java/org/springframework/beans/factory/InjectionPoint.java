@@ -40,10 +40,10 @@ import org.springframework.util.ObjectUtils;
 public class InjectionPoint {
 
 	@Nullable
-	protected MethodParameter methodParameter;
+	protected MethodParameter methodParameter; /* 注入- 方法参数 */
 
 	@Nullable
-	protected Field field;
+	protected Field field; /* 注入- 字段 */
 
 	@Nullable
 	private volatile Annotation[] fieldAnnotations;

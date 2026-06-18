@@ -101,7 +101,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	protected transient Log logger = LogFactory.getLog(getClass());
 
 	@Nullable
-	private Class<? extends Annotation> initAnnotationType;
+	private Class<? extends Annotation> initAnnotationType; /* @PostConstruct 注解 */
 
 	@Nullable
 	private Class<? extends Annotation> destroyAnnotationType;
@@ -146,15 +146,15 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
-		LifecycleMetadata metadata = findLifecycleMetadata(beanType);
-		metadata.checkConfigMembers(beanDefinition);
+		LifecycleMetadata metadata = findLifecycleMetadata(beanType);/* 解析 @PostConstruct 注解 */
+		metadata.checkConfigMembers(beanDefinition);/* 防止重复标记 */
 	}
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
 		try {
-			metadata.invokeInitMethods(bean, beanName);
+			metadata.invokeInitMethods(bean, beanName);/* 调用 @PostConstruct注解 方法 */
 		}
 		catch (InvocationTargetException ex) {
 			throw new BeanCreationException(beanName, "Invocation of init method failed", ex.getTargetException());
@@ -199,7 +199,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	private LifecycleMetadata findLifecycleMetadata(Class<?> clazz) {
 		if (this.lifecycleMetadataCache == null) {
 			// Happens after deserialization, during destruction...
-			return buildLifecycleMetadata(clazz);
+			return buildLifecycleMetadata(clazz);/* 解析 @PostConstruct 注解 */
 		}
 		// Quick check on the concurrent map first, with minimal locking.
 		LifecycleMetadata metadata = this.lifecycleMetadataCache.get(clazz);
@@ -228,7 +228,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 		do {
 			final List<LifecycleElement> currInitMethods = new ArrayList<>();
 			final List<LifecycleElement> currDestroyMethods = new ArrayList<>();
-
+			/* 解析 @PostConstruct 注解 */
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
 				if (this.initAnnotationType != null && method.isAnnotationPresent(this.initAnnotationType)) {
 					LifecycleElement element = new LifecycleElement(method);
@@ -330,7 +330,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 					if (logger.isTraceEnabled()) {
 						logger.trace("Invoking init method on bean '" + beanName + "': " + element.getMethod());
 					}
-					element.invoke(target);
+					element.invoke(target);/* 调用 @PostConstruct 注解 方法 */
 				}
 			}
 		}

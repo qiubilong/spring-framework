@@ -79,7 +79,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 						}
 						bd.resolvedConstructorOrFactoryMethod = constructorToUse;
 					}
-					catch (Throwable ex) {
+					catch (Throwable ex) {    /* 使用 无参构造函数初始化 ，不存在时抛出异常 */
 						throw new BeanInstantiationException(clazz, "No default constructor found", ex);
 					}
 				}
@@ -114,7 +114,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 					return null;
 				});
 			}
-			return BeanUtils.instantiateClass(ctor, args);
+			return BeanUtils.instantiateClass(ctor, args);/* 实例化 */
 		}
 		else {
 			return instantiateWithMethodInjection(bd, beanName, owner, ctor, args);
@@ -151,7 +151,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 			Method priorInvokedFactoryMethod = currentlyInvokedFactoryMethod.get();
 			try {
 				currentlyInvokedFactoryMethod.set(factoryMethod);
-				Object result = factoryMethod.invoke(factoryBean, args);
+				Object result = factoryMethod.invoke(factoryBean, args); /* 反射调用 */
 				if (result == null) {
 					result = new NullBean();
 				}

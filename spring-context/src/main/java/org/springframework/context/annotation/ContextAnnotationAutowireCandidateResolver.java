@@ -49,7 +49,7 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 	@Override
 	@Nullable
 	public Object getLazyResolutionProxyIfNecessary(DependencyDescriptor descriptor, @Nullable String beanName) {
-		return (isLazy(descriptor) ? buildLazyResolutionProxy(descriptor, beanName) : null);
+		return (isLazy(descriptor) ? buildLazyResolutionProxy(descriptor, beanName) : null);/* 生成 @Lazy属性的代理对象 */
 	}
 
 	protected boolean isLazy(DependencyDescriptor descriptor) {
@@ -71,7 +71,7 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 		}
 		return false;
 	}
-
+	/* 生成 @Lazy属性的代理对象 */
 	protected Object buildLazyResolutionProxy(final DependencyDescriptor descriptor, final @Nullable String beanName) {
 		Assert.state(getBeanFactory() instanceof DefaultListableBeanFactory,
 				"BeanFactory needs to be a DefaultListableBeanFactory");
@@ -86,7 +86,7 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 				return false;
 			}
 			@Override
-			public Object getTarget() {
+			public Object getTarget() { /* 动态获取 lazy对象 */
 				Object target = beanFactory.doResolveDependency(descriptor, beanName, null, null);
 				if (target == null) {
 					Class<?> type = getTargetClass();

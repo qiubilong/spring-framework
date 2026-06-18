@@ -134,7 +134,7 @@ class ConfigurationClassParser {
 
 	private final ConditionEvaluator conditionEvaluator;
 
-	private final Map<ConfigurationClass, ConfigurationClass> configurationClasses = new LinkedHashMap<>();
+	private final Map<ConfigurationClass, ConfigurationClass> configurationClasses = new LinkedHashMap<>();/* 标记已经解析的配置类 */
 
 	private final Map<String, ConfigurationClass> knownSuperclasses = new HashMap<>();
 
@@ -188,8 +188,8 @@ class ConfigurationClassParser {
 						"Failed to parse configuration class [" + bd.getBeanClassName() + "]", ex);
 			}
 		}
-		/* 配置类是 DeferredImportSelector --> 加载spring.factories自动配置类 - AopAutoConfiguration/TransactionAutoConfiguration/DispatcherServletAutoConfiguration/WebMvcAutoConfiguration */
-		this.deferredImportSelectorHandler.process();/* 延迟 ImportSelector */
+		/* @SpringBootApplication --> @EnableAutoConfiguration --> AutoConfigurationImportSelector  --> 加载spring.factories自动配置类 - AopAutoConfiguration/TransactionAutoConfiguration/DispatcherServletAutoConfiguration/WebMvcAutoConfiguration */
+		this.deferredImportSelectorHandler.process();/* 配置类是 DeferredImportSelector */
 	}
 
 	protected final void parse(@Nullable String className, String beanName) throws IOException {
@@ -518,7 +518,7 @@ class ConfigurationClassParser {
 	private Set<SourceClass> getImports(SourceClass sourceClass) throws IOException {
 		Set<SourceClass> imports = new LinkedHashSet<>();
 		Set<SourceClass> visited = new LinkedHashSet<>();
-		collectImports(sourceClass, imports, visited);
+		collectImports(sourceClass, imports, visited);/* @Import声明的class */
 		return imports;
 	}
 
@@ -541,11 +541,11 @@ class ConfigurationClassParser {
 		if (visited.add(sourceClass)) {
 			for (SourceClass annotation : sourceClass.getAnnotations()) {
 				String annName = annotation.getMetadata().getClassName();
-				if (!annName.equals(Import.class.getName())) {
+				if (!annName.equals(Import.class.getName())) {/* 递归搜索注解中的@Import */
 					collectImports(annotation, imports, visited);
 				}
 			}
-			imports.addAll(sourceClass.getAnnotationAttributes(Import.class.getName(), "value"));
+			imports.addAll(sourceClass.getAnnotationAttributes(Import.class.getName(), "value")); /* @Import声明的class */
 		}
 	}
 
@@ -563,7 +563,7 @@ class ConfigurationClassParser {
 		else {
 			this.importStack.push(configClass);
 			try {
-				for (SourceClass candidate : importCandidates) {
+				for (SourceClass candidate : importCandidates) { /* 遍历 @Import 导入的类  */
 					if (candidate.isAssignable(ImportSelector.class)) {     /* ## 1、处理 ImportSelector类 */
 						// Candidate class is an ImportSelector -> delegate to it to determine imports
 						Class<?> candidateClass = candidate.loadClass();    /* 实例化 ImportSelector */
@@ -573,7 +573,7 @@ class ConfigurationClassParser {
 						if (selectorFilter != null) {
 							exclusionFilter = exclusionFilter.or(selectorFilter);
 						}
-						if (selector instanceof DeferredImportSelector) { /* ### springboot @EnableAutoConfiguration implement DeferredImportSelector 注入点 */
+						if (selector instanceof DeferredImportSelector) { /* ### springboot @EnableAutoConfiguration implement DeferredImportSelector 注入点 ，用于加载 springboot自动配置类 */
 							this.deferredImportSelectorHandler.handle(configClass, (DeferredImportSelector) selector);
 						}
 						else {
@@ -808,7 +808,7 @@ class ConfigurationClassParser {
 				grouping.getImports().forEach(entry -> {/* AutoConfigurationGroup.getImports --> 加载 spring.factories自动配置类 */
 					ConfigurationClass configurationClass = this.configurationClasses.get(entry.getMetadata());
 					try {
-						processImports(configurationClass, asSourceClass(configurationClass, exclusionFilter),
+						processImports(configurationClass, asSourceClass(configurationClass, exclusionFilter), /* 继续解析 springboot 自动配置类 */
 								Collections.singleton(asSourceClass(entry.getImportClassName(), exclusionFilter)),
 								exclusionFilter, false);
 					}

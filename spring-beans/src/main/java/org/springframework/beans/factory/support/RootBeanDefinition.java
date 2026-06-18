@@ -65,7 +65,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	boolean allowCaching = true;
 
-	boolean isFactoryMethodUnique = false;
+	boolean isFactoryMethodUnique = false; /* 不会有多个候选者 -- 快速路径 */
 
 	@Nullable
 	volatile ResolvableType targetType;
@@ -115,10 +115,10 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	volatile Boolean beforeInstantiationResolved;
 
 	@Nullable
-	private Set<Member> externallyManagedConfigMembers;
+	private Set<Member> externallyManagedConfigMembers; /* 依赖注入标记 -- 防止重复注入 */
 
 	@Nullable
-	private Set<String> externallyManagedInitMethods;
+	private Set<String> externallyManagedInitMethods; /* 初始化方法（@PostConstruct） 标记 -- 防止重复执行 */
 
 	@Nullable
 	private Set<String> externallyManagedDestroyMethods;
@@ -380,7 +380,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	public void setUniqueFactoryMethodName(String name) {
 		Assert.hasText(name, "Factory method name must not be empty");
 		setFactoryMethodName(name);
-		this.isFactoryMethodUnique = true;
+		this.isFactoryMethodUnique = true; /* 不会有多个候选者 */
 	}
 
 	/**

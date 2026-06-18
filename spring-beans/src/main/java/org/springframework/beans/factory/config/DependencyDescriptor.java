@@ -52,7 +52,7 @@ import org.springframework.util.ObjectUtils;
 @SuppressWarnings("serial")
 public class DependencyDescriptor extends InjectionPoint implements Serializable {
 
-	private final Class<?> declaringClass;
+	private final Class<?> declaringClass; /* 参数类 */
 
 	@Nullable
 	private String methodName;

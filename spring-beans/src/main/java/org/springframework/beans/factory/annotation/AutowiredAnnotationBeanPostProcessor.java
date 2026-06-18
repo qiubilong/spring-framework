@@ -159,7 +159,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	 */
 	@SuppressWarnings("unchecked")
 	public AutowiredAnnotationBeanPostProcessor() {
-		this.autowiredAnnotationTypes.add(Autowired.class);
+		this.autowiredAnnotationTypes.add(Autowired.class); /* @Autowired 注入 */
 		this.autowiredAnnotationTypes.add(Value.class);
 		try {
 			this.autowiredAnnotationTypes.add((Class<? extends Annotation>)
@@ -243,8 +243,8 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
-		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);
-		metadata.checkConfigMembers(beanDefinition);
+		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);/* 寻找注入点 -- @Value、@Autowired属性注入 */
+		metadata.checkConfigMembers(beanDefinition);/* 依赖注入标记 -- 防止重复注入 */
 	}
 
 	@Override
@@ -301,7 +301,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 				if (candidateConstructors == null) {
 					Constructor<?>[] rawCandidates;
 					try {
-						rawCandidates = beanClass.getDeclaredConstructors();
+						rawCandidates = beanClass.getDeclaredConstructors();	/* 得到所有构造函数 */
 					}
 					catch (Throwable ex) {
 						throw new BeanCreationException(beanName,
@@ -320,7 +320,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 						else if (primaryConstructor != null) {
 							continue;
 						}
-						MergedAnnotation<?> ann = findAutowiredAnnotation(candidate);
+						MergedAnnotation<?> ann = findAutowiredAnnotation(candidate);/* 判断构造函数有没有 @Autowired 注解 */
 						if (ann == null) {
 							Class<?> userClass = ClassUtils.getUserClass(beanClass);
 							if (userClass != beanClass) {
@@ -334,9 +334,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 								}
 							}
 						}
-						if (ann != null) {
+						if (ann != null) { /* @Autowired注解的构造函数 */
 							if (requiredConstructor != null) {
-								throw new BeanCreationException(beanName,
+								throw new BeanCreationException(beanName, /* 多个@Autowied声明的构造函数 --> 报错 */
 										"Invalid autowire-marked constructor: " + candidate +
 										". Found constructor with 'required' Autowired annotation already: " +
 										requiredConstructor);
@@ -349,12 +349,12 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 											". Found constructor with 'required' Autowired annotation: " +
 											candidate);
 								}
-								requiredConstructor = candidate;
+								requiredConstructor = candidate;/* 选中 @Autowired注解的构造函数 */
 							}
 							candidates.add(candidate);
 						}
 						else if (candidate.getParameterCount() == 0) {
-							defaultConstructor = candidate;
+							defaultConstructor = candidate;/* 无参构造函数 */
 						}
 					}
 					if (!candidates.isEmpty()) {
@@ -370,20 +370,20 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 										"default constructor to fall back to: " + candidates.get(0));
 							}
 						}
-						candidateConstructors = candidates.toArray(new Constructor<?>[0]);
+						candidateConstructors = candidates.toArray(new Constructor<?>[0]); /* 指定 @Autowired 构造函数 */
 					}
 					else if (rawCandidates.length == 1 && rawCandidates[0].getParameterCount() > 0) {
-						candidateConstructors = new Constructor<?>[] {rawCandidates[0]};
+						candidateConstructors = new Constructor<?>[] {rawCandidates[0]};  /* 一个有参构造函数 */
 					}
-					else if (nonSyntheticConstructors == 2 && primaryConstructor != null &&
+					else if (nonSyntheticConstructors == 2 && primaryConstructor != null &&//忽略Kotlin
 							defaultConstructor != null && !primaryConstructor.equals(defaultConstructor)) {
 						candidateConstructors = new Constructor<?>[] {primaryConstructor, defaultConstructor};
 					}
-					else if (nonSyntheticConstructors == 1 && primaryConstructor != null) {
+					else if (nonSyntheticConstructors == 1 && primaryConstructor != null) {//忽略Kotlin
 						candidateConstructors = new Constructor<?>[] {primaryConstructor};
 					}
 					else {
-						candidateConstructors = new Constructor<?>[0];
+						candidateConstructors = new Constructor<?>[0];/* 都没有 @Autowired --> 返回null */
 					}
 					this.candidateConstructorsCache.put(beanClass, candidateConstructors);
 				}
@@ -394,9 +394,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
-		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
+		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);/* 注入点 - postProcessMergedBeanDefinition已经扫描 */
 		try {
-			metadata.inject(bean, beanName, pvs);
+			metadata.inject(bean, beanName, pvs);/* @Value、@Autowired属性 注入 */
 		}
 		catch (BeanCreationException ex) {
 			throw ex;
@@ -451,7 +451,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
-					metadata = buildAutowiringMetadata(clazz);
+					metadata = buildAutowiringMetadata(clazz);/* 寻找注入点 */
 					this.injectionMetadataCache.put(cacheKey, metadata);
 				}
 			}
@@ -469,7 +469,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 		do {
 			final List<InjectionMetadata.InjectedElement> currElements = new ArrayList<>();
-
+			/* @Autowired 字段 */
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
 				MergedAnnotation<?> ann = findAutowiredAnnotation(field);
 				if (ann != null) {
@@ -512,7 +512,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			elements.addAll(0, currElements);
 			targetClass = targetClass.getSuperclass();
 		}
-		while (targetClass != null && targetClass != Object.class);
+		while (targetClass != null && targetClass != Object.class); /* 递归查找 */
 
 		return InjectionMetadata.forElements(elements, clazz);
 	}
@@ -631,13 +631,13 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 				value = resolvedCachedArgument(beanName, this.cachedFieldValue);
 			}
 			else {
-				DependencyDescriptor desc = new DependencyDescriptor(field, this.required);
+				DependencyDescriptor desc = new DependencyDescriptor(field, this.required);/* 依赖注入描述 DependencyDescriptor */
 				desc.setContainingClass(bean.getClass());
 				Set<String> autowiredBeanNames = new LinkedHashSet<>(1);
 				Assert.state(beanFactory != null, "No BeanFactory available");
 				TypeConverter typeConverter = beanFactory.getTypeConverter();
 				try {
-					value = beanFactory.resolveDependency(desc, beanName, autowiredBeanNames, typeConverter);
+					value = beanFactory.resolveDependency(desc, beanName, autowiredBeanNames, typeConverter); 	/* 获取依赖对象 */
 				}
 				catch (BeansException ex) {
 					throw new UnsatisfiedDependencyException(null, beanName, new InjectionPoint(field), ex);

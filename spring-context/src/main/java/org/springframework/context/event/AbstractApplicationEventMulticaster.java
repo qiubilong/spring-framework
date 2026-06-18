@@ -111,7 +111,7 @@ public abstract class AbstractApplicationEventMulticaster
 			if (singletonTarget instanceof ApplicationListener) {
 				this.defaultRetriever.applicationListeners.remove(singletonTarget);
 			}
-			this.defaultRetriever.applicationListeners.add(listener);
+			this.defaultRetriever.applicationListeners.add(listener); /* 添加 - 事件监听器 */
 			this.retrieverCache.clear();
 		}
 	}
@@ -417,7 +417,7 @@ public abstract class AbstractApplicationEventMulticaster
 	 */
 	private class ListenerRetriever {
 
-		public final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<>();
+		public final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<>(); /* 事件监听器集合 */
 
 		public final Set<String> applicationListenerBeans = new LinkedHashSet<>();
 

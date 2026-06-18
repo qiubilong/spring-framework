@@ -200,7 +200,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/** LifecycleProcessor for managing the lifecycle of beans within this context. */
 	@Nullable
-	private LifecycleProcessor lifecycleProcessor;
+	private LifecycleProcessor lifecycleProcessor;                        /* DefaultLifecycleProcessor - 容器生命周期 - 处理器 */
 
 	/** MessageSource we delegate our implementation of this interface to. */
 	@Nullable
@@ -208,7 +208,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/** Helper class used in event publishing. */
 	@Nullable
-	private ApplicationEventMulticaster applicationEventMulticaster;
+	private ApplicationEventMulticaster applicationEventMulticaster;     /* 事件广播器  SimpleApplicationEventMulticaster */
 
 	/** Statically specified listeners. */
 	private final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<>();
@@ -532,7 +532,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				invokeBeanFactoryPostProcessors(beanFactory); /* ## 实例化并调用 Bean工厂处理器 BeanFactoryProcessor --> 扫描配置类  --> 注册BeanDefinition */
 
 				// Register bean processors that intercept bean creation.
-				registerBeanPostProcessors(beanFactory);
+				registerBeanPostProcessors(beanFactory);     /* ## 实例化并注册BeanPostProcessor */
 
 				// Initialize message source for this context.
 				initMessageSource();
@@ -541,13 +541,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
-				onRefresh();
+				onRefresh(); /* 创建Tomcat or Jetty */
 
 				// Check for listener beans and register them.
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
-				finishBeanFactoryInitialization(beanFactory);
+				finishBeanFactoryInitialization(beanFactory);/* ## 实例化所有 - 非懒加载- 单例 - Bean */
 
 				// Last step: publish corresponding event.
 				finishRefresh();
@@ -719,7 +719,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * <p>Must be called before any instantiation of application beans.
 	 */
 	protected void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
-		PostProcessorRegistrationDelegate.registerBeanPostProcessors(beanFactory, this);
+		PostProcessorRegistrationDelegate.registerBeanPostProcessors(beanFactory, this); /* ## 实例化并注册BeanPostProcessor */
 	}
 
 	/**
@@ -770,7 +770,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 		}
 		else {
-			this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
+			this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory); /* 创建 应用事件 广播器 */
 			beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, this.applicationEventMulticaster);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No '" + APPLICATION_EVENT_MULTICASTER_BEAN_NAME + "' bean, using " +
@@ -820,7 +820,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Add beans that implement ApplicationListener as listeners.
 	 * Doesn't affect other listeners, which can be added without being beans.
 	 */
-	protected void registerListeners() {
+	protected void registerListeners() {  /* 注册事件监听器 --> 广播器 */
 		// Register statically specified listeners first.
 		for (ApplicationListener<?> listener : getApplicationListeners()) {
 			getApplicationEventMulticaster().addApplicationListener(listener);
@@ -858,7 +858,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Register a default embedded value resolver if no bean post-processor
 		// (such as a PropertyPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
-		if (!beanFactory.hasEmbeddedValueResolver()) {
+		if (!beanFactory.hasEmbeddedValueResolver()) {/* 占位符解析器 ${xxx} */
 			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
 		}
 
@@ -875,7 +875,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.freezeConfiguration();
 
 		// Instantiate all remaining (non-lazy-init) singletons.
-		beanFactory.preInstantiateSingletons();
+		beanFactory.preInstantiateSingletons();/* ## 实例化所有 - 非懒 - 加载- 单例 - Bean */
 	}
 
 	/**
