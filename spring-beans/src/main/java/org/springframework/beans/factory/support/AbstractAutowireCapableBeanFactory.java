@@ -427,9 +427,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeansException {
 
 		Object result = existingBean;
-		for (BeanPostProcessor processor : getBeanPostProcessors()) {
-			Object current = processor.postProcessAfterInitialization(result, beanName);
-			if (current == null) {
+		for (BeanPostProcessor processor : getBeanPostProcessors()) {                     /*                         - 循环依赖  --> 返回原始Bean             */
+			Object current = processor.postProcessAfterInitialization(result, beanName);  /* AbstractAutoProxyCreator                                      */
+			if (current == null) {                                                        /*                         - 无循环依赖 --> 生成代理对象AdvisedBean   */
 				return result;
 			}
 			result = current;
