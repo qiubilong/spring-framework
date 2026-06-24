@@ -53,7 +53,7 @@ public abstract class ScopedProxyUtils {
 	 * @see #getTargetBeanName(String)
 	 * @see #getOriginalBeanName(String)
 	 */
-	public static BeanDefinitionHolder createScopedProxy(BeanDefinitionHolder definition,
+	public static BeanDefinitionHolder createScopedProxy(BeanDefinitionHolder definition, /* 配置类 Bean --> @RefreshScope --> 创建代理 */
 			BeanDefinitionRegistry registry, boolean proxyTargetClass) {
 
 		String originalBeanName = definition.getBeanName();
@@ -62,13 +62,13 @@ public abstract class ScopedProxyUtils {
 
 		// Create a scoped proxy definition for the original bean name,
 		// "hiding" the target bean in an internal target definition.
-		RootBeanDefinition proxyDefinition = new RootBeanDefinition(ScopedProxyFactoryBean.class);
+		RootBeanDefinition proxyDefinition = new RootBeanDefinition(ScopedProxyFactoryBean.class); /* 配置类 Bean --> @RefreshScope --> 创建代理 */
 		proxyDefinition.setDecoratedDefinition(new BeanDefinitionHolder(targetDefinition, targetBeanName));
 		proxyDefinition.setOriginatingBeanDefinition(targetDefinition);
 		proxyDefinition.setSource(definition.getSource());
 		proxyDefinition.setRole(targetDefinition.getRole());
 
-		proxyDefinition.getPropertyValues().add("targetBeanName", targetBeanName);
+		proxyDefinition.getPropertyValues().add("targetBeanName", targetBeanName); /* 指定 参数 */
 		if (proxyTargetClass) {
 			targetDefinition.setAttribute(AutoProxyUtils.PRESERVE_TARGET_CLASS_ATTRIBUTE, Boolean.TRUE);
 			// ScopedProxyFactoryBean's "proxyTargetClass" default is TRUE, so we don't need to set it explicitly here.

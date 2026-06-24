@@ -56,7 +56,7 @@ public class ScopedProxyFactoryBean extends ProxyConfig
 		implements FactoryBean<Object>, BeanFactoryAware, AopInfrastructureBean {
 
 	/** The TargetSource that manages scoping. */
-	private final SimpleBeanTargetSource scopedTargetSource = new SimpleBeanTargetSource();
+	private final SimpleBeanTargetSource scopedTargetSource = new SimpleBeanTargetSource(); /* 一个简单的 TargetSource 实现，每次获取目标对象时都会从 Spring BeanFactory 中重新获取指定的 Bean */
 
 	/** The name of the target bean. */
 	@Nullable
@@ -92,9 +92,9 @@ public class ScopedProxyFactoryBean extends ProxyConfig
 
 		this.scopedTargetSource.setBeanFactory(beanFactory);
 
-		ProxyFactory pf = new ProxyFactory();
+		ProxyFactory pf = new ProxyFactory(); /* 生成 @RefreshScope 配置Bean 代理对象 */
 		pf.copyFrom(this);
-		pf.setTargetSource(this.scopedTargetSource);
+		pf.setTargetSource(this.scopedTargetSource); /* 代理对象 */
 
 		Assert.notNull(this.targetBeanName, "Property 'targetBeanName' is required");
 		Class<?> beanType = beanFactory.getType(this.targetBeanName);
