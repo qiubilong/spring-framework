@@ -239,7 +239,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @throws BeansException if the bean could not be created
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
+	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,  /* Bean不存在时创建Bean */
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
 
 		final String beanName = transformedBeanName(name);/* beanName、AliasBeanName(bean别名)、&beanName(工厂beanName) */
@@ -346,14 +346,14 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					bean = getObjectForBeanInstance(prototypeInstance, name, beanName, mbd);
 				}
 
-				else {
+				else { /* 自定义声明周期，例如 @Scope("refresh") */
 					String scopeName = mbd.getScope();
 					final Scope scope = this.scopes.get(scopeName);
 					if (scope == null) {
 						throw new IllegalStateException("No Scope registered for scope name '" + scopeName + "'");
 					}
 					try {
-						Object scopedInstance = scope.get(beanName, () -> {
+						Object scopedInstance = scope.get(beanName, () -> { /* 获取自定义声明周期 Bean */
 							beforePrototypeCreation(beanName);
 							try {
 								return createBean(beanName, mbd, args);

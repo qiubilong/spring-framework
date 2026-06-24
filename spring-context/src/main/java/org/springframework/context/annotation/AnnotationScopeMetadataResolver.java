@@ -40,7 +40,7 @@ public class AnnotationScopeMetadataResolver implements ScopeMetadataResolver {
 
 	private final ScopedProxyMode defaultProxyMode;
 
-	protected Class<? extends Annotation> scopeAnnotationType = Scope.class;
+	protected Class<? extends Annotation> scopeAnnotationType = Scope.class; /* Bean 作用域 */
 
 
 	/**
@@ -80,7 +80,7 @@ public class AnnotationScopeMetadataResolver implements ScopeMetadataResolver {
 		if (definition instanceof AnnotatedBeanDefinition) {
 			AnnotatedBeanDefinition annDef = (AnnotatedBeanDefinition) definition;
 			AnnotationAttributes attributes = AnnotationConfigUtils.attributesFor(
-					annDef.getMetadata(), this.scopeAnnotationType);
+					annDef.getMetadata(), this.scopeAnnotationType); /* Bean 作用域 注解 @Scope */
 			if (attributes != null) {
 				metadata.setScopeName(attributes.getString("value"));
 				ScopedProxyMode proxyMode = attributes.getEnum("proxyMode");

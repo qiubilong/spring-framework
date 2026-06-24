@@ -61,7 +61,7 @@ import org.springframework.core.annotation.AliasFor;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Scope {
+public @interface Scope {     /* Bean 生命周期 ，默认单例 */
 
 	/**
 	 * Alias for {@link #scopeName}.
